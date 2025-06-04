@@ -1,7 +1,7 @@
 import {BaseApiService} from './base-api.service';
 import {HttpClient} from '@angular/common/http';
 import {ConfigService} from './config.service';
-import {combineLatest, map, Observable} from 'rxjs';
+import {combineLatest, map, Observable, of} from 'rxjs';
 import {EnvironmentService} from './environment.service';
 import {DraftVersionService} from './draft-version.service';
 import {Injectable} from '@angular/core';
@@ -27,5 +27,21 @@ export class EditPermissionsService extends BaseApiService {
       this.environmentService.canUpdateGlobalConfiguration(),
       this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag),
     ]).pipe(map(([canUpdate, isDraftVersion]) => canUpdate && isDraftVersion));
+  }
+
+  public hasPermissionsToEditBasedOnContext(
+    caseDefinitionKey: string,
+    caseDefinitionVersionTag: string,
+    context: 'case' | 'independent' | string
+  ): Observable<boolean> {
+    if (context === 'case') {
+      return combineLatest([
+        this.environmentService.canUpdateGlobalConfiguration(),
+        this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag),
+      ]).pipe(map(([canUpdate, isDraft]) => canUpdate && isDraft));
+    } else if (context === 'independent') {
+      return this.environmentService.canUpdateGlobalConfiguration();
+    }
+    return of(false);
   }
 }

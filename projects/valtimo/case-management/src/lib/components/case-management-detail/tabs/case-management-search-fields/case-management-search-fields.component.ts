@@ -208,9 +208,8 @@ export class CaseManagementSearchFieldsComponent implements OnInit, OnDestroy, A
   );
 
   public readonly caseDefinitionVersionTag$: Observable<string> = this.route.parent.params.pipe(
-    map(params => params.caseDefinitionKey || ''),
-    filter(caseDefinitionKey => !!caseDefinitionKey),
-    tap((caseDefinitionKey: string) => (this._caseDefinitionKey = caseDefinitionKey))
+    map(params => params.caseDefinitionVersionTag || ''),
+    filter(caseDefinitionVersionTag => !!caseDefinitionVersionTag)
   );
 
   private cachedSearchFields!: Array<SearchField>;

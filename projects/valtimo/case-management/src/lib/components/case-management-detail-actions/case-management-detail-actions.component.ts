@@ -30,7 +30,7 @@ import {Deploy16, Version16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
 import {PageHeaderService} from '@valtimo/components';
 import {
-  EnvironmentService,
+  EditPermissionsService,
   getCaseManagementRouteParams,
   GlobalNotificationService,
 } from '@valtimo/shared';
@@ -85,25 +85,12 @@ export class CaseManagementDetailActionsComponent {
     )
   );
 
-  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest(
     this.caseDefinitionKey$,
-    this.caseDefinitionVersionTag$,
-  ]).pipe(
+    this.caseDefinitionVersionTag$
+  ).pipe(
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.caseManagementService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
-    )
-  );
-
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-  ]).pipe(
-    map(
-      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-        canUpdateGlobalConfiguration && isDraftVersion
+      this.editPermissionsService.hasEditPermissions(caseDefinitionKey, caseDefinitionVersionTag)
     )
   );
 
@@ -211,7 +198,7 @@ export class CaseManagementDetailActionsComponent {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly translateService: TranslateService,
-    private readonly environmentService: EnvironmentService
+    private readonly editPermissionsService: EditPermissionsService
   ) {
     this.iconService.register(Version16);
     this.iconService.register(Deploy16);

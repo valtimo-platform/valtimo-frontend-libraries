@@ -68,12 +68,6 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
   ];
 
   public readonly params$ = getCaseManagementRouteParams(this.route);
-  public readonly caseDefinitionKey$: Observable<string> = this.params$.pipe(
-    map(params => params.caseDefinitionKey || '')
-  );
-  public readonly caseDefinitionVersionTag$: Observable<string> = this.params$.pipe(
-    map(params => params.caseDefinitionVersionTag || '')
-  );
 
   public readonly loadingCaseListColumns$ = new BehaviorSubject<boolean>(true);
 
@@ -336,12 +330,12 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     startWith(false)
   );
 
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.caseDefinitionKey$,
-    this.caseDefinitionVersionTag$,
-  ]).pipe(
-    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.editPermissionsService.hasEditPermissions(caseDefinitionKey, caseDefinitionVersionTag)
+  public readonly hasEditPermissions$: Observable<boolean> = this.params$.pipe(
+    switchMap(params =>
+      this.editPermissionsService.hasEditPermissions(
+        params.caseDefinitionKey,
+        params.caseDefinitionVersionTag
+      )
     )
   );
 

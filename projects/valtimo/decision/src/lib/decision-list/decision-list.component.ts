@@ -104,14 +104,7 @@ export class DecisionListComponent {
     })
   );
 
-  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
-    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionKey,
-      caseDefinitionVersionTag: caseDefinitionVersionTag,
-    }))
-  );
-
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+  public readonly isDraftVersion$: Observable<boolean> = this.caseManagementRouteParams$.pipe(
     filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
     switchMap(params =>
       this.draftVersionService.isDraftVersion(
