@@ -29,12 +29,12 @@ import {ArrowLeft16, Deploy16, Download16} from '@carbon/icons';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   BreadcrumbService,
-  FitPageDirectiveModule,
+  FitPageDirective,
   ModalService,
   PageHeaderService,
   PageTitleService,
   PendingChangesComponent,
-  RenderInPageHeaderDirectiveModule,
+  RenderInPageHeaderDirective,
 } from '@valtimo/components';
 import {ProcessDefinition, ProcessService} from '@valtimo/process';
 import {
@@ -112,9 +112,9 @@ import {ValtimoPropertiesProviderModule} from './panel';
   standalone: true,
   imports: [
     CommonModule,
-    FitPageDirectiveModule,
+    FitPageDirective,
     LoadingModule,
-    RenderInPageHeaderDirectiveModule,
+    RenderInPageHeaderDirective,
     DropdownModule,
     ReactiveFormsModule,
     SelectModule,
