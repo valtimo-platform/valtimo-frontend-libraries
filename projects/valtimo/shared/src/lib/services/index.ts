@@ -22,3 +22,4 @@ export * from './menu-include.service';
 export * from './user-settings.service';
 export * from './environment.service';
 export * from './draft-version.service';
+export * from './edit-permissions.service';
