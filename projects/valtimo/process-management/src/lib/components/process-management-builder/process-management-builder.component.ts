@@ -298,7 +298,7 @@ export class ProcessManagementBuilderComponent
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly translateService: TranslateService,
-    private readonly pluginTranslationService: PluginTranslationService
+    private readonly pluginTranslationService: PluginTranslationService,
     private readonly environmentService: EnvironmentService,
     private readonly draftVersionService: DraftVersionService
   ) {
