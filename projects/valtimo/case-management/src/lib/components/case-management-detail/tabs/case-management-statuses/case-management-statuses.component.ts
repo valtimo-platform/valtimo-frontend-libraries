@@ -28,17 +28,7 @@ import {
   getCaseManagementRouteParams,
 } from '@valtimo/shared';
 import {CaseStatusService, InternalCaseStatus, InternalCaseStatusUtils} from '@valtimo/document';
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  map,
-  Observable,
-  Subject,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, Subject, switchMap, take, tap} from 'rxjs';
 import {StatusModalCloseEvent, StatusModalType} from '../../../../models';
 
 @Component({
@@ -133,7 +123,9 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   }
 
   public openEditModal(status: InternalCaseStatus): void {
-    this.hasEditPermissions$.pipe(filter(hasPermission => hasPermission)).subscribe(() => {
+    this.hasEditPermissions$.pipe(take(1)).subscribe(hasPermission => {
+      if (!hasPermission) return;
+
       this.prefillStatus$.next(status);
       this.statusModalType$.next('edit');
     });
@@ -166,10 +158,8 @@ export class CaseManagementStatusesComponent implements AfterViewInit {
   public onItemsReordered(reorderedItems: InternalCaseStatus[]): void {
     if (!reorderedItems) return;
 
-    this.hasEditPermissions$
+    this.caseDefinitionKey$
       .pipe(
-        filter(hasPermission => hasPermission),
-        switchMap(() => this.caseDefinitionKey$.pipe(take(1))),
         switchMap(caseDefinitionKey =>
           this.caseStatusService.updateInternalCaseStatuses(caseDefinitionKey, reorderedItems)
         )

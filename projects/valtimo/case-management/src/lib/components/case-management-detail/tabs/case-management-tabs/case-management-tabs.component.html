@@ -29,7 +29,7 @@
     [loading]="obs.loading"
     (rowClicked)="onRowClicked($event)"
     [dragAndDrop]="true"
-    [dragAndDropDisabled]="dragAndDropDisabled()"
+    [dragAndDropDisabled]="dragAndDropDisabled() || !(hasEditPermissions$ | async)"
     (itemsReordered)="onItemsReorderedEvent($event)"
   >
     <ng-container carbonToolbarContent>

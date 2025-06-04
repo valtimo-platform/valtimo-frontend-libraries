@@ -32,6 +32,7 @@
     [items]="obs.configuredColumns"
     [loading]="obs.loading || !fields"
     [dragAndDrop]="true"
+    [dragAndDropDisabled]="!(hasEditPermissions$ | async)"
     (itemsReordered)="onItemsReordered(obs.caseDefinitionKey, $event)"
     (rowClicked)="openEditModal($event)"
   >

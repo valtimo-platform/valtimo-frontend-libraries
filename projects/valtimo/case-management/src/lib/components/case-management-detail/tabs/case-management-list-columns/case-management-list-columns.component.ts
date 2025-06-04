@@ -435,10 +435,11 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
   public columnRowClicked(row: {key: string}): void {
     this.resetFormGroup();
 
-    combineLatest([this.viewTypeItems$, this.sortItems$, this.hasEditPermissions$])
+    this.hasEditPermissions$
       .pipe(
-        filter(([_, __, hasEditPermissions]) => hasEditPermissions),
-        take(1)
+        filter(hasEditPermissions => hasEditPermissions),
+        take(1),
+        switchMap(() => combineLatest([this.viewTypeItems$, this.sortItems$]).pipe(take(1)))
       )
       .subscribe(([viewTypeItems, sortItems]) => {
         const column = this.cachedCaseListColumns.find(
@@ -479,18 +480,13 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
           displayType: {...viewTypeItem},
           // @ts-ignore
           defaultSort: sortItem ? {...sortItem} : {...sortItems[0]},
-          ...(columnDateFormat && {
-            dateFormat: columnDateFormat,
-          }),
-          ...(tagAmount && {
-            tagAmount: tagAmount,
-          }),
+          ...(columnDateFormat && {dateFormat: columnDateFormat}),
+          ...(tagAmount && {tagAmount: tagAmount}),
         });
 
         this.openModal('edit');
       });
   }
-
   public selectedDisplayType(event: ListItem): void {
     if (event.item.selected && event.item.key === 'tags') {
       this.formGroup.patchValue({sortable: undefined, defaultSort: undefined});

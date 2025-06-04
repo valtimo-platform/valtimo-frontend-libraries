@@ -190,13 +190,15 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
   }
 
   public openEditModal(column: ConfiguredColumn): void {
-    this.hasEditPermissions$.pipe(take(1)).subscribe(hasPermission => {
-      if (!hasPermission) {
-        return;
-      }
-      this.prefillColumn$.next(column);
-      this.columnModalType$.next('edit');
-    });
+    this.hasEditPermissions$
+      .pipe(
+        filter(hasPermission => hasPermission),
+        take(1)
+      )
+      .subscribe(() => {
+        this.prefillColumn$.next(column);
+        this.columnModalType$.next('edit');
+      });
   }
 
   public openAddModal(): void {
@@ -217,18 +219,9 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
   }
 
   public onItemsReordered(definitionName: string, columns: ConfiguredColumn[]): void {
-    this.hasEditPermissions$
-      .pipe(
-        take(1),
-        filter(hasPermission => hasPermission)
-      )
-      .subscribe(() => {
-        this.zgwDocumentColumnService
-          .updateConfiguredColumns(definitionName, columns)
-          .subscribe(() => {
-            this.reload(true);
-          });
-      });
+    this.zgwDocumentColumnService.updateConfiguredColumns(definitionName, columns).subscribe(() => {
+      this.reload(true);
+    });
   }
 
   private reload(noAnimation = false): void {

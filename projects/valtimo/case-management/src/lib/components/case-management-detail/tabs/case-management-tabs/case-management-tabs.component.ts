@@ -181,18 +181,11 @@ export class CaseManagementTabsComponent implements AfterViewInit {
   public onItemsReorderedEvent(reorderedItems: ApiTabItem[]): void {
     if (!reorderedItems) return;
 
-    this.hasEditPermissions$
-      .pipe(
-        filter(hasPermission => hasPermission),
-        take(1)
-      )
-      .subscribe(() => {
-        this.dragAndDropDisabled.set(true);
+    this.dragAndDropDisabled.set(true);
 
-        this.tabManagementService.dispatchAction(
-          this.tabManagementService.editTabsOrder(reorderedItems)
-        );
-      });
+    this.tabManagementService.dispatchAction(
+      this.tabManagementService.editTabsOrder(reorderedItems)
+    );
   }
 
   private addTab(tab: Partial<ApiTabItem>): void {
