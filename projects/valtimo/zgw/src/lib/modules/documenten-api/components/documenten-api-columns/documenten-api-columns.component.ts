@@ -32,8 +32,7 @@ import {
 } from '@valtimo/components';
 import {
   CaseManagementParams,
-  DraftVersionService,
-  EnvironmentService,
+  EditPermissionsService,
   getCaseManagementRouteParams,
 } from '@valtimo/shared';
 import {ButtonModule, IconModule, TagModule} from 'carbon-components-angular';
@@ -81,25 +80,12 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
     this.route
   ).pipe(map((params: CaseManagementParams | undefined) => params?.caseDefinitionVersionTag ?? ''));
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly isDraftVersion$: Observable<boolean> = combineLatest([
+  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
     this.caseDefinitionKey$,
     this.caseDefinitionVersionTag$,
   ]).pipe(
     switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag)
-    )
-  );
-
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-  ]).pipe(
-    map(
-      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-        canUpdateGlobalConfiguration && isDraftVersion
+      this.editPermissionsService.hasEditPermissions(caseDefinitionKey, caseDefinitionVersionTag)
     )
   );
 
@@ -163,8 +149,7 @@ export class DocumentenApiColumnsComponent implements AfterViewInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly zgwDocumentColumnService: DocumentenApiColumnService,
-    private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {}
 
   public ngAfterViewInit(): void {

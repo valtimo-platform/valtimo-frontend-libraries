@@ -27,8 +27,7 @@ import {
 } from '@valtimo/components';
 import {
   CaseManagementParams,
-  DraftVersionService,
-  EnvironmentService,
+  EditPermissionsService,
   getCaseManagementRouteParams,
 } from '@valtimo/shared';
 import {ButtonModule, IconModule} from 'carbon-components-angular';
@@ -114,26 +113,12 @@ export class DocumentenApiUploadFieldsComponent {
     }))
   );
 
-  public readonly canUpdateGlobalConfiguration$ =
-    this.environmentService.canUpdateGlobalConfiguration();
-
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
-    filter(params => !!params.caseDefinitionKey && !!params.caseDefinitionVersionTag),
+  public readonly hasEditPermissions$: Observable<boolean> = this.params$.pipe(
     switchMap(params =>
-      this.draftVersionService.isDraftVersion(
-        params.caseDefinitionKey,
-        params.caseDefinitionVersionTag
+      this.editPermissionsService.hasEditPermissions(
+        params?.caseDefinitionKey,
+        params?.caseDefinitionVersionTag
       )
-    )
-  );
-
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.canUpdateGlobalConfiguration$,
-    this.isDraftVersion$,
-  ]).pipe(
-    map(
-      ([canUpdateGlobalConfiguration, isDraftVersion]) =>
-        canUpdateGlobalConfiguration && isDraftVersion
     )
   );
 
@@ -172,8 +157,7 @@ export class DocumentenApiUploadFieldsComponent {
     private readonly route: ActivatedRoute,
     private readonly documentenApiDocumentService: DocumentenApiDocumentService,
     private readonly translateService: TranslateService,
-    private readonly environmentService: EnvironmentService,
-    private readonly draftVersionService: DraftVersionService
+    private readonly editPermissionsService: EditPermissionsService
   ) {}
 
   public openEditModal(uploadField: DocumentenApiUploadField): void {

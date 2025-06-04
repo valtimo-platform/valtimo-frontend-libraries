@@ -40,7 +40,6 @@ export class EditPermissionsService extends BaseApiService {
         this.draftVersionService.isDraftVersion(caseDefinitionKey, caseDefinitionVersionTag),
       ]).pipe(map(([canUpdate, isDraft]) => canUpdate && isDraft));
     } else if (context === 'independent') {
-      console.log('independent');
       return this.environmentService.canUpdateGlobalConfiguration();
     }
     return of(false);
