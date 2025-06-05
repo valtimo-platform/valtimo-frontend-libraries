@@ -49,10 +49,6 @@ export class DraftVersionService extends BaseApiService {
           headers: new HttpHeaders().set(InterceptorSkip, '403'),
         }
       )
-      .pipe(
-        map(caseDefinition => {
-          return !caseDefinition.final;
-        })
-      );
+      .pipe(map(caseDefinition => !caseDefinition.final));
   }
 }
