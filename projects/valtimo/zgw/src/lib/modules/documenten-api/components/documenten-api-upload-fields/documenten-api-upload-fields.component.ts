@@ -106,14 +106,9 @@ export class DocumentenApiUploadFieldsComponent {
     })
   );
 
-  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
-    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionKey,
-      caseDefinitionVersionTag: caseDefinitionVersionTag,
-    }))
-  );
-
-  public readonly hasEditPermissions$: Observable<boolean> = this.params$.pipe(
+  public readonly hasEditPermissions$: Observable<boolean> = getCaseManagementRouteParams(
+    this.route
+  ).pipe(
     switchMap(params =>
       this.editPermissionsService.hasEditPermissions(
         params?.caseDefinitionKey,

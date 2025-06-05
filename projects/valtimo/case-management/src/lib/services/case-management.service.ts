@@ -74,11 +74,7 @@ export class CaseManagementService extends BaseApiService {
           headers: new HttpHeaders().set(InterceptorSkip, '403'),
         }
       )
-      .pipe(
-        map(caseDefinition => {
-          return caseDefinition.final === false;
-        })
-      );
+      .pipe(map(caseDefinition => !caseDefinition.final));
   }
 
   public getGlobalActiveCase(caseDefinitionKey: string): Observable<any> {

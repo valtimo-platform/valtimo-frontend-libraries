@@ -92,24 +92,17 @@ export class FormManagementListComponent {
     switchMap(() => getCaseManagementRouteParams(this.route))
   );
 
-  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
-    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionKey,
-      caseDefinitionVersionTag: caseDefinitionVersionTag,
-    }))
-  );
-
   public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.params$,
+    getCaseManagementRouteParams(this.route),
     this.context$,
   ]).pipe(
-    switchMap(([params, context]) => {
-      return this.editPermissionsService.hasPermissionsToEditBasedOnContext(
+    switchMap(([params, context]) =>
+      this.editPermissionsService.hasPermissionsToEditBasedOnContext(
         params?.caseDefinitionKey,
         params?.caseDefinitionVersionTag,
         context
-      );
-    })
+      )
+    )
   );
 
   private readonly _collectionSize$ = new BehaviorSubject<number>(0);

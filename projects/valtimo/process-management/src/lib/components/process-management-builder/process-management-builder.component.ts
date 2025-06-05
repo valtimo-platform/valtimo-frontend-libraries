@@ -207,13 +207,13 @@ export class ProcessManagementBuilderComponent
     this.params$,
     this.context$,
   ]).pipe(
-    switchMap(([params, context]) => {
-      return this.editPermissionsService.hasPermissionsToEditBasedOnContext(
+    switchMap(([params, context]) =>
+      this.editPermissionsService.hasPermissionsToEditBasedOnContext(
         params?.caseDefinitionKey,
         params?.caseDefinitionVersionTag,
         context
-      );
-    })
+      )
+    )
   );
 
   private readonly _reload$ = new Subject<null>();

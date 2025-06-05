@@ -136,20 +136,12 @@ export class FormManagementEditComponent
 
   private readonly _formDefinition$ = new BehaviorSubject<FormDefinition | null>(null);
 
-  public readonly params$: Observable<{
-    caseDefinitionKey: string;
-    caseDefinitionVersionTag: string;
-  }> = this.route.params.pipe(
-    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionKey,
-      caseDefinitionVersionTag: caseDefinitionVersionTag,
-    }))
-  );
-
   public readonly canUpdateGlobalConfiguration$ =
     this.environmentService.canUpdateGlobalConfiguration();
 
-  public readonly isDraftVersion$: Observable<boolean> = this.params$.pipe(
+  public readonly isDraftVersion$: Observable<boolean> = getCaseManagementRouteParams(
+    this.route
+  ).pipe(
     switchMap(params =>
       this.draftVersionService.isDraftVersion(
         params.caseDefinitionKey,

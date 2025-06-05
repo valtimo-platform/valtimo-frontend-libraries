@@ -27,11 +27,12 @@ import {
 import {
   EditPermissionsService,
   EnvironmentService,
+  getCaseManagementRouteParams,
   GlobalNotificationService,
 } from '@valtimo/shared';
 import {ProcessDefinition} from '@valtimo/process';
 import {ButtonModule, IconModule, IconService} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, map, Observable, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, switchMap, tap} from 'rxjs';
 import {ProcessDefinitionResult} from '../../models';
 import {ProcessManagementService, ProcessManagementStateService} from '../../services';
 import {ActivatedRoute} from '@angular/router';
@@ -66,13 +67,6 @@ export class ProcessManagementListComponent {
     {label: 'Delete', callback: this.onDeleteProcess.bind(this), type: 'danger'},
   ];
 
-  public readonly params$: Observable<any> | undefined = this.route.parent?.params.pipe(
-    map(({caseDefinitionKey, caseDefinitionVersionTag}) => ({
-      caseDefinitionKey: caseDefinitionKey,
-      caseDefinitionVersionTag: caseDefinitionVersionTag,
-    }))
-  );
-
   public readonly context$ = getContextObservable(this.route);
 
   public readonly processDefinitions$: Observable<ProcessDefinitionResult[]> =
@@ -83,7 +77,7 @@ export class ProcessManagementListComponent {
     );
 
   public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.params$,
+    getCaseManagementRouteParams(this.route),
     this.context$,
   ]).pipe(
     switchMap(([params, context]) => {

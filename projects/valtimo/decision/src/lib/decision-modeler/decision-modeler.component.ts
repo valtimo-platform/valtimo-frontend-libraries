@@ -120,13 +120,13 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
     this.params$,
     this.context$,
   ]).pipe(
-    switchMap(([params, context]) => {
-      return this.editPermissionsService.hasPermissionsToEditBasedOnContext(
+    switchMap(([params, context]) =>
+      this.editPermissionsService.hasPermissionsToEditBasedOnContext(
         params?.caseDefinitionKey,
         params?.caseDefinitionVersionTag,
         context
-      );
-    })
+      )
+    )
   );
 
   private readonly decisionId$ = this.route.params.pipe(
