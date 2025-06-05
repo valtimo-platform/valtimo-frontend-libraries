@@ -35,11 +35,11 @@ import {
 } from 'rxjs';
 import {
   BreadcrumbService,
-  FitPageDirectiveModule,
+  FitPageDirective,
   PageHeaderService,
   PageTitleService,
   PendingChangesComponent,
-  RenderInPageHeaderDirectiveModule,
+  RenderInPageHeaderDirective,
   SelectedValue,
   SelectItem,
   WidgetModule,
@@ -79,10 +79,10 @@ declare const $: any;
     SelectModule,
     WidgetModule,
     TranslateModule,
-    RenderInPageHeaderDirectiveModule,
+    RenderInPageHeaderDirective,
     ButtonModule,
     IconModule,
-    FitPageDirectiveModule,
+    FitPageDirective,
     DialogModule,
   ],
 })

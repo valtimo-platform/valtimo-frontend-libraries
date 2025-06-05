@@ -28,14 +28,16 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   BreadcrumbService,
-  FitPageDirectiveModule,
+  FitPageDirective,
   ModalService,
   PageHeaderService,
   PageTitleService,
   PendingChangesComponent,
-  RenderInPageHeaderDirectiveModule,
+  RenderInPageHeaderDirective,
 } from '@valtimo/components';
 import {
+    CaseManagementParams,
+
   EditPermissionsService,
   getCaseManagementRouteParams,
   getCaseManagementRouteParamsAndContext,
@@ -96,7 +98,6 @@ import {EMPTY_BPMN} from '../../constants';
 import {
   OpenProcessLinkModalEvent,
   ProcessDefinitionResult,
-  ProcessManagementParams,
   ProcessManagementWindow,
   UpdateProcessDefinitionCaseDefinitionRequest,
 } from '../../models';
@@ -112,9 +113,9 @@ import {PluginTranslationService} from '@valtimo/plugin';
   standalone: true,
   imports: [
     CommonModule,
-    FitPageDirectiveModule,
+    FitPageDirective,
     LoadingModule,
-    RenderInPageHeaderDirectiveModule,
+    RenderInPageHeaderDirective,
     DropdownModule,
     ReactiveFormsModule,
     SelectModule,
@@ -483,12 +484,8 @@ export class ProcessManagementBuilderComponent
         camundaPlatformBehaviors,
         ValtimoPropertiesProviderModule,
       ],
-      moddleExtensions: {
-        camunda: CamundaBpmnModdle,
-      },
-      propertiesPanel: {
-        parent: this.modelerPanelElementRef.nativeElement,
-      },
+      moddleExtensions: {camunda: CamundaBpmnModdle},
+      propertiesPanel: {parent: this.modelerPanelElementRef.nativeElement},
     });
 
     this._bpmnModeler?.attachTo(this.modelerElementRef.nativeElement);
@@ -549,13 +546,7 @@ export class ProcessManagementBuilderComponent
         },
       ],
       move: ['value', null],
-      resizeHandles: [
-        'value',
-        {
-          addResizer: () => {},
-          removeResizers: () => {},
-        },
-      ],
+      resizeHandles: ['value', {addResizer: () => {}, removeResizers: () => {}}],
     };
 
     this._bpmnViewer = new Modeler({
@@ -564,12 +555,8 @@ export class ProcessManagementBuilderComponent
         BpmnPropertiesPanelModule,
         ValtimoPropertiesProviderModule,
       ],
-      moddleExtensions: {
-        camunda: CamundaBpmnModdle,
-      },
-      propertiesPanel: {
-        parent: this.viewerPanelElementRef.nativeElement,
-      },
+      moddleExtensions: {camunda: CamundaBpmnModdle},
+      propertiesPanel: {parent: this.viewerPanelElementRef.nativeElement},
     });
 
     this._bpmnViewer?.attachTo(this.viewerElementRef.nativeElement);
@@ -749,7 +736,7 @@ export class ProcessManagementBuilderComponent
     );
   }
 
-  private initBreadcrumbs(params: ProcessManagementParams, context: ManagementContext): void {
+  private initBreadcrumbs(params: CaseManagementParams, context: ManagementContext): void {
     if (context === 'independent') return;
 
     const route = `/case-management/case/${params.caseDefinitionKey}/version/${params.caseDefinitionVersionTag}`;
