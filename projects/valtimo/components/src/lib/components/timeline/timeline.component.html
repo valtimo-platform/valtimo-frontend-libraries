@@ -16,7 +16,7 @@
 
 @if (items$ | async; as items) {
   <ul class="timeline mb-0 py-5">
-    @for (item of items; track item) {
+    @for (item of items; track item.customData.id) {
       <li class="timeline-item status-done">
         <div class="timeline-date">
           <span>{{ item.date }}</span>

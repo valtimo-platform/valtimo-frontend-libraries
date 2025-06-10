@@ -17,7 +17,7 @@ import {Component, HostBinding, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {PermissionService} from '@valtimo/access-control';
-import {Pagination, PromptService, TimelineItem, TimelineItemImpl} from '@valtimo/components';
+import {Pagination, TimelineItem, TimelineItemImpl} from '@valtimo/components';
 import {GlobalNotificationService, Page} from '@valtimo/shared';
 import moment from 'moment';
 import {BehaviorSubject, combineLatest, map, Observable, of} from 'rxjs';
@@ -42,8 +42,9 @@ export class CaseDetailTabNotesComponent implements OnInit {
   public timelineItems: TimelineItem[] = [];
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
-  public readonly fields$ = new BehaviorSubject<Array<{key: string; label: string}>>([]);
   public readonly customData$ = new BehaviorSubject<object>({});
+  public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
+  public readonly idToDelete$ = new BehaviorSubject<string | null>(null);
 
   private readonly documentId$ = this.route.params.pipe(map(params => params.documentId));
   public readonly actions = [
@@ -150,7 +151,6 @@ export class CaseDetailTabNotesComponent implements OnInit {
     private readonly globalNotificationService: GlobalNotificationService,
     private readonly notesService: NotesService,
     private readonly permissionService: PermissionService,
-    private readonly promptService: PromptService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService
   ) {}
@@ -202,23 +202,18 @@ export class CaseDetailTabNotesComponent implements OnInit {
     this.notesService.showModal();
   }
 
-  public deleteNote(data): void {
-    this.promptService.openPrompt({
-      headerText: this.translateService.instant('case.notes.deleteConfirmation.title'),
-      bodyText: this.translateService.instant('case.notes.deleteConfirmation.description'),
-      cancelButtonText: this.translateService.instant('case.deleteConfirmation.cancel'),
-      confirmButtonText: this.translateService.instant('case.deleteConfirmation.delete'),
-      closeOnConfirm: true,
-      closeOnCancel: true,
-      confirmCallBackFunction: () => {
-        this.notesService.deleteNote(data.customData.id).subscribe(() => {
-          this.notesService.refresh();
-          this.globalNotificationService.showToast({
-            title: this.translateService.instant('case.notes.deleteConfirmation.deletedMessage'),
-            type: 'success',
-          });
-        });
-      },
+  public onDeleteConfirm(noteId: string): void {
+    this.notesService.deleteNote(noteId).subscribe(() => {
+      this.notesService.refresh();
+      this.globalNotificationService.showToast({
+        title: this.translateService.instant('case.notes.deleteConfirmation.deletedMessage'),
+        type: 'success',
+      });
     });
+  }
+
+  private deleteNote(data: TimelineItem): void {
+    this.idToDelete$.next(data.customData?.['id'] ?? '');
+    this.showDeleteModal$.next(true);
   }
 }
