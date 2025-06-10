@@ -133,8 +133,8 @@ export class CaseDetailTabNotesComponent implements OnInit {
             {},
             {id: note.id},
             [
-              ...(deletePermissions[index] ? ['delete'] : []),
               ...(editPermissions[index] ? ['edit'] : []),
+              ...(deletePermissions[index] ? ['delete'] : []),
             ]
           )
         );
