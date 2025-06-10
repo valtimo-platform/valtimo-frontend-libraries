@@ -24,7 +24,10 @@ import {BehaviorSubject} from 'rxjs';
   standalone: false,
 })
 export class TimelineComponent {
-  @Input() items: Array<TimelineItem>;
+  public readonly items$ = new BehaviorSubject<Array<TimelineItem>>([]);
+  @Input() public set items(value: Array<TimelineItem>) {
+    this.items$.next(value);
+  }
 
   public readonly actions$ = new BehaviorSubject<{[id: string]: object}>({});
   @Input() public set actions(value: any[]) {
