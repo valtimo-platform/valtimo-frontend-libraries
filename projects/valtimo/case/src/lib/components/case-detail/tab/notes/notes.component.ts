@@ -20,7 +20,7 @@ import {PermissionService} from '@valtimo/access-control';
 import {Pagination, TimelineItem, TimelineItemImpl} from '@valtimo/components';
 import {GlobalNotificationService, Page} from '@valtimo/shared';
 import moment from 'moment';
-import {BehaviorSubject, combineLatest, map, Observable, of} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, of, Subject} from 'rxjs';
 import {switchMap, take, tap} from 'rxjs/operators';
 import {Note} from '../../../../models/notes.model';
 import {
@@ -42,7 +42,9 @@ export class CaseDetailTabNotesComponent implements OnInit {
   public timelineItems: TimelineItem[] = [];
 
   public readonly loading$ = new BehaviorSubject<boolean>(true);
-  public readonly customData$ = new BehaviorSubject<object>({});
+  public readonly customData$ = new BehaviorSubject<TimelineItem | null>(null);
+  public readonly modalOpen$ = new BehaviorSubject<boolean>(false);
+  public readonly modalType$ = new Subject<'add' | 'modify'>();
   public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
   public readonly idToDelete$ = new BehaviorSubject<string | null>(null);
 
@@ -168,38 +170,25 @@ export class CaseDetailTabNotesComponent implements OnInit {
   }
 
   public showAddModal(): void {
-    this.customData$.next({});
-    this.notesService.setModalType('add');
-    this.notesService.showModal();
+    this.customData$.next(null);
+    this.modalType$.next('add');
+    this.modalOpen$.next(true);
   }
 
-  public createNewNote(content): void {
-    this.documentId$
-      .pipe(
-        take(1),
-        switchMap((documentId: string) => this.notesService.createDocumentNote(documentId, content))
-      )
-      .subscribe(() => {
-        this.notesService.refresh();
-        this.notesService.hideModal();
-      });
-  }
-
-  public editNoteEvent(content): void {
-    this.notesService.updateNote(content.data.customData.id, content.formData).subscribe(() => {
-      this.notesService.refresh();
-      this.notesService.hideModal();
-      this.globalNotificationService.showToast({
-        title: this.translateService.instant('case.notes.editedMessage'),
-        type: 'success',
-      });
-    });
-  }
-
-  public editNote(data): void {
+  public editNote(data: TimelineItem): void {
     this.customData$.next(data);
-    this.notesService.setModalType('modify');
-    this.notesService.showModal();
+    this.modalType$.next('modify');
+    this.modalOpen$.next(true);
+  }
+
+  public onModalClosed(note: Partial<{id: string; content: string}> | null): void {
+    this.modalOpen$.next(false);
+
+    if (!note || !note.content) return;
+    const {id, content} = note;
+
+    if (!id) this.createNewNote(content);
+    else this.editNoteConfirmed({id, content});
   }
 
   public onDeleteConfirm(noteId: string): void {
@@ -207,6 +196,29 @@ export class CaseDetailTabNotesComponent implements OnInit {
       this.notesService.refresh();
       this.globalNotificationService.showToast({
         title: this.translateService.instant('case.notes.deleteConfirmation.deletedMessage'),
+        type: 'success',
+      });
+    });
+  }
+
+  private createNewNote(content): void {
+    this.documentId$
+      .pipe(
+        take(1),
+        switchMap((documentId: string) =>
+          this.notesService.createDocumentNote(documentId, {content})
+        )
+      )
+      .subscribe(() => {
+        this.notesService.refresh();
+      });
+  }
+
+  private editNoteConfirmed(note: {id: string; content: string}): void {
+    this.notesService.updateNote(note.id, note).subscribe(() => {
+      this.notesService.refresh();
+      this.globalNotificationService.showToast({
+        title: this.translateService.instant('case.notes.editedMessage'),
         type: 'success',
       });
     });
