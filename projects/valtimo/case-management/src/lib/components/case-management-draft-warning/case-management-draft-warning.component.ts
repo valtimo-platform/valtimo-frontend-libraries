@@ -37,16 +37,13 @@ export class CaseManagementDraftWarningComponent {
     this._name$,
     this.translateService.stream('key'),
   ]).pipe(
-    map(([name]) => {
-      console.log({name});
-      return {
-        type: 'warning',
-        lowContrast: true,
-        title: this.translateService.instant('caseManagement.draftWarning.title'),
-        message: this.translateService.instant('caseManagement.draftWarning.description', {name}),
-        showClose: false,
-      };
-    })
+    map(([name]) => ({
+      type: 'warning',
+      lowContrast: true,
+      title: this.translateService.instant('caseManagement.draftWarning.title'),
+      message: this.translateService.instant('caseManagement.draftWarning.description', {name}),
+      showClose: false,
+    }))
   );
 
   constructor(private readonly translateService: TranslateService) {}

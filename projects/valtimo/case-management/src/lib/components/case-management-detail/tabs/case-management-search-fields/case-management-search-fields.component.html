@@ -26,10 +26,6 @@
     showActionItems: showActionItems$ | async,
   } as obs"
 >
-  <valtimo-case-management-draft-warning
-    name="Search fields"
-  ></valtimo-case-management-draft-warning>
-
   <ng-container *ngTemplateOutlet="list; context: {obs: obs}"></ng-container>
 
   <ng-container *ngTemplateOutlet="modal; context: {obs: obs}"></ng-container>
