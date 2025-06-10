@@ -178,7 +178,8 @@
 
       <valtimo-value-path-selector
         formControlName="path"
-        [documentDefinitionName]="(params$ | async)?.caseDefinitionKey"
+        [caseDefinitionKey]="(params$ | async)?.caseDefinitionKey"
+        [caseDefinitionVersionTag]="(params$ | async)?.caseDefinitionVersionTag"
       ></valtimo-value-path-selector>
     </cds-label>
 
