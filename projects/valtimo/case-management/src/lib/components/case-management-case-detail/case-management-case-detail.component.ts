@@ -45,12 +45,6 @@ export class CaseManagementCaseDetailComponent {
   public readonly currentTab$ = new BehaviorSubject<TabEnum>(TabEnum.TABS);
   public readonly TabEnum = TabEnum;
 
-  public readonly DRAFT_WARNING_MESSAGE = {
-    [TabEnum.TABS]: 'caseManagement.tabs.caseDetailTab.tabs',
-    [TabEnum.STATUSES]: 'caseManagement.tabs.caseDetailTab.statuses',
-    [TabEnum.TAGS]: 'caseManagement.tabs.caseDetailTab.tags',
-  };
-
   constructor(
     private readonly draftVersionService: DraftVersionService,
     private readonly route: ActivatedRoute
