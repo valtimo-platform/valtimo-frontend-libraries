@@ -263,7 +263,7 @@ export class ValuePathSelectorComponent implements OnInit, OnDestroy, ControlVal
           cache ? of(cache) : this.documentService.getCaseDefinitions({active: true}),
           this._caseDefinitionKey$.pipe(startWith(null)),
         ]).pipe(
-          tap(([definitions, _]) => {
+          tap(([definitions]) => {
             this.loadingCaseDefinitionItems$.next(false);
             this.valuePathSelectorService.setCaseDefinitionCache(definitions);
           }),
