@@ -85,15 +85,6 @@ export class CaseManagementDetailActionsComponent {
     )
   );
 
-  public readonly hasEditPermissions$: Observable<boolean> = combineLatest(
-    this.caseDefinitionKey$,
-    this.caseDefinitionVersionTag$
-  ).pipe(
-    switchMap(([caseDefinitionKey, caseDefinitionVersionTag]) =>
-      this.editPermissionsService.hasEditPermissions(caseDefinitionKey, caseDefinitionVersionTag)
-    )
-  );
-
   public readonly selectedVersionIsGloballyActive$: Observable<boolean> = combineLatest([
     this.selectedVersion$,
     this.globalActiveVersion$,
