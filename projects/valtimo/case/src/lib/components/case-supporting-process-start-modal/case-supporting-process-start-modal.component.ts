@@ -65,7 +65,6 @@ export class CaseSupportingProcessStartModalComponent {
 
   protected isFormViewModel = false;
   public isUIComponent = false;
-  public isLoaded = false;
 
   public readonly processDefinitionKey$ = new BehaviorSubject<string>('');
   public readonly caseDefinitionKey$ = new BehaviorSubject<string>('');
@@ -79,6 +78,7 @@ export class CaseSupportingProcessStartModalComponent {
   public readonly formFlowInstanceId$ = new BehaviorSubject<string>(undefined);
   public readonly documentId$ = new BehaviorSubject<string>(undefined);
   public readonly modalOpen$ = new BehaviorSubject<boolean>(false);
+  public readonly isLoading$ = new BehaviorSubject<boolean>(true);
   private readonly _formCustomComponentConfig$ = new BehaviorSubject<
     FormCustomComponentConfig | {}
   >({});
@@ -113,8 +113,7 @@ export class CaseSupportingProcessStartModalComponent {
       )
       .subscribe(startProcessResult => {
         if (startProcessResult) {
-          this.isLoaded = true;
-
+          this.isLoading$.next(false);
           this.isUIComponent = false;
           this.isFormViewModel = false;
           switch (startProcessResult.type) {
@@ -190,7 +189,7 @@ export class CaseSupportingProcessStartModalComponent {
   public formSubmitted(): void {
     this.closeCdsModal();
     this.formSubmit.emit();
-    this.isLoaded = false;
+    this.isLoading$.next(true);
     this.formDefinition$.next(null);
   }
 
