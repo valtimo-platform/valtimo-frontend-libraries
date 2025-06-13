@@ -15,8 +15,8 @@
  */
 
 import {Injector} from '@angular/core';
-import {FormioCustomComponentInfo, registerCustomFormioComponent} from '../../../modules';
 import {FormioDummyComponent} from './dummy.component';
+import {FormioCustomComponentInfo, registerCustomFormioComponent} from '../../../modules';
 
 const COMPONENT_OPTIONS: FormioCustomComponentInfo = {
   type: 'dummy',

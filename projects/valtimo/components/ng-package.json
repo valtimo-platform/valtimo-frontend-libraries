@@ -30,13 +30,13 @@
     "flatpickr",
     "lodash",
     "jwt-decode",
-    "formiojs",
     "deepmerge-ts",
     "@carbon/charts-angular",
     "@types/topojson",
     "@tadashi/currency",
     "semver",
-    "@formio/js",
-    "muuri"
+    "formiojs",
+    "muuri",
+    "@formio/angular"
   ]
 }

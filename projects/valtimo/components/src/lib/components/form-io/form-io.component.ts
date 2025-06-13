@@ -46,7 +46,7 @@ import {FormIoLocalStorageService} from './services/form-io-local-storage.servic
 import {deepmerge} from 'deepmerge-ts';
 import {ConfigService, ValtimoConfig} from '@valtimo/shared';
 import {isEqual} from 'lodash';
-import {Formio} from '@formio/js';
+import {Formio} from 'formiojs';
 
 @Component({
   selector: 'valtimo-form-io',
