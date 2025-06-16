@@ -91,17 +91,16 @@ import {CaseManagementWidgetsEditorComponent} from './components/case-management
 import {CaseManagementTagsModalComponent} from './components/case-management-detail/tabs/case-management-tags/case-management-tags-modal/case-management-tags-modal.component';
 import {CaseManagementTagsComponent} from './components/case-management-detail/tabs/case-management-tags/case-management-tags.component';
 import {CaseManagementListComponent} from './components/case-management-list/case-management-list.component';
-import {CaseManagementRemoveModalComponent} from './components/case-management-remove-modal/case-management-remove-modal.component';
 import {CaseManagementSelectVersionModalComponent} from './components/case-management-select-version-modal/case-management-select-version-modal.component';
 import {CaseManagementUploadComponent} from './components/case-management-upload/case-management-upload.component';
 import {CaseManagementUploadStepComponent} from './components/case-management-upload/step/case-management-upload-step.component';
 import {TabManagementService} from './services';
+import {CaseManagementDraftWarningComponent} from './components/case-management-draft-warning/case-management-draft-warning.component';
 
 @NgModule({
   declarations: [
     CaseManagementListComponent,
     CaseManagementConnectModalComponent,
-    CaseManagementRemoveModalComponent,
     CaseManagementSelectVersionModalComponent,
     CaseManagementUploadComponent,
     CaseManagementSearchFieldsComponent,
@@ -182,6 +181,7 @@ import {TabManagementService} from './services';
     MuuriDirectiveModule,
     NumberModule,
     ReadOnlyDirective,
+    CaseManagementDraftWarningComponent,
   ],
   providers: [TabManagementService],
 })

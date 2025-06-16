@@ -14,11 +14,4 @@
   ~ limitations under the License.
   -->
 
-<valtimo-value-path-selector
-  [appendInline]="true"
-  [defaultValue]="defaultValue$ | async"
-  [showCaseDefinitionSelector]="true"
-  notation="slashes"
-  [prefixes]="[ValuePathSelectorPrefix.DOC]"
-  (valueChangeEvent)="onValueChange($event)"
-></valtimo-value-path-selector>
+<cds-inline-notification [notificationObj]="notificationObj$ | async"></cds-inline-notification>

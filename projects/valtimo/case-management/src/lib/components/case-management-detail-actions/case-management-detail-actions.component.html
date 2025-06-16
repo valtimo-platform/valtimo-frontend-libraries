@@ -92,7 +92,6 @@
 <ng-template #exportMenu let-obs="obs">
   <cds-overflow-menu
     valtimoCdsOverflowButton
-    [disabled]="!(hasEditPermissions$ | async)"
     [width]="250"
     [customTrigger]="customTrigger"
     [offset]="{y: 48, x: 37}"
@@ -107,7 +106,7 @@
 
     <cds-overflow-menu-option
       [id]="'setGlobalActiveVersion'"
-      [disabled]="obs.selectedVersionIsGloballyActive || !(hasEditPermissions$ | async)"
+      [disabled]="obs.selectedVersionIsGloballyActive"
       (selected)="openGlobalActiveVersionModal()"
       >{{ 'caseManagement.setGlobalActiveVersion' | translate }}
     </cds-overflow-menu-option>
@@ -141,8 +140,6 @@
     'caseManagement.readonly' | translate
   }}</cds-tag>
 </ng-template>
-
-<valtimo-case-management-remove-modal #caseRemoveModal></valtimo-case-management-remove-modal>
 
 <valtimo-case-management-select-version-modal
   [open]="showAllVersionsModal$ | async"
