@@ -93,6 +93,7 @@ export class FormManagementDuplicateComponent extends BaseModal implements OnIni
 
   public duplicate(): void {
     const control = this.duplicateFormName;
+
     const request: CreateFormDefinitionRequest = {
       name: control.value.toString(),
       formDefinition: JSON.stringify(this.formToDuplicate.formDefinition),

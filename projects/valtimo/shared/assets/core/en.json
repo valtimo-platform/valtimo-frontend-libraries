@@ -447,7 +447,7 @@
       "deleted": "Deleted form",
       "deletionError": "Error deleting form",
       "deployed": "Form deployed",
-      "duplicated": "Form duplicated"
+      "deploymentError": "Error deploying form"
     },
     "upload": {
       "modalTitle": "Upload form definition",
