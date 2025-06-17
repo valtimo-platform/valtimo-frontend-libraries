@@ -18,6 +18,7 @@ import {
   Component,
   EventEmitter,
   HostListener,
+  Injector,
   Input,
   OnChanges,
   OnDestroy,
@@ -46,7 +47,9 @@ import {FormIoLocalStorageService} from './services/form-io-local-storage.servic
 import {deepmerge} from 'deepmerge-ts';
 import {ConfigService, ValtimoConfig} from '@valtimo/shared';
 import {isEqual} from 'lodash';
-import {Formio} from '@formio/js';
+import {Formio} from 'formiojs';
+import {FormIoTagsService} from './services/form-io.tags.service';
+import {registerCustomTag} from '../../modules';
 
 @Component({
   selector: 'valtimo-form-io',
@@ -144,9 +147,12 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     private readonly translateService: TranslateService,
     private readonly localStorageService: FormIoLocalStorageService,
     private readonly modalService: ValtimoModalService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly tagsService: FormIoTagsService,
+    private readonly injector: Injector
   ) {
     this.setOverrideOptions(configService.config);
+    this.reregisterTags();
   }
 
   public ngOnInit(): void {
@@ -166,6 +172,8 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
       this.unsubscribeFormRefresh();
       this.subscribeFormRefresh();
     }
+
+    this.reregisterTags();
   }
 
   public ngOnDestroy(): void {
@@ -299,5 +307,11 @@ export class FormioComponent implements OnInit, OnChanges, OnDestroy {
     if (!config.formioOptions) return;
 
     this._overrideOptions$.next(config.formioOptions);
+  }
+
+  private reregisterTags(): void {
+    this.tagsService.tagsToRegister.forEach(tag => {
+      registerCustomTag(tag, this.injector);
+    });
   }
 }

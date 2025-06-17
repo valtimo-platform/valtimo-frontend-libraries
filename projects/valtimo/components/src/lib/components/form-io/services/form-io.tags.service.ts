@@ -16,11 +16,17 @@
 
 import {Injectable} from '@angular/core';
 
-@Injectable({providedIn: 'root'})
-export class CustomTagsService {
-  tags: string[] = [];
+@Injectable({
+  providedIn: 'root',
+})
+export class FormIoTagsService {
+  private _tagsToRegister: string[] = [];
 
-  addCustomTag(tag: string) {
-    this.tags.push(tag);
+  public get tagsToRegister(): string[] {
+    return this._tagsToRegister;
+  }
+
+  public markTagForRegistration(tag: string): void {
+    this._tagsToRegister = [...this._tagsToRegister, tag];
   }
 }
