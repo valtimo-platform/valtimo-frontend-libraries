@@ -197,6 +197,7 @@ export class FormManagementEditComponent implements OnInit, OnDestroy {
     private readonly injector: Injector
   ) {
     this.iconService.registerAll([ArrowLeft16]);
+    this.formIoTagsService.reregisterTags(this.injector);
   }
 
   public ngOnInit(): void {
