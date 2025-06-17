@@ -29,7 +29,6 @@ import {ValtimoFormioOptions} from '../../models';
 import {deepmerge} from 'deepmerge-ts';
 import {isEqual} from 'lodash';
 import {ConfigService, ValtimoConfig} from '@valtimo/shared';
-import {registerCustomTag} from '../../modules';
 import {FormIoTagsService} from './services/form-io.tags.service';
 
 @Component({
@@ -96,7 +95,7 @@ export class FormioBuilderComponent implements OnInit {
     private readonly tagsService: FormIoTagsService
   ) {
     this.setOverrideOptions(this.configService.config);
-    this.reregisterTags();
+    this.tagsService.reregisterTags(this.injector);
   }
 
   public ngOnInit() {
@@ -124,11 +123,5 @@ export class FormioBuilderComponent implements OnInit {
     if (!config.formioOptions) return;
 
     this._overrideOptions$.next(config.formioOptions);
-  }
-
-  private reregisterTags(): void {
-    this.tagsService.tagsToRegister.forEach(tag => {
-      registerCustomTag(tag, this.injector);
-    });
   }
 }
