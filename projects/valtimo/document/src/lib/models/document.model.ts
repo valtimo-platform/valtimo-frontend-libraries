@@ -313,8 +313,8 @@ interface ExternalStartFormConfiguration {
 }
 
 interface CaseSettings extends ExternalStartFormConfiguration {
-  caseDefinitionKey: string;
-  caseDefinitionVersionTag: string;
+  caseDefinitionKey?: string;
+  caseDefinitionVersionTag?: string;
   canHaveAssignee?: boolean;
   autoAssignTasks?: boolean;
 }
