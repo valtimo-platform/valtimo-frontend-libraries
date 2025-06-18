@@ -71,7 +71,8 @@ export class CaseDetailTabAuditComponent implements OnInit {
             auditRecord.metaData.user,
             fromNow,
             CaseDetailTabAuditComponent.getTranslationKey(auditRecord.auditEvent),
-            auditRecord.auditEvent
+            auditRecord.auditEvent,
+            {id: `${auditRecord.metaData.user}-${auditRecord.metaData.occurredOn}`}
           )
         );
       });
