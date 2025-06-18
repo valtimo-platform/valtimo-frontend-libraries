@@ -121,13 +121,13 @@ export const environment: ValtimoConfig = {
           {link: ['/access-control'], title: 'Access Control', sequence: 5},
           {link: ['/translation-management'], title: 'Translations', sequence: 6},
 
-          {title: 'System processes', textClass: 'text-dark font-weight-bold c-default', sequence: 7},
-          {link: ['/processes'], title: 'Processes', sequence: 8},
-          {link: ['/decision-tables'], title: 'Decision tables', sequence: 9},
-
           {title: 'Object management', textClass: 'text-dark font-weight-bold c-default', sequence: 10},
           {link: ['/object-management'], title: 'Objects', sequence: 11},
           {link: ['/form-management'], title: 'Forms', sequence: 12},
+
+          {title: 'System processes', textClass: 'text-dark font-weight-bold c-default', sequence: 7},
+          {link: ['/processes'], title: 'Processes', sequence: 8},
+          {link: ['/decision-tables'], title: 'Decision tables', sequence: 9},
 
           {title: 'Other', textClass: 'text-dark font-weight-bold c-default', sequence: 13},
           {link: ['/logging'], title: 'Logs', sequence: 14},
