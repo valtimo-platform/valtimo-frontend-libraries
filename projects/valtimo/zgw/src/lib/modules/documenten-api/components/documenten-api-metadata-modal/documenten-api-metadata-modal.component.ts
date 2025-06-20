@@ -79,6 +79,7 @@ import {DocumentenApiTagService} from '../../services/documenten-api-tag.service
 import moment from 'moment';
 import {DocumentenApiUploadFieldDefaultValues} from '../../models/documenten-api-upload-field.model';
 import {DocumentenApiVersionService} from '../../services';
+import {getCaseManagementRouteParams} from '@valtimo/shared';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -399,14 +400,17 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   );
 
   public readonly documentTypeItems$: Observable<Array<ListItem>> = combineLatest([
-    this.valtimoModalService.caseDefinitionKey$,
+    getCaseManagementRouteParams(this.route),
     this.informatieobjecttypeFormControl.valueChanges.pipe(
       startWith(this.informatieobjecttypeFormControl.value)
     ),
   ]).pipe(
-    switchMap(([caseDefinitionKey, informatieobjecttypeValue]) =>
+    switchMap(([params, informatieobjecttypeValue]) =>
       combineLatest([
-        this.documentService.getDocumentTypes(caseDefinitionKey),
+        this.documentService.getDocumentTypesForCase(
+          params.caseDefinitionKey,
+          params.caseDefinitionVersionTag
+        ),
         of(informatieobjecttypeValue),
       ])
     ),
