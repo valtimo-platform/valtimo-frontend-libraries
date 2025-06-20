@@ -514,7 +514,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       else if (ontvangstdatum) this.additionalDocumentDate$.next('received');
       else this.additionalDocumentDate$.next('neither');
 
-      const prefillStatus = status || this.defaultValues.status;
+      const prefillStatus = this.defaultValues.status || status;
       const validPrefillStatus = this.STATUSES.includes(prefillStatus) ? prefillStatus : '';
 
       this.documentenApiMetadataForm.patchValue({
