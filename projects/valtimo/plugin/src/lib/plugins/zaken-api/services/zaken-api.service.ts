@@ -51,12 +51,12 @@ export class ZakenApiService {
       `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/version/${versionTag}/zaaktype/resultaattype`
     );
   }
-
-  public getEigenschappenByCaseDefinition(
-    caseDefinitionKey: string
+  public getEigenschappenByCaseAndVersion(
+    caseDefinitionKey: string,
+    versionTag: string
   ): Observable<Array<Eigenschap>> {
     return this.http.get<Array<Eigenschap>>(
-      `${this.valtimoEndpointUri}management/v1/case-definition/${caseDefinitionKey}/catalogi-eigenschappen`
+      `${this.valtimoEndpointUri}management/v1/case-definition/${caseDefinitionKey}/version/${versionTag}/catalogi-eigenschappen`
     );
   }
 }
