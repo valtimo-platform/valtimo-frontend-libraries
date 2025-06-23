@@ -513,6 +513,12 @@ export class DocumentService {
     );
   }
 
+  public getDocumentTypesForDocument(documentId: string): Observable<DocumentType[]> {
+    return this.http.get<DocumentType[]>(
+      `${this.valtimoEndpointUri}v1/document/${documentId}/zaaktype/documenttype`
+    );
+  }
+
   public getProcessDefinitionCaseDefinitionFromProcessInstanceId(
     processInstanceId: string
   ): Observable<ProcessDefinitionCaseDefinition> {
