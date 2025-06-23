@@ -43,11 +43,12 @@ export class ZakenApiService {
     );
   }
 
-  public getResultaatTypesByCaseDefinition(
-    caseDefinitionKey: string
+  public getResultaatTypesByCaseAndVersion(
+    caseDefinitionKey: string,
+    versionTag: string
   ): Observable<Array<ResultaatType>> {
     return this.http.get<Array<ResultaatType>>(
-      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/zaaktype/resultaattype`
+      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/version/${versionTag}/zaaktype/resultaattype`
     );
   }
 

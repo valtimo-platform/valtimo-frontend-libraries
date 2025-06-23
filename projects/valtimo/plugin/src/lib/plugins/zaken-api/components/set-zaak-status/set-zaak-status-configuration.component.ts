@@ -28,8 +28,7 @@ import {
   tap,
 } from 'rxjs';
 import {InputOption, SetZaakStatusConfig} from '../../models';
-import {ModalService, RadioValue, SelectItem} from '@valtimo/components';
-import {DocumentService} from '@valtimo/document';
+import {RadioValue, SelectItem} from '@valtimo/components';
 import {map} from 'rxjs/operators';
 import {ZakenApiService} from '../../services';
 import {PluginTranslatePipe} from '../../../../pipes';
@@ -82,8 +81,6 @@ export class SetZaakStatusConfigurationComponent
   private readonly _subscriptions = new Subscription();
 
   constructor(
-    private readonly modalService: ModalService,
-    private readonly documentService: DocumentService,
     private readonly zakenApiService: ZakenApiService,
     private readonly pluginTranslatePipe: PluginTranslatePipe
   ) {}
