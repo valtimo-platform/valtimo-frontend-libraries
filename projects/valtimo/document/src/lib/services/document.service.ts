@@ -507,8 +507,8 @@ export class DocumentService {
   public getDocumentTypesForCase(
     caseDefinitionKey: string,
     versionTag: string
-  ): Observable<Array<DocumentType>> {
-    return this.http.get<Array<DocumentType>>(
+  ): Observable<DocumentType[]> {
+    return this.http.get<DocumentType[]>(
       `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/version/${versionTag}/zaaktype/documenttype`
     );
   }

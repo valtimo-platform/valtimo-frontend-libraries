@@ -34,9 +34,12 @@ export class ZakenApiService {
     this.valtimoEndpointUri = configService.config.valtimoApi.endpointUri;
   }
 
-  public getStatusTypesByCaseDefinition(caseDefinitionKey: string): Observable<Array<StatusType>> {
+  public getStatusTypesByCaseAndVersion(
+    caseDefinitionKey: string,
+    versionTag: string
+  ): Observable<Array<StatusType>> {
     return this.http.get<Array<StatusType>>(
-      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/zaaktype/statustype`
+      `${this.valtimoEndpointUri}v1/case-definition/${caseDefinitionKey}/version/${versionTag}/zaaktype/statustype`
     );
   }
 
