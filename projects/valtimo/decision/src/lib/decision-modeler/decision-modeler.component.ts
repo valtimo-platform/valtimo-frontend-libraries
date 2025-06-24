@@ -43,6 +43,7 @@ import {
   SelectedValue,
   SelectItem,
   WidgetModule,
+  SelectModule as ValtimoSelectModule,
 } from '@valtimo/components';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {EMPTY_DECISION} from './empty-decision';
@@ -78,6 +79,7 @@ declare const $: any;
     ModalModule,
     SelectModule,
     WidgetModule,
+    ValtimoSelectModule,
     TranslateModule,
     RenderInPageHeaderDirective,
     ButtonModule,
@@ -178,7 +180,6 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
   ) {
     super();
     this.iconService.registerAll([Deploy16, Download16, ArrowLeft16]);
-    console.log(this.route.snapshot.params);
   }
 
   public ngAfterViewInit(): void {
@@ -193,10 +194,6 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
 
         this.initBreadcrumbs(params, context);
       });
-  }
-
-  public switchVersion(decisionId: string | SelectedValue): void {
-    if (decisionId) this.router.navigate(['/decision-tables/edit', decisionId]);
   }
 
   public deploy(): void {
@@ -217,23 +214,8 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
                 )
               )
         ),
-        tap(res => {
-          const deployed = res?.deployedDecisionDefinitions;
-          const id = deployed && deployed[Object.keys(deployed)[0]]?.id;
-
-          if (!id) return;
-
-          this.createdDecisionVersionSelectItems$.pipe(take(1)).subscribe(existing => {
-            this.createdDecisionVersionSelectItems$.next([
-              ...existing,
-              {id, text: deployed[id].version.toString()},
-            ]);
-            setTimeout(() => {
-              this.switchVersion(id);
-            });
-          });
-        }),
-        tap(() => {
+        tap((res: {identifier: string}) => {
+          this.router.navigate(['../', res.identifier], {relativeTo: this.route});
           this.showNotification('success', 'decisions.deploySuccess');
         }),
         catchError(() => {
