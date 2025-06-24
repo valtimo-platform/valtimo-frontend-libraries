@@ -196,6 +196,12 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
       });
   }
 
+  public switchVersion(decisionId: string | SelectedValue): void {
+    if (!decisionId) return;
+
+    this.router.navigate(['../', decisionId], {relativeTo: this.route});
+  }
+
   public deploy(): void {
     from(this.dmnModeler.saveXML({format: true}))
       .pipe(
@@ -215,7 +221,7 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
               )
         ),
         tap((res: {identifier: string}) => {
-          this.router.navigate(['../', res.identifier], {relativeTo: this.route});
+          this.switchVersion(res.identifier);
           this.showNotification('success', 'decisions.deploySuccess');
         }),
         catchError(() => {
