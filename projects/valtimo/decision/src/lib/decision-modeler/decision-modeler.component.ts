@@ -104,22 +104,21 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
 
   private _fileName!: string;
 
-  public readonly caseManagementRouteParams$ = getCaseManagementRouteParams(this.route);
-  public readonly context$ = getContextObservable(this.route);
+  public readonly caseManagementRouteParams$: Observable<CaseManagementParams | undefined> =
+    getCaseManagementRouteParams(this.route);
+  public readonly context$: Observable<ManagementContext | null> = getContextObservable(this.route);
 
   public readonly compactMode$ = this.pageHeaderService.compactMode$;
 
-  public readonly params$: Observable<any> | undefined = getCaseManagementRouteParams(this.route);
-
   public readonly hasEditPermissions$: Observable<boolean> = combineLatest([
-    this.params$,
+    this.caseManagementRouteParams$,
     this.context$,
   ]).pipe(
     switchMap(([params, context]) =>
       this.editPermissionsService.hasPermissionsToEditBasedOnContext(
-        params?.caseDefinitionKey,
-        params?.caseDefinitionVersionTag,
-        context
+        params?.caseDefinitionKey ?? '',
+        params?.caseDefinitionVersionTag ?? '',
+        context ?? ''
       )
     )
   );
@@ -154,7 +153,7 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
     map(([current, list, created]) => {
       const filtered = list.filter(d => d.key === current.key);
       return [...filtered.map(d => ({id: d.id, text: d.version.toString()})), ...created].sort(
-        (a, b) => +b.text - +a.text
+        (a, b) => +(b.text ?? '') - +(a.text ?? '')
       );
     }),
     tap(() => this.versionSelectionDisabled$.next(false))
@@ -179,6 +178,7 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
   ) {
     super();
     this.iconService.registerAll([Deploy16, Download16, ArrowLeft16]);
+    console.log(this.route.snapshot.params);
   }
 
   public ngAfterViewInit(): void {
@@ -189,6 +189,8 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
     combineLatest([this.caseManagementRouteParams$, this.context$])
       .pipe(take(1))
       .subscribe(([params, context]) => {
+        if (!params || !context) return;
+
         this.initBreadcrumbs(params, context);
       });
   }
@@ -208,8 +210,8 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
             : this.caseManagementRouteParams$.pipe(
                 switchMap(params =>
                   this.decisionService.deployCaseDecisionDefinition(
-                    params.caseDefinitionKey,
-                    params.caseDefinitionVersionTag,
+                    params?.caseDefinitionKey ?? '',
+                    params?.caseDefinitionVersionTag ?? '',
                     file
                   )
                 )
@@ -268,6 +270,8 @@ export class DecisionModelerComponent extends PendingChangesComponent implements
   }
 
   private showNotification(notification: null | 'success' | 'error', message: string): void {
+    if (!notification) return;
+
     this.notificationService.showToast({
       caption: this.translateService.instant(message),
       type: notification,
