@@ -614,6 +614,7 @@
       "forms": "Forms",
       "decision": "Decision tables",
       "formFlows": "Form Flows",
+      "tasks": "Tasks",
       "generalTab": {
         "readOnlyNotification": {
           "title": "Read only",
@@ -633,8 +634,8 @@
         }
       },
       "caseListTab": {"title": "Case list", "searchFields": "Search Fields", "columns": "Columns"},
-      "caseDetailTab": {
-        "title": "Case detail",
+      "caseDetailsTab": {
+        "title": "Case details",
         "tabs": "Tabs",
         "statuses": "Statuses",
         "tags": "Tags"
