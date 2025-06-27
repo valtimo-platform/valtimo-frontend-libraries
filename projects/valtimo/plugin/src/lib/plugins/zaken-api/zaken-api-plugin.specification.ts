@@ -31,6 +31,15 @@ import {CreateZaakeigenschapComponent} from './components/create-zaakeigenschap/
 import {UpdateZaakeigenschapComponent} from './components/update-zaakeigenschap/update-zaakeigenschap.component';
 import {DeleteZaakeigenschapComponent} from './components/delete-zaakeigenschap/delete-zaakeigenschap.component';
 import {RelateerZakenComponent} from './components/relateer-zaken/relateer-zaken.component';
+import {
+  CreateOrganisatorischeEenheidZaakRolComponent
+} from './components/create-organisatorische-eenheid-zaak-rol/create-organisatorische-eenheid-zaak-rol.component';
+import {
+  CreateMedewerkerZaakRolComponent
+} from './components/create-medewerker-zaak-rol/create-medewerker-zaak-rol.component';
+import {
+  CreateVestigingZaakRolComponent
+} from './components/create-vestiging-zaak-rol/create-vestiging-zaak-rol.component';
 
 const zakenApiPluginSpecification: PluginSpecification = {
   pluginId: 'zakenapi',
@@ -44,6 +53,9 @@ const zakenApiPluginSpecification: PluginSpecification = {
     'create-zaak': CreateZaakConfigurationComponent,
     'create-natuurlijk-persoon-zaak-rol': CreateNatuurlijkPersoonZaakRolComponent,
     'create-niet-natuurlijk-persoon-zaak-rol': CreateNietNatuurlijkPersoonZaakRolComponent,
+    'create-medewerker-zaak-rol': CreateMedewerkerZaakRolComponent,
+    'create-organisatorische-eenheid-zaak-rol': CreateOrganisatorischeEenheidZaakRolComponent,
+    'create-vestiging-zaak-rol': CreateVestigingZaakRolComponent,
     'set-zaakopschorting': SetZaakopschortingComponent,
     'start-hersteltermijn': StartHersteltermijnConfigurationComponent,
     'end-hersteltermijn': EndHersteltermijnComponent,
@@ -97,8 +109,11 @@ const zakenApiPluginSpecification: PluginSpecification = {
       inputTypeZaakTypeToggle: 'Invoertype Zaaktype-URL',
       text: 'Tekst',
       selection: 'Selectie',
-      'create-natuurlijk-persoon-zaak-rol': 'Zaakrol aanmaken - natuurlijk persoon',
-      'create-niet-natuurlijk-persoon-zaak-rol': 'Zaakrol aanmaken - niet natuurlijk persoon',
+      'create-natuurlijk-persoon-zaak-rol': 'Zaakrol aanmaken - Natuurlijk persoon',
+      'create-niet-natuurlijk-persoon-zaak-rol': 'Zaakrol aanmaken - Niet natuurlijk persoon',
+      'create-medewerker-zaak-rol': 'Zaakrol aanmaken - Medewerker',
+      'create-organisatorische-eenheid-zaak-rol': 'Zaakrol aanmaken - Organisatorische eenheid',
+      'create-vestiging-zaak-rol': 'Zaakrol aanmaken - Vestiging',
       'set-zaakopschorting': 'Schort een zaak op',
       'start-hersteltermijn': 'Start hersteltermijn',
       startRecoveryPeriodInformation:
@@ -170,6 +185,30 @@ const zakenApiPluginSpecification: PluginSpecification = {
       'option-vervolg': 'De andere zaak gaf aanleiding tot het starten van de onderhanden zaak.',
       'option-onderwerp': 'De andere zaak is relevant voor cq. is onderwerp van de onderhanden zaak.',
       'option-bijdrage': 'Aan het bereiken van de uitkomst van de andere zaak levert de onderhanden zaak een bijdrage.',
+      identificatie: 'Identificatie',
+      identificatieMedewerkerTooltip: 'Een korte unieke aanduiding van de medewerker.',
+      identificatieOrganisatorischeEenheidTooltip: 'Een korte identificatie van de organisatorische eenheid.',
+      voorletters: 'Voorletters',
+      voorlettersTooltip: 'De verzameling letters die gevormd wordt door de eerste letter van alle in volgorde voorkomende voornamen.',
+      achternaam: 'Achternaam',
+      achternaamTooltip: 'De achternaam zoals de medewerker die in het dagelijkse verkeer gebruikt.',
+      voorvoegselAchternaam: 'Achternaam voorvoegsel',
+      voorvoegselAchternaamTooltip: 'eel van de geslachtsnaam dat voorkomt in Tabel 36 (GBA), voorvoegseltabel, en door een spatie van de geslachtsnaam is',
+      afwijkendeNaamBetrokkene: 'Afwijkende naam betrokkene',
+      afwijkendeNaamBetrokkeneTooltip: 'De naam van de betrokkene waaronder deze in relatie tot de zaak aangesproken wil worden.',
+      indicatieMachtiging: 'Indicatie machtiging',
+      indicatieMachtigingTooltip: 'Het type welke de machtigings indicatie voorsteld',
+      nvt: 'N.v.t',
+      gemachtigde: 'Gemachtigde',
+      machtiginggever: 'Machtiginggever',
+      naam: 'Naam',
+      naamTooltip: 'De feitelijke naam van de organisatorische eenheid.',
+      isGehuisvestIn: 'Is gehuisvest in',
+      isGehuisvestInTooltip: 'Locatie waar de organisatorische eenheid gehuisvest is.',
+      kvkNummer: 'KVK-nummer',
+      kvkNummerTooltip: 'Een uniek nummer toegekend door de Kamer van Koophandel',
+      vestigingsNummer: 'Vestigingsnummer',
+      vestigingsNummerTooltip: 'Een korte unieke aanduiding van de Vestiging'
     },
     en: {
       title: 'Zaken API',
@@ -217,6 +256,9 @@ const zakenApiPluginSpecification: PluginSpecification = {
       selection: 'Selection',
       'create-natuurlijk-persoon-zaak-rol': 'Create Zaakrol - natural person',
       'create-niet-natuurlijk-persoon-zaak-rol': 'Create Zaakrol - not a natural person',
+      'create-medewerker-zaak-rol': 'Create Zaakrol - Employee',
+      'create-organisatorische-eenheid-zaak-rol': 'Create Zaakrol - Organizational unit',
+      'create-vestiging-zaak-rol': 'Create Zaakrol - Establishment',
       'set-zaakopschorting': 'Suspend case',
       'start-hersteltermijn': 'Start recovery period',
       startHersteltermijnInformation:
@@ -288,6 +330,30 @@ const zakenApiPluginSpecification: PluginSpecification = {
       'option-vervolg': 'The other Zaak prompted the start of the current Zaak.',
       'option-onderwerp': 'The other Zaak is relevant to or the subject of the current Zaak.',
       'option-bijdrage': 'The current Zaak contributes to the outcome of the other Zaak.',
+      identificatie: 'Identification',
+      identificatieMedewerkerTooltip: 'A short unique designation of the employee.',
+      identificatieOrganisatorischeEenheidTooltip: 'A short identification of the organizational unit.',
+      voorletters: 'Initials',
+      voorlettersTooltip: 'The collection of letters formed by the first letter of all forenames in order.',
+      achternaam: 'Last name',
+      achternaamTooltip: 'The last name as used by the employee in daily life.',
+      voorvoegselAchternaam: 'Prefix to last name',
+      voorvoegselAchternaamTooltip: 'Part of the genus name that appears in Table 36 (GBA), prefix table, and is separated from the genus name by a space',
+      afwijkendeNaamBetrokkene: 'Alternative name of the person involved',
+      afwijkendeNaamBetrokkeneTooltip: 'The name of the person involved under which they wish to be addressed in relation to the case.',
+      indicatieMachtiging: 'Authorization indication',
+      indicatieMachtigingTooltip: 'The type that represents the authorization indication',
+      nvt: 'N/A',
+      gemachtigde: 'Authorized representative',
+      machtiginggever: 'Authorizing party',
+      naam: 'Name',
+      naamTooltip: 'The actual name of the organizational unit.',
+      isGehuisvestIn: 'Is housed in',
+      isGehuisvestInTooltip: 'Location where the organizational unit is housed.',
+      kvkNummer: 'Chamber of Commerce number',
+      kvkNummerTooltip: 'A unique number assigned by the Chamber of Commerce',
+      vestigingsNummer: 'Establishment number',
+      vestigingsNummerTooltip: 'A short unique designation of the Establishment'
     },
     de: {
       title: 'Zaken API',
@@ -335,6 +401,9 @@ const zakenApiPluginSpecification: PluginSpecification = {
       selection: 'Auswahl',
       'create-natuurlijk-persoon-zaak-rol': 'Zaakrol erstellen – natürliche Person',
       'create-niet-natuurlijk-persoon-zaak-rol': 'Zaakrol erstellen – keine natürliche Person',
+      'create-medewerker-zaak-rol': 'Zaakrol erstellen – Mitarbeiter',
+      'create-organisatorische-eenheid-zaak-rol': 'Zaakrol erstellen – Organisationseinheit',
+      'create-vestiging-zaak-rol': 'Zaakrol erstellen – Niederlassung',
       'set-zaakopschorting': 'Einen Fall aussetzen',
       'start-hersteltermijn': 'Beginnen Sie mit der Erholungsphase',
       startHersteltermijnInformation:
@@ -406,6 +475,30 @@ const zakenApiPluginSpecification: PluginSpecification = {
       'option-vervolg': 'Der andere Zaak gab Anlass zur Einleitung des aktuellen Zaak.',
       'option-onderwerp': 'Der andere Zaak ist relevant für bzw. Gegenstand des aktuellen Zaak.',
       'option-bijdrage': 'Der aktuelle Zaak trägt zum Ergebnis des anderen Zaak bei.',
+      identificatie: 'Identifikation',
+      identificatieMedewerkerTooltip: 'Eine kurze, eindeutige Bezeichnung des Mitarbeiters.',
+      identificatieOrganisatorischeEenheidTooltip: 'Eine kurze Identifikation der organisatorischen Einheit.',
+      voorletters: 'Initialen',
+      voorlettersTooltip: 'Die Sammlung von Buchstaben, die durch den ersten Buchstaben aller in Reihenfolge vorkommenden Vornamen gebildet wird.',
+      achternaam: 'Nachname',
+      achternaamTooltip: 'Der Nachname, wie ihn der Mitarbeiter im täglichen Verkehr verwendet.',
+      voorvoegselAchternaam: 'Nachnamenspräfix',
+      voorvoegselAchternaamTooltip: 'Teil des Gattungsnamens, der in Tabelle 36 (GBA), Präfixtabelle, erscheint und durch ein Leerzeichen vom Gattungsnamen getrennt ist',
+      afwijkendeNaamBetrokkene: 'Abweichender Name der betroffenen Person',
+      afwijkendeNaamBetrokkeneTooltip: 'Der Name der betroffenen Person, unter dem sie im Zusammenhang mit dem Vorgang angesprochen werden möchte.',
+      indicatieMachtiging: 'Vollmachtsanzeige',
+      indicatieMachtigingTooltip: 'Der Typ, der die Vollmachtsanzeige darstellt',
+      nvt: 'Nicht zutreffend',
+      gemachtigde: 'Bevollmächtigter',
+      machtiginggever: 'Vollmachtgeber',
+      naam: 'Name',
+      naamTooltip: 'Der tatsächliche Name der organisatorischen Einheit.',
+      isGehuisvestIn: 'Ist untergebracht in',
+      isGehuisvestInTooltip: 'Ort, an dem die organisatorische Einheit untergebracht ist.',
+      kvkNummer: 'Handelskammernummer',
+      kvkNummerTooltip: 'Eine eindeutige Nummer, die von der Handelskammer vergeben wird',
+      vestigingsNummer: 'Niederlassungsnummer',
+      vestigingsNummerTooltip: 'Eine kurze eindeutige Bezeichnung der Niederlassung'
     },
   },
 };

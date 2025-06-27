@@ -49,6 +49,15 @@ import {UpdateZaakeigenschapComponent} from './components/update-zaakeigenschap/
 import {DeleteZaakeigenschapComponent} from './components/delete-zaakeigenschap/delete-zaakeigenschap.component';
 import {RelateerZakenComponent} from './components/relateer-zaken/relateer-zaken.component';
 import {TranslateModule} from '@ngx-translate/core';
+import {
+  CreateMedewerkerZaakRolComponent
+} from './components/create-medewerker-zaak-rol/create-medewerker-zaak-rol.component';
+import {
+  CreateOrganisatorischeEenheidZaakRolComponent
+} from './components/create-organisatorische-eenheid-zaak-rol/create-organisatorische-eenheid-zaak-rol.component';
+import {
+  CreateVestigingZaakRolComponent
+} from './components/create-vestiging-zaak-rol/create-vestiging-zaak-rol.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +68,9 @@ import {TranslateModule} from '@ngx-translate/core';
     CreateZaakResultaatConfigurationComponent,
     CreateNatuurlijkPersoonZaakRolComponent,
     CreateNietNatuurlijkPersoonZaakRolComponent,
+    CreateMedewerkerZaakRolComponent,
+    CreateOrganisatorischeEenheidZaakRolComponent,
+    CreateVestigingZaakRolComponent,
     CreateZaakConfigurationComponent,
     SetZaakopschortingComponent,
     StartHersteltermijnConfigurationComponent,
@@ -94,6 +106,9 @@ import {TranslateModule} from '@ngx-translate/core';
     CreateZaakConfigurationComponent,
     CreateNatuurlijkPersoonZaakRolComponent,
     CreateNietNatuurlijkPersoonZaakRolComponent,
+    CreateMedewerkerZaakRolComponent,
+    CreateOrganisatorischeEenheidZaakRolComponent,
+    CreateVestigingZaakRolComponent,
     SetZaakopschortingComponent,
     StartHersteltermijnConfigurationComponent,
     EndHersteltermijnComponent,
