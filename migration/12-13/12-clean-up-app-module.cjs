@@ -1,29 +1,43 @@
 const fs = require('fs');
 const path = require('path');
+
 const rootDir = path.resolve(__dirname, '../../');
 const appModulePath = path.join(rootDir, 'src/app/app.module.ts');
 
 let source = fs.readFileSync(appModulePath, 'utf-8');
 
-// Modules to remove from @valtimo/components
-const modulesToRemove = [
-  'CardModule',
-  'ListModule',
-  'ButtonModule',
-  'PageModule',
-  'TitleModule',
-  'VCardModule',
-];
+// Modules to remove by source path
+const modulesToRemoveMap = {
+  '@valtimo/components': [
+    'CardModule',
+    'ListModule',
+    'ButtonModule',
+    'PageModule',
+    'TitleModule',
+    'VCardModule',
+  ],
+  '@valtimo/task-management': ['TaskManagementModule'],
+};
 
-// Remove import line if it includes any of the target modules from @valtimo/components
-const importRegex = new RegExp(
-  `import\\s*{[^}]*\\b(${modulesToRemove.join('|')})\\b[^}]*}\\s*from\\s*['"]@valtimo/components['"];?\\s*`,
-  'g'
-);
-source = source.replace(importRegex, '');
+// Reusable function to build regex for import removal
+function buildImportRegex(moduleNames, fromPath) {
+  return new RegExp(
+    `import\\s*{[^}]*\\b(${moduleNames.join('|')})\\b[^}]*}\\s*from\\s*['"]${fromPath}['"];?\\s*`,
+    'g'
+  );
+}
+
+// Remove specified imports
+Object.entries(modulesToRemoveMap).forEach(([importPath, moduleList]) => {
+  const importRegex = buildImportRegex(moduleList, importPath);
+  source = source.replace(importRegex, '');
+});
+
+// Flatten list of all modules to remove for usage cleanup
+const allModulesToRemove = Object.values(modulesToRemoveMap).flat();
 
 // Remove each module from NgModule arrays like imports, declarations, etc.
-modulesToRemove.forEach(module => {
+allModulesToRemove.forEach(module => {
   const regex = new RegExp(`\\s*${module}\\s*,?\\n?`, 'g');
   source = source.replace(regex, '');
 });

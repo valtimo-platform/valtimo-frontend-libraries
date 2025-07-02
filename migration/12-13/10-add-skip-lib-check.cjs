@@ -51,15 +51,15 @@ function addCompilerOptions() {
     console.log('ℹ No changes needed to tsconfig.json');
   }
 
-  console.log('✅ Migration step 08 completed.');
+  console.log('✅ Migration step completed.');
 }
 
 try {
-  console.log('🚀 Starting migration step 08: Ensure skipLibCheck and moduleResolution are set');
+  console.log('🚀 Starting migration step: Ensure skipLibCheck and moduleResolution are set');
   addCompilerOptions();
   process.exit(0);
 } catch (err) {
-  console.error('❌ Migration step 08 failed');
+  console.error('❌ Migration step failed');
   console.error(err);
   process.exit(1);
 }
