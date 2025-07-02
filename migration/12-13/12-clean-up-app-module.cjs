@@ -58,6 +58,62 @@ source = source.replace(/import\s*{\s*HttpClientModule\s*}\s*from\s*['"][^'"]+['
 source = source.replace(/HttpClientModule,\s*\n/g, '');
 source = source.replace(/\s*HttpClientModule\s*,?/g, '');
 
-fs.writeFileSync(appModulePath, source, 'utf-8');
+// === Add required modules ===
+const requiredModules = ['BpmnJsDiagramModule', 'MenuModule', 'WidgetModule'];
 
+// Step 1: Ensure they're in the import from @valtimo/components
+const valtimoImportRegex = /import\s*{([^}]*)}\s*from\s*['"]@valtimo\/components['"];/;
+if (valtimoImportRegex.test(source)) {
+  source = source.replace(valtimoImportRegex, (match, imports) => {
+    const importList = imports.split(',').map(i => i.trim()).filter(Boolean);
+    requiredModules.forEach(mod => {
+      if (!importList.includes(mod)) {
+        importList.push(mod);
+      }
+    });
+    return `import { ${importList.join(', ')} } from '@valtimo/components';`;
+  });
+} else {
+  // Add new import line near top
+  source = `import { ${requiredModules.join(', ')} } from '@valtimo/components';\n` + source;
+}
+
+// Step 2: Add to @NgModule imports array (root-level only)
+const ngModuleImportsStart = source.indexOf('imports: [');
+if (ngModuleImportsStart !== -1) {
+  const importsStart = source.indexOf('[', ngModuleImportsStart);
+  let bracketCount = 1;
+  let i = importsStart + 1;
+
+  // Find where the imports array ends
+  while (i < source.length && bracketCount > 0) {
+    if (source[i] === '[') bracketCount++;
+    if (source[i] === ']') bracketCount--;
+    i++;
+  }
+
+  const importsArrayContent = source.slice(importsStart + 1, i - 1);
+  const importEntries = importsArrayContent
+    .split(',')
+    .map(line => line.trim())
+    .filter(Boolean);
+
+  let changed = false;
+  requiredModules.forEach(mod => {
+    if (!importEntries.includes(mod)) {
+      importEntries.push(mod);
+      changed = true;
+    }
+  });
+
+  if (changed) {
+    const newImportsArray = '  imports: [\n    ' + importEntries.join(',\n    ') + '\n  ]';
+    source =
+      source.slice(0, ngModuleImportsStart) +
+      newImportsArray +
+      source.slice(i); // slice from end of original array
+  }
+}
+
+fs.writeFileSync(appModulePath, source, 'utf-8');
 console.log('AppModule updated successfully.');

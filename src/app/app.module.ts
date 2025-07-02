@@ -29,20 +29,7 @@ import {LayoutModule, TranslationManagementModule} from '@valtimo/layout';
 import {TaskModule} from '@valtimo/task';
 import {environment} from '../environments/environment';
 import {SecurityModule} from '@valtimo/security';
-import {
-  BpmnJsDiagramModule,
-  enableCustomFormioComponents,
-  FormIoModule,
-  MenuModule,
-  registerFormioCurrencyComponent,
-  registerFormioCurrentUserComponent,
-  registerFormioFileSelectorComponent,
-  registerFormioIbanComponent,
-  registerFormioUploadComponent,
-  registerFormioValueResolverSelectorComponent,
-  UploaderModule,
-  WidgetModule,
-} from '@valtimo/components';
+import { enableCustomFormioComponents, FormIoModule, registerFormioCurrencyComponent, registerFormioCurrentUserComponent, registerFormioFileSelectorComponent, registerFormioIbanComponent, registerFormioUploadComponent, registerFormioValueResolverSelectorComponent, UploaderModule, BpmnJsDiagramModule, MenuModule, WidgetModule } from '@valtimo/components';
 import {
   CASE_TAB_TOKEN,
   CaseDetailTabAuditComponent,
@@ -159,23 +146,20 @@ export function tabsFactory() {
     CustomMapsTabComponent,
   ],
   bootstrap: [AppComponent],
-  imports: [
+    imports: [
     CommonModule,
     BrowserModule,
     AppRoutingModule,
     LayoutModule,
-    WidgetModule,
     BootstrapModule,
     ConfigModule.forRoot(environment),
     LoggerModule.forRoot(environment.logger),
     environment.authentication.module,
     SecurityModule,
-    MenuModule,
     TaskModule,
     CaseMigrationModule,
     CaseModule.forRoot(tabsFactory),
     ProcessModule,
-    BpmnJsDiagramModule,
     FormsModule,
     ReactiveFormsModule,
     DashboardModule,
@@ -213,9 +197,12 @@ export function tabsFactory() {
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: CustomMultiTranslateHttpLoaderFactory,
-        deps: [HttpBackend, HttpClient, ConfigService, LocalizationService],
-      },
+    useFactory: CustomMultiTranslateHttpLoaderFactory,
+    deps: [HttpBackend,
+    HttpClient,
+    ConfigService,
+    LocalizationService],
+    },
     }),
     ObjectModule,
     ObjectManagementModule,
@@ -226,6 +213,9 @@ export function tabsFactory() {
     FormViewModelModule,
     LoggingModule,
     FormManagementModule,
+    BpmnJsDiagramModule,
+    MenuModule,
+    WidgetModule
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
