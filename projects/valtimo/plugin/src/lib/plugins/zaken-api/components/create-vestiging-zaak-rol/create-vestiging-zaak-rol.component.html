@@ -51,6 +51,7 @@
     [defaultValue]="obs.prefill?.kvkNummer"
     [disabled]="obs.disabled"
     [required]="true"
+    [trim]="true"
     [tooltip]="'kvkNummerTooltip' | pluginTranslate: pluginId | async"
     [fullWidth]="true"
   >
@@ -62,6 +63,7 @@
     [defaultValue]="obs.prefill?.vestigingsNummer"
     [disabled]="obs.disabled"
     [required]="true"
+    [trim]="true"
     [tooltip]="'vestigingsNummerTooltip' | pluginTranslate: pluginId | async"
     [fullWidth]="true"
   >

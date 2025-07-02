@@ -40,6 +40,7 @@
     [defaultValue]="obs.prefill?.rolToelichting"
     [disabled]="obs.disabled"
     [required]="true"
+    [trim]="true"
     [tooltip]="'rolToelichtingTooltip' | pluginTranslate: pluginId | async"
     [fullWidth]="true"
   >
@@ -51,6 +52,7 @@
     [defaultValue]="obs.prefill?.identificatie"
     [disabled]="obs.disabled"
     [required]="true"
+    [trim]="true"
     [tooltip]="'identificatieTooltip' | pluginTranslate: pluginId | async"
     [fullWidth]="true"
   >
@@ -62,6 +64,7 @@
     [defaultValue]="obs.prefill?.naam"
     [disabled]="obs.disabled"
     [required]="true"
+    [trim]="true"
     [tooltip]="'naamTooltip' | pluginTranslate: pluginId | async"
     [fullWidth]="true"
   >
@@ -73,6 +76,7 @@
     [defaultValue]="obs.prefill?.isGehuisvestIn"
     [disabled]="obs.disabled"
     [required]="true"
+    [trim]="true"
     [tooltip]="'isGehuisvestInTooltip' | pluginTranslate: pluginId | async"
     [fullWidth]="true"
   >
@@ -84,6 +88,7 @@
     [defaultValue]="obs.prefill?.afwijkendeNaamBetrokkene"
     [disabled]="obs.disabled"
     [required]="false"
+    [trim]="true"
     [tooltip]="'afwijkendeNaamBetrokkeneTooltip' | pluginTranslate: pluginId | async"
     [fullWidth]="true"
   >

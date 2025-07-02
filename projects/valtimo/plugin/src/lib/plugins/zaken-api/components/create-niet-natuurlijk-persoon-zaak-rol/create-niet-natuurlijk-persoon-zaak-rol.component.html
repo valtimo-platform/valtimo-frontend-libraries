@@ -68,4 +68,28 @@
     [fullWidth]="true"
   >
   </v-input>
+  <v-input
+    name="kvkNummer"
+    [title]="'kvkNummer' | pluginTranslate: pluginId | async"
+    [margin]="true"
+    [defaultValue]="obs.prefill?.kvkNummer"
+    [disabled]="obs.disabled"
+    [required]="false"
+    [trim]="true"
+    [tooltip]="'kvkNummerTooltip' | pluginTranslate: pluginId | async"
+    [fullWidth]="true"
+  >
+  </v-input>
+  <v-input
+    name="vestigingsNummer"
+    [title]="'vestigingsNummer' | pluginTranslate: pluginId | async"
+    [margin]="true"
+    [defaultValue]="obs.prefill?.vestigingsNummer"
+    [disabled]="obs.disabled"
+    [required]="false"
+    [trim]="true"
+    [tooltip]="'vestigingsNummerTooltip' | pluginTranslate: pluginId | async"
+    [fullWidth]="true"
+  >
+  </v-input>
 </v-form>
