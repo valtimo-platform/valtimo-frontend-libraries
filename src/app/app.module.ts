@@ -29,7 +29,20 @@ import {LayoutModule, TranslationManagementModule} from '@valtimo/layout';
 import {TaskModule} from '@valtimo/task';
 import {environment} from '../environments/environment';
 import {SecurityModule} from '@valtimo/security';
-import { enableCustomFormioComponents, FormIoModule, registerFormioCurrencyComponent, registerFormioCurrentUserComponent, registerFormioFileSelectorComponent, registerFormioIbanComponent, registerFormioUploadComponent, registerFormioValueResolverSelectorComponent, UploaderModule, BpmnJsDiagramModule, MenuModule, WidgetModule } from '@valtimo/components';
+import {
+  enableCustomFormioComponents,
+  FormIoModule,
+  registerFormioCurrencyComponent,
+  registerFormioCurrentUserComponent,
+  registerFormioFileSelectorComponent,
+  registerFormioIbanComponent,
+  registerFormioUploadComponent,
+  registerFormioValueResolverSelectorComponent,
+  UploaderModule,
+  BpmnJsDiagramModule,
+  MenuModule,
+  WidgetModule,
+} from '@valtimo/components';
 import {
   CASE_TAB_TOKEN,
   CaseDetailTabAuditComponent,
@@ -146,7 +159,7 @@ export function tabsFactory() {
     CustomMapsTabComponent,
   ],
   bootstrap: [AppComponent],
-    imports: [
+  imports: [
     CommonModule,
     BrowserModule,
     AppRoutingModule,
@@ -197,12 +210,9 @@ export function tabsFactory() {
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-    useFactory: CustomMultiTranslateHttpLoaderFactory,
-    deps: [HttpBackend,
-    HttpClient,
-    ConfigService,
-    LocalizationService],
-    },
+        useFactory: CustomMultiTranslateHttpLoaderFactory,
+        deps: [HttpBackend, HttpClient, ConfigService, LocalizationService],
+      },
     }),
     ObjectModule,
     ObjectManagementModule,
@@ -215,7 +225,7 @@ export function tabsFactory() {
     FormManagementModule,
     BpmnJsDiagramModule,
     MenuModule,
-    WidgetModule
+    WidgetModule,
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),

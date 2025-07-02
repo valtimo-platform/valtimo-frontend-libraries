@@ -61,12 +61,24 @@ source = source.replace(/\s*HttpClientModule\s*,?/g, '');
 // === Add required modules ===
 const requiredModules = ['BpmnJsDiagramModule', 'MenuModule', 'WidgetModule'];
 
+// === Add required imports from components library ===
+const requiredImports = [
+  'enableCustomFormioComponents',
+  'registerFormioCurrencyComponent',
+  'registerFormioUploadComponent',
+  'registerFormioFileSelectorComponent',
+  'registerFormioValueResolverSelectorComponent',
+];
+
 // Step 1: Ensure they're in the import from @valtimo/components
 const valtimoImportRegex = /import\s*{([^}]*)}\s*from\s*['"]@valtimo\/components['"];/;
 if (valtimoImportRegex.test(source)) {
   source = source.replace(valtimoImportRegex, (match, imports) => {
-    const importList = imports.split(',').map(i => i.trim()).filter(Boolean);
-    requiredModules.forEach(mod => {
+    const importList = imports
+      .split(',')
+      .map(i => i.trim())
+      .filter(Boolean);
+    [...requiredModules, ...requiredImports].forEach(mod => {
       if (!importList.includes(mod)) {
         importList.push(mod);
       }
@@ -75,7 +87,9 @@ if (valtimoImportRegex.test(source)) {
   });
 } else {
   // Add new import line near top
-  source = `import { ${requiredModules.join(', ')} } from '@valtimo/components';\n` + source;
+  source =
+    `import { ${[...requiredModules, ...requiredImports].join(', ')} } from '@valtimo/components';\n` +
+    source;
 }
 
 // Step 2: Add to @NgModule imports array (root-level only)
@@ -108,10 +122,7 @@ if (ngModuleImportsStart !== -1) {
 
   if (changed) {
     const newImportsArray = '  imports: [\n    ' + importEntries.join(',\n    ') + '\n  ]';
-    source =
-      source.slice(0, ngModuleImportsStart) +
-      newImportsArray +
-      source.slice(i); // slice from end of original array
+    source = source.slice(0, ngModuleImportsStart) + newImportsArray + source.slice(i); // slice from end of original array
   }
 }
 

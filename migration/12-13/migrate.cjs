@@ -1,4 +1,4 @@
-const { spawnSync } = require('child_process');
+const {spawnSync} = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const readline = require('readline');
@@ -58,7 +58,7 @@ function runMigrationSteps() {
     const stepPath = path.join(stepsDir, step);
     console.log(`Running step: ${green(step)}`);
 
-    const result = spawnSync('node', [stepPath], { stdio: 'inherit' });
+    const result = spawnSync('node', [stepPath], {stdio: 'inherit'});
 
     if (result.status !== 0) {
       console.error(`Migration stopped at ${step}`);
