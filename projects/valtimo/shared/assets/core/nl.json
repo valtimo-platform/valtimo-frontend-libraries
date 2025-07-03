@@ -15,7 +15,7 @@
     "TaskDueDateSetEvent": "Taak einddatum ingesteld > {{taskName}}"
   },
   "case": {
-    "summaryFormNotFound": "Samenvattingsformulier niet gevonden voor '{{caseDefinitionKey}}'. Er moet een formulier bestaan met de naam '{{caseDefinitionKey}}.summary' dat de Sleutel voor het dossierdefinitie gebruikt.",
+    "summaryFormNotFound": "Samenvattingsformulier niet gevonden voor '{{caseDefinitionKey}}'. Er moet een formulier bestaan met de naam '{{caseDefinitionKey}}.summary' dat de Key voor het dossierdefinitie gebruikt.",
     "bulkAssign": {
       "assign": "Toewijzen",
       "modal": {
@@ -334,7 +334,7 @@
       "cancel": "Annuleren",
       "delete": "Verwijderen",
       "deleteDescription": "Weet u zeker dat u deze widget wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
-      "metadata": "<b>Aangemaakt door</b> {{createdBy}} | <b>Aangemaakt op</b> {{createdOn}} | <b>Dashboard-sleutel</b> {{key}}",
+      "metadata": "<b>Aangemaakt door</b> {{createdBy}} | <b>Aangemaakt op</b> {{createdOn}} | <b>Dashboard-key</b> {{key}}",
       "form": {
         "title": "Widget-titel (vereist)",
         "titleHelperText": "De naam van de widget-configuratie",
@@ -1537,8 +1537,8 @@
     "noSearchfieldsDescription": "Er zijn geen zoekvelden geconfigureerd voor dit dossiertype."
   },
   "searchFieldsOverviewTooltips": {
-    "title": "De titel is een optioneel veld dat wordt weergegeven als een label voor het huidige zoekveld. Als de titel niet is ingesteld, is de standaardwaarde de sleutelvertaling van het zoekveld (als er geen vertaling beschikbaar is, wordt de oorspronkelijke sleutelwaarde weergegeven).",
-    "key": "Een unieke key waarmee het zoekveld wordt geïdentificeerd. Als de sleutel niet uniek is, kan het zoekveld niet worden opgeslagen.",
+    "title": "De titel is een optioneel veld dat wordt weergegeven als een label voor het huidige zoekveld. Als de titel niet is ingesteld, is de standaardwaarde de key-vertaling van het zoekveld (als er geen vertaling beschikbaar is, wordt de oorspronkelijke key-waarde weergegeven).",
+    "key": "Een unieke key waarmee het zoekveld wordt geïdentificeerd. Als de key niet uniek is, kan het zoekveld niet worden opgeslagen.",
     "path": "Een pad dat leidt naar de eigenschap waarop u wilt zoeken. Volg dit voorbeeld om te zoeken in het JSON-schema van het document: 'doc:customer.firstName'. Volg deze voorbeelden om te zoeken in de documenteigenschappen: 'case:createdBy', of 'case:sequence', of 'case:assigneeFullName'. Let op: wanneer er speciale tekens in een eigenschap zitten, moet de eigenschap binnen aanhalingstekens staan. Bijvoorbeeld: case:\"loan-accepted\".",
     "objectsApiPath": "Een pad dat leidt naar het object waarop u wilt zoeken. Voor het zoeken in de objecten API JSON volgt u dit voorbeeld: 'object:/customer/firstName'.",
     "dataType": "Het datatype bepaalt welke invoer aan de gebruiker wordt getoond. Voor het datatype 'Datum' wordt bijvoorbeeld een datumkiezer getoond.",
@@ -1555,7 +1555,7 @@
     "titleTitle": "Titel (optioneel)",
     "titleTooltip": "Als dit veld is ingevuld, wordt deze titel weergegeven als de kolomkop, met prioriteit boven eventueel beschikbare vertalingen.",
     "key": "Key",
-    "keyTooltip": "Een unieke sleutel waarmee de kolom wordt geïdentificeerd. Als de sleutel niet uniek is, kan de kolom niet worden opgeslagen.",
+    "keyTooltip": "Een unieke key waarmee de kolom wordt geïdentificeerd. Als de key niet uniek is, kan de kolom niet worden opgeslagen.",
     "path": "Pad",
     "pathTooltip": "Een pad dat leidt naar de eigenschap die u wilt weergeven. Volg dit voorbeeld voor het JSON-schema van het document: 'doc:customer.firstName'. Volg deze voorbeelden voor documenteigenschappen: 'case:createdBy', of 'case:sequence', of 'case:assigneeFullName'. Let op: wanneer er speciale tekens in een eigenschap zitten, moet de eigenschap binnen aanhalingstekens staan. Bijvoorbeeld: case:\"loan-accepted\".",
     "objectsApiPathTooltip": "Een pad dat leidt naar het object waarop u wilt zoeken. Voor het zoeken in de objecten API JSON volgt u dit voorbeeld: 'object:/customer/firstName'.",
@@ -1581,10 +1581,10 @@
     "save": "Kolom opslaan",
     "dateFormat": "Datumnotatie (optioneel)",
     "dateFormatTooltip": "Een datumnotatie die ondersteund wordt door Moment.js (https://momentjs.com/docs/).",
-    "uniqueKeyWarning": "De sleutel voor deze kolom moet uniek zijn.",
+    "uniqueKeyWarning": "De key voor deze kolom moet uniek zijn.",
     "enumTitle": "Opsommingswaarden",
     "enumTitleOptional": "Waarden (optioneel)",
-    "enumTooltip": "De sleutels en waarden die gebruikt worden om weergavedata om te zetten in de tabel.",
+    "enumTooltip": "De keys en waarden die gebruikt worden om weergavedata om te zetten in de tabel.",
     "enumTooltipOptional": "De waarden die gebruikt worden om weergavedata om te zetten in de tabel.",
     "downloadButtonText": "Download configuratie",
     "deleteColumn": "Kolom verwijderen",
@@ -1752,7 +1752,7 @@
   "accessControl": {
     "roles": {
       "title": "Alle rollen",
-      "key": "Rol-sleutel",
+      "key": "Rol-key",
       "add": "Nieuwe rol toevoegen",
       "name": "Rol-naam",
       "deleteModalContent": "Weet u zeker dat u deze rollen en alle onderliggende machtigingen wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
