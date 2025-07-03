@@ -46,8 +46,7 @@ import {
   FormioSubmission,
   ValtimoFormioOptions,
 } from '@valtimo/components';
-import {FormioBeforeSubmit} from '@formio/angular/formio.common';
-import {FormioForm} from '@formio/angular';
+import {FormioBeforeSubmit, FormioForm} from '@formio/angular';
 import {UserProviderService} from '@valtimo/security';
 import {take} from 'rxjs/operators';
 import {CAN_VIEW_CASE_PERMISSION, CASE_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
@@ -93,7 +92,6 @@ export class CaseProcessStartModalComponent implements OnInit, OnDestroy {
     FormCustomComponentConfig | {}
   >({});
   public readonly closeModalEvent = new EventEmitter();
-
 
   constructor(
     private route: ActivatedRoute,
