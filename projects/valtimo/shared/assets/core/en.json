@@ -514,7 +514,7 @@
       }
     },
     "deployment": {
-      "title": "Deployment",
+      "title": "Version management",
       "buttons": {
         "back": "Back",
         "delete": "Delete draft",
@@ -555,7 +555,7 @@
         "fields": {"caseDefinitionVersionTag": "Version", "basedOnVersionTag": "Based on"},
         "warning": {
           "title": "Warning",
-          "description": "There is another draft based on {{ basedOnVersionTag }} called {{ conflictingVersions }}"
+          "description": "There is another draft based on {{ basedOnVersionTag }} with version {{ conflictingVersions }}"
         }
       },
       "releaseInformation": {
@@ -930,7 +930,7 @@
     },
     "cancelModal": {
       "title": "Leaving the editor",
-      "content": "Are you sure you want to leave the editor? There can be unsaved changes that will be lost. When saving, beware that removing or changing an attribute can break the widget configuration."
+      "content": "Are you sure you want to leave the editor? There can be unsaved changes that will be lost."
     },
     "processes": {
       "buttonTextLabel": "New process button text (Optional)",
@@ -938,7 +938,7 @@
       "selectorLabel": "New process button (Optional)",
       "selectorPlaceholder": "Choose a process"
     },
-    "saveModalContent": "Are you sure you want to save the widget configuration? Removing or changing an attribute can break the widget configuration."
+    "saveModalContent": "Are you sure you want to save the widget configuration?"
   },
   "zgw": {
     "columns": {

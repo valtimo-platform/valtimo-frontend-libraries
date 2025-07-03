@@ -15,7 +15,7 @@
     "TaskDueDateSetEvent": "Taak einddatum ingesteld > {{taskName}}"
   },
   "case": {
-    "summaryFormNotFound": "Samenvattingsformulier niet gevonden voor '{{caseDefinitionKey}}'. Er moet een formulier bestaan met de naam '{{caseDefinitionKey}}.summary' die de Key voor het dossierdefinitie gebruikt.",
+    "summaryFormNotFound": "Formulier niet gevonden voor '{{caseDefinitionKey}}'. Er moet een formulier bestaan met de naam '{{caseDefinitionKey}}.summary'.",
     "bulkAssign": {
       "assign": "Toewijzen",
       "modal": {
@@ -165,7 +165,7 @@
       "noWidgets": "Geen widgets",
       "noWidgetsDescription": "Er zijn geen widgets geconfigureerd voor dit tabblad, of je hebt niet de juiste rechten om deze te zien.",
       "noWidget": "Widget niet beschikbaar",
-      "noCustomComponentDescription": "de component die geconfigureerd is voor deze widget is niet beschikbaar."
+      "noCustomComponentDescription": "De component die geconfigureerd is voor deze widget is niet beschikbaar."
     }
   },
   "document": {
@@ -174,8 +174,8 @@
     "createdBy": "Aangemaakt door",
     "createdOn": "Aanmaakdatum",
     "sequence": "Volgnummer",
-    "fillInMetadata": "Voeg metadata van bestanden toe",
-    "editMetadata": "Metadata van bestanden bewerken",
+    "fillInMetadata": "Voeg metadata van bestand toe",
+    "editMetadata": "Metadata van bestand bewerken",
     "cancel": "Annuleren",
     "upload": "Uploaden",
     "save": "Opslaan",
@@ -200,7 +200,7 @@
     "openbaar": "Openbaar",
     "beperkt_openbaar": "Beperkt openbaar",
     "intern": "Intern",
-    "zaakvertrouwelijk": "Zaak-vertrouwelijk",
+    "zaakvertrouwelijk": "Zaakvertrouwelijk",
     "vertrouwelijk": "Vertrouwelijk",
     "confidentieel": "Confidentieel",
     "geheim": "Geheim",
@@ -384,8 +384,8 @@
       "options": {"nl": "Nederlands", "en": "English", "de": "Deutsch"}
     },
     "notification": {
-      "title": "Meldingen",
-      "frequency": {"title": "Frequentie van meldingen"},
+      "title": "Notificaties",
+      "frequency": {"title": "Frequentie van notificaties"},
       "taskNotifications": "Taakmeldingen",
       "taskNotificationsIntro": "Ontvang een e-mail wanneer een taak aan jou is toegewezen",
       "emailNotifications": "Dagelijks taakoverzicht",
@@ -426,7 +426,7 @@
   "cta": {"close": "Sluiten", "moreDetails": "Meer details"},
   "formManagement": {
     "noFormDefinitionFoundAdmin": "Er is geen formulier gekoppeld aan de start event/user task. Om een formulier te koppelen ga naar Admin menu > Proceskoppelingen",
-    "noFormDefinitionFoundUser": "Er is geen formulier gekoppeld aan de start event/user task. Vraag een admin om hulp.",
+    "noFormDefinitionFoundUser": "Er is geen formulier gekoppeld aan de start event/user task. Vraag een beheerder om hulp.",
     "gotoProcessLinksButton": "Configureer nu",
     "loading": "Formulier wordt geladen...",
     "name": "Naam",
@@ -512,12 +512,12 @@
       "closeButton": "Sluiten",
       "columns": {"version": "Versie", "release": "Uitgebracht op", "description": "Beschrijving"},
       "noResults": {
-        "title": "Er zijn geen dossierversie",
+        "title": "Er zijn geen dossierversies",
         "description": "Er is geen versie geconfigureerd voor dit dossier"
       }
     },
     "deployment": {
-      "title": "Publiceren",
+      "title": "Versiebeheer",
       "buttons": {
         "back": "Terug",
         "delete": "Concept verwijderen",
@@ -558,7 +558,7 @@
         "fields": {"caseDefinitionVersionTag": "Versie", "basedOnVersionTag": "Gebaseerd op"},
         "warning": {
           "title": "Waarschuwing",
-          "description": "Er is een ander concept gebaseerd op {{ basedOnVersionTag }} concept, met de naam {{ conflictingVersions }}"
+          "description": "Er is een ander concept gebaseerd op {{ basedOnVersionTag }} concept, met de versie {{ conflictingVersions }}"
         }
       },
       "releaseInformation": {
@@ -637,9 +637,9 @@
       },
       "caseListTab": {"title": "Dossierlijst", "searchFields": "Zoekvelden", "columns": "Kolommen"},
       "caseDetailsTab": {
-        "title": "dossierdetails",
+        "title": "Dossierdetails",
         "tabs": "Tabbladen",
-        "tags": "Trefwoorden",
+        "tags": "Tags",
         "statuses": "Statussen"
       }
     },
@@ -699,7 +699,7 @@
       },
       "info": {
         "title": "Let op",
-        "message": "Controleer of de plugin-configuraties in de proceslinks aanwezig zijn. Importeer pas daarna."
+        "message": "Controleer of de plugin-configuraties die gebruikt worden in de proceskoppelingen aanwezig zijn."
       },
       "upload": {
         "title": "Upload bestand",
@@ -752,9 +752,9 @@
     "documentDefinition": {
       "cancelModal": {
         "title": "De editor verlaten",
-        "content": "Weet je zeker dat je de editor wilt verlaten? Er kunnen niet-opgeslagen wijzigingen zijn die verloren gaan. Houd er bij het opslaan rekening mee dat het verwijderen of wijzigen van een attribuut de integriteit van deze dossierdefinitie kan beschadigen."
+        "content": "Weet je zeker dat je de editor wilt verlaten? Er kunnen niet-opgeslagen wijzigingen zijn die verloren gaan."
       },
-      "saveModalContent": "Weet je zeker dat je de dossierdefinitie wilt opslaan? Het verwijderen of wijzigen van een attribuut kan de integriteit van de dossierdefinitie beschadigen."
+      "saveModalContent": "Weet je zeker dat je de dossierdefinitie wilt opslaan?"
     },
     "statuses": {
       "withoutStatus": "Toon dossiers zonder status",
@@ -765,7 +765,7 @@
       "visible": "Zichtbaar",
       "invisible": "Niet zichtbaar",
       "deleteText": "Weet je zeker dat je deze status wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
-      "keyAutoGenerated": "De Key wordt automatisch gegenereerd",
+      "keyAutoGenerated": "De key wordt automatisch gegenereerd",
       "colorPlaceholder": "Kies een kleur",
       "columns": {
         "title": "Statusnaam",
@@ -779,12 +779,12 @@
       }
     },
     "caseTags": {
-      "searchFieldTitle": "Trefwoorden",
-      "add": "Trefwoord toevoegen",
-      "edit": "Trefwoord bewerken",
+      "searchFieldTitle": "Tags",
+      "add": "Tag toevoegen",
+      "edit": "Tag bewerken",
       "visible": "Zichtbaar",
       "invisible": "Niet zichtbaar",
-      "deleteText": "Weet je zeker dat je dit trefwoord wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+      "deleteText": "Weet je zeker dat je deze tag wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
       "keyAutoGenerated": "De key wordt automatisch gegenereerd",
       "colorPlaceholder": "Kies een kleur",
       "columns": {
@@ -794,13 +794,13 @@
         "color": "Kleur"
       },
       "noResults": {
-        "title": "Er zijn geen trefwoorden geconfigureerd",
-        "description": "Klik hier om een trefwoord voor dit dossiertype te configureren"
+        "title": "Er zijn geen tags geconfigureerd",
+        "description": "Klik hier om een tag voor dit dossiertype te configureren"
       }
     },
     "draftWarning": {
-      "title": "Niet gekoppeld aan een versie van de dossier",
-      "description": "Bij het bijwerken van {name} verandert de {name} voor alle versies van dit dossier. Niet alleen voor de geselecteerde versie!"
+      "title": "Niet gekoppeld aan een versie van het dossiertype",
+      "description": "Bij het bijwerken van {name} verandert de {name} voor alle versies van dit dossiertype. Niet alleen voor de geselecteerde versie!"
     }
   },
   "widgetTabManagement": {
@@ -849,7 +849,7 @@
       "small": {"title": "Klein", "subtitle": "Bevat 1 kolom met inhoud"},
       "medium": {"title": "Medium", "subtitle": "Bevat maximaal 2 kolommen met inhoud"},
       "large": {"title": "Groot", "subtitle": "Bevat maximaal 3 kolommen met inhoud"},
-      "xtraLarge": {"title": "xtra Groot", "subtitle": "Bevat maximaal 4 kolommen met inhoud"}
+      "xtraLarge": {"title": "Xtra Groot", "subtitle": "Bevat maximaal 4 kolommen met inhoud"}
     },
     "style": {
       "description": "Selecteer de gewenste stijl voor de widget",
@@ -944,7 +944,7 @@
     },
     "cancelModal": {
       "title": "De editor verlaten",
-      "content": "Weet je zeker dat je de editor wilt verlaten? Er kunnen niet-opgeslagen wijzigingen zijn die verloren gaan. Houd er bij het opslaan rekening mee dat het verwijderen of wijzigen van een attribuut de widget configuratie kan beschadigen."
+      "content": "Weet je zeker dat je de editor wilt verlaten? Er kunnen niet-opgeslagen wijzigingen zijn die verloren gaan."
     },
     "processes": {
       "buttonTextLabel": "Nieuwe procesknoptekst (Optioneel)",
@@ -952,7 +952,7 @@
       "selectorLabel": "Nieuwe procesknop (Optioneel)",
       "selectorPlaceholder": "Kies een proces"
     },
-    "saveModalContent": "Weet je zeker dat je de widget configuratie wilt opslaan? Het verwijderen of wijzigen van een attribuut kan de integriteit van de widget configuratie beschadigen."
+    "saveModalContent": "Weet je zeker dat je de widget configuratie wilt opslaan?"
   },
   "zgw": {
     "columns": {
@@ -1183,7 +1183,7 @@
   },
   "processCaseConnection": {
     "noProcessesTitle": "Geen processen",
-    "noProcessesDescription": "Er zijn nog geen processen gekoppeld aan dit dossierdefinitie",
+    "noProcessesDescription": "Er zijn nog geen processen gekoppeld aan deze dossierdefinitie",
     "processCreatesCase": "Proces maakt nieuw dossier aan",
     "processCreatesCaseTooltip": "Wanneer deze optie is geselecteerd wordt bij het starten van dit proces een nieuw dossier aangemaakt. Hiervoor moet er een startformulier gekoppeld zijn aan de eerste stap in het proces.",
     "startableWithinCase": "Kan gestart worden binnen bestaand dossier",
