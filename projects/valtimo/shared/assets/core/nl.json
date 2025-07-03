@@ -15,7 +15,7 @@
     "TaskDueDateSetEvent": "Taak einddatum ingesteld > {{taskName}}"
   },
   "case": {
-    "summaryFormNotFound": "Samenvattingsformulier niet gevonden voor '{{caseDefinitionKey}}'. Er moet een formulier bestaan met de naam '{{caseDefinitionKey}}.summary' dat de Key voor het dossierdefinitie gebruikt.",
+    "summaryFormNotFound": "Samenvattingsformulier niet gevonden voor '{{caseDefinitionKey}}'. Er moet een formulier bestaan met de naam '{{caseDefinitionKey}}.summary' die de Key voor het dossierdefinitie gebruikt.",
     "bulkAssign": {
       "assign": "Toewijzen",
       "modal": {
@@ -26,14 +26,14 @@
       }
     },
     "changePageModal": {
-      "title": "Verander pagina",
+      "title": "Pagina wisselen",
       "content": "Weet je zeker dat je van pagina wilt veranderen? Alle gemaakte selecties gaan verloren.",
-      "confirm": "Verander pagina"
+      "confirm": "Pagina wisselen"
     },
     "changeTabModal": {
-      "title": "Verander tabblad",
-      "content": "Weet je zeker dat je van tabblad wilt veranderen? Alle gemaakte selecties gaan verloren.",
-      "confirm": "Verander tabblad"
+      "title": "Tabblad wisselen",
+      "content": "Weet je zeker dat je van tabblad wilt wisselen? Alle gemaakte selecties gaan verloren.",
+      "confirm": "Tabblad wisselen"
     },
     "noResults": {
       "ALL": {"description": "Er is hier niets te doen.", "title": "Er zijn geen dossiers"},
@@ -124,7 +124,7 @@
         "content": "Weet u zeker dat u dit document wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt."
       },
       "noProcessLinked": {
-        "regularUser": "Het uploaden van documenten is voor dit dossier niet beschikbaar. Neem contact op met een beheerder",
+        "regularUser": "Het uploaden van documenten is voor dit dossiertype niet beschikbaar. Neem contact op met een beheerder",
         "adminRole": "Het proces voor het uploaden van documenten is niet geconfigureerd. Configureer dit proces op de dossierbeheerpagina"
       },
       "navigateToCaseAdmin": "Configureer Zaak",
@@ -161,11 +161,11 @@
     "rowLocked": "Je hebt geen toegang tot dit dossier",
     "widgets": {
       "noData": "Geen data gevonden",
-      "emptyFields": "Er is hier niets",
+      "emptyFields": "Niks hier",
       "noWidgets": "Geen widgets",
       "noWidgetsDescription": "Er zijn geen widgets geconfigureerd voor dit tabblad, of je hebt niet de juiste rechten om deze te zien.",
       "noWidget": "Widget niet beschikbaar",
-      "noCustomComponentDescription": "het component dat geconfigureerd is voor deze widget is niet beschikbaar."
+      "noCustomComponentDescription": "de component die geconfigureerd is voor deze widget is niet beschikbaar."
     }
   },
   "document": {
@@ -440,7 +440,7 @@
     "duplicate": "Dupliceren",
     "readOnly": "Alleen-lezen",
     "add": "Formulier toevoegen",
-    "tabs": {"formBuilder": "Formulier bewerker", "jsonEditor": "JSON bewerker", "output": "Resultaat"},
+    "tabs": {"formBuilder": "Formulier-bewerker", "jsonEditor": "JSON-bewerker", "output": "Resultaat"},
     "intermediateSave": {
       "save": "Voortgang opslaan",
       "clear": "Laatste wijzigingen ongedaan maken",
@@ -469,7 +469,7 @@
     "noResults": {
       "title": "Geen formulierdefinities gevonden",
       "caseDescription": "Klik hier om een formulierdefinitie aan te maken die aan dit dossier is gekoppeld.",
-      "independentDescription": "Klik hier om een op losstaande formulierdefinitie aan te maken."
+      "independentDescription": "Klik hier om een losstaande formulierdefinitie aan te maken."
     }
   },
   "caseManagement": {
@@ -623,21 +623,21 @@
           "message": "Het dossier kan niet worden bijgewerkt omdat deze definitief is."
         },
         "linkUploadProcess": {
-          "title": "Uploadproces koppelen aan dossier",
+          "title": "Uploadproces koppelen aan dossierdefinitie",
           "label": "Kies welk proces het uploaden van bestanden moet afhandelen.",
           "placeholder": "Documenten API document uploaden"
         },
         "caseHandler": {
           "title": "dossierbehandelaar",
-          "canHaveHandler": "dossiertype kan een behandelaar hebben",
+          "canHaveHandler": "Dossiertype kan een behandelaar hebben",
           "assignUser": "Gebruikerstaken automatisch toewijzen aan dossierbehandelaar",
-          "disabledAutoAssignTooltip": "Het automatisch toewijzen van een gebruikerstaak aan de dossierbehandelaar kan alleen worden ingeschakeld als de case zelf een behandelaar kan hebben.",
+          "disabledAutoAssignTooltip": "Het automatisch toewijzen van een gebruikerstaak aan de dossierbehandelaar kan alleen worden ingeschakeld als de dossier zelf een behandelaar kan hebben.",
           "toggle": {"onText": "Ja", "offText": "Nee"}
         }
       },
       "caseListTab": {"title": "Dossierlijst", "searchFields": "Zoekvelden", "columns": "Kolommen"},
       "caseDetailsTab": {
-        "title": "dossier details",
+        "title": "dossierdetails",
         "tabs": "Tabbladen",
         "tags": "Trefwoorden",
         "statuses": "Statussen"
@@ -646,15 +646,15 @@
     "tabManagement": {
       "columns": {
         "content": "Inhoud",
-        "key": "Tab key",
+        "key": "Tab-key",
         "name": "Tab naam",
         "type": "Type",
         "showTasks": "Takenlijst zichtbaar"
       },
       "addModal": {
         "addTab": "Tabblad toevoegen",
-        "customComponent": "Maatwerk component",
-        "customComponentDisabled": "Er zijn geen maatwerk componenten beschikbaar, of ze zijn allemaal al toegevoegd.",
+        "customComponent": "Maatwerkcomponent",
+        "customComponentDisabled": "Er zijn geen maatwerkcomponenten beschikbaar, of ze zijn allemaal al toegevoegd.",
         "description": "Selecteer een van de opties om een nieuw tabblad toe te voegen aan uw dossierdefinitie",
         "formIOComponent": "FormIO component",
         "formIOComponentDisabled": "Geen Form.io-formulierdefinities beschikbaar",
@@ -849,7 +849,7 @@
       "small": {"title": "Klein", "subtitle": "Bevat 1 kolom met inhoud"},
       "medium": {"title": "Medium", "subtitle": "Bevat maximaal 2 kolommen met inhoud"},
       "large": {"title": "Groot", "subtitle": "Bevat maximaal 3 kolommen met inhoud"},
-      "xtraLarge": {"title": "Extra Groot", "subtitle": "Bevat maximaal 4 kolommen met inhoud"}
+      "xtraLarge": {"title": "xtra Groot", "subtitle": "Bevat maximaal 4 kolommen met inhoud"}
     },
     "style": {
       "description": "Selecteer de gewenste stijl voor de widget",
@@ -1160,7 +1160,7 @@
     "version": "Versie: ",
     "noResults": {
       "title": "Geen processen gevonden",
-      "caseDescription": "Klik hier om een proces aan te maken dat aan deze case is gekoppeld",
+      "caseDescription": "Klik hier om een proces aan te maken dat aan deze dossierdefinitie is gekoppeld",
       "independentDescription": "Klik hier om een op zichzelf staand proces aan te maken"
     },
     "deleteModal": {
@@ -1746,7 +1746,7 @@
     "plugin": "Er zijn geen plugin-configuraties beschikbaar. Maak een plugin-configuratie aan om deze te kunnen koppelen aan een processtap.",
     "form": "Er zijn geen formulieren beschikbaar. Maak een formulier aan om deze te kunnen koppelen aan een processtap.",
     "form-flow": "Er zijn geen FormFlows beschikbaar. Maak een FormFlow aan om deze te kunnen koppelen aan een processtap.",
-    "ui-component": "Er zijn geen maatwerk componenten geregistreerd maak er een aan om deze optie te kunnen gebruiken."
+    "ui-component": "Er zijn geen maatwerkcomponenten geregistreerd maak er een aan om deze optie te kunnen gebruiken."
   },
   "processLinkUrlInvalid": "Ongeldige URL {{ URL }}",
   "accessControl": {
@@ -1783,9 +1783,9 @@
     "targetCaseDefinitionKey": "Doel dossierdefinitie-naam",
     "targetCaseDefinitionVersionTag": "Doel dossierdefinitie-versie",
     "patches": "Patches",
-    "patchTooltip": "Met patches migreer je dossier-eigenschappen: geef een bron- en doelpad op (leeg doel = verwijderen), stel een standaardwaarde in of gebruik ${null} voor NULL. Typeconversie is automatisch; schakel een Spring-bean in voor geavanceerde gevallen.",
-    "patchSource": "Bron dossierveld",
-    "patchTarget": "Doel dossierveld",
+    "patchTooltip": "The old case can be migrated to the new case by using patches. Patches work by moving case properties from the source location to the target location. For example: source: '/oldLocation/firstName', target: '/newLocation/firstName'. A property can be removed by leaving the target empty. For example: source: '/gulden', target: ''. A property can be given a default value in the source field. For example, source: 'John', target: '/firstName'. A patch will always try to convert the type to the target type. For example, source: '/my/number', target: '/my/text'. A property can be set to [NULL] by using SpEL expressions. For example, source: '${null}', target: '/driversLicense'. A Spring bean can be called for more elaborate patches. For example, source: ${myBean.getAge(source.person.birthYear)}, target: '${myOtherBean.doMore(builder, sourceValue)}'",
+    "patchSource": "Bron-dossierveld",
+    "patchTarget": "Doel-dossierveld",
     "errors": "Fouten",
     "noErrors": "Klaar. Geen errors gevonden.",
     "checkPatches": "Controleer patches",
