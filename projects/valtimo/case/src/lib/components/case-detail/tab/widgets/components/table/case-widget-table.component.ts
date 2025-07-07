@@ -32,17 +32,17 @@ import {
   TilesModule,
 } from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap} from 'rxjs';
-import {CaseWidgetAction, FieldsCaseWidgetValue, TableCaseWidget} from '../../../../../../models';
 import {CaseWidgetsApiService} from '../../../../../../services';
 import {WidgetProcess} from '../widget-process/widget-process';
 import {DocumentService} from '@valtimo/document';
 import {PermissionService} from '@valtimo/access-control';
 import {WidgetsService} from '../../widgets.service';
+import {FieldsWidgetValue, TableWidget, WidgetAction} from '@valtimo/layout';
 
 @Component({
-  selector: 'valtimo-widget-table',
-  templateUrl: './widget-table.component.html',
-  styleUrls: ['./widget-table.component.scss'],
+  selector: 'valtimo-case-widget-table',
+  templateUrl: './case-widget-table.component.html',
+  styleUrls: ['./case-widget-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
@@ -55,18 +55,18 @@ import {WidgetsService} from '../../widgets.service';
     ButtonModule,
   ],
 })
-export class WidgetTableComponent extends WidgetProcess {
+export class CaseWidgetTableComponent extends WidgetProcess {
   @Input({required: true}) public set documentId(value: string) {
     this.baseDocumentId = value;
   }
   @Input({required: true}) public tabKey: string;
 
-  private _widgetConfiguration: TableCaseWidget;
-  @Input({required: true}) public set widgetConfiguration(value: TableCaseWidget) {
+  private _widgetConfiguration: TableWidget;
+  @Input({required: true}) public set widgetConfiguration(value: TableWidget) {
     this._widgetConfiguration = value;
     this.baseWidgetConfiguration = value;
     this.fields$.next(
-      value.properties.columns.map((column: FieldsCaseWidgetValue, index: number) => ({
+      value.properties.columns.map((column: FieldsWidgetValue, index: number) => ({
         key: column.key,
         label: column.title,
         viewType: column.displayProperties?.type ?? ViewType.TEXT,
@@ -90,7 +90,7 @@ export class WidgetTableComponent extends WidgetProcess {
     );
     this.cdr.detectChanges();
   }
-  public get widgetConfiguration(): TableCaseWidget {
+  public get widgetConfiguration(): TableWidget {
     return this._widgetConfiguration;
   }
 
@@ -179,7 +179,7 @@ export class WidgetTableComponent extends WidgetProcess {
     }));
   }
 
-  public onProcessStartClick(process: CaseWidgetAction): void {
+  public onProcessStartClick(process: WidgetAction): void {
     this.widgetsService.startProcess(process.processDefinitionKey);
   }
 }

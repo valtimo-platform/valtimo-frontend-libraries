@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,20 +14,4 @@
  * limitations under the License.
  */
 
-.formio-widget {
-  padding: 24px;
-
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__title {
-    color: var(--cds-text-primary);
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-    margin-bottom: 16px;
-  }
-}
+export * from './layout-public.component';

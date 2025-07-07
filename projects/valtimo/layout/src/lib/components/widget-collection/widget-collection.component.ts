@@ -20,9 +20,11 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   HostBinding,
   Input,
   OnDestroy,
+  Output,
   signal,
   ViewChild,
   ViewEncapsulation,
@@ -35,24 +37,18 @@ import {
   PaginationModule,
   TilesModule,
 } from 'carbon-components-angular';
-import {
-  CaseWidgetAction,
-  CaseWidgetDisplayTypeKey,
-  CollectionCaseWidget,
-  CollectionCaseWidgetCardData,
-  CollectionCaseWidgetField,
-  CollectionCaseWidgetTitle,
-  CollectionWidgetResolvedField,
-} from '../../../../../../models';
-import {BehaviorSubject, combineLatest, filter, map, Observable, of, switchMap, tap} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, tap} from 'rxjs';
 import {CarbonListModule, ViewContentService} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
 import {Page} from '@valtimo/shared';
-import {CaseWidgetsApiService} from '../../../../../../services';
-import {WidgetProcess} from '../widget-process/widget-process';
-import {DocumentService} from '@valtimo/document';
-import {PermissionService} from '@valtimo/access-control';
-import {WidgetsService} from '../../widgets.service';
+import {
+  CollectionWidget,
+  CollectionWidgetCardData,
+  CollectionWidgetField,
+  CollectionWidgetResolvedField,
+  CollectionWidgetTitle,
+  WidgetDisplayTypeKey,
+} from '../../models';
 
 @Component({
   selector: 'valtimo-widget-collection',
@@ -71,19 +67,15 @@ import {WidgetsService} from '../../widgets.service';
     ButtonModule,
   ],
 })
-export class WidgetCollectionComponent extends WidgetProcess implements AfterViewInit, OnDestroy {
+export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
   @HostBinding('class') public readonly class = 'valtimo-widget-collection';
   @ViewChild('widgetCollection') private _widgetCollectionRef: ElementRef<HTMLDivElement>;
 
-  @Input({required: true}) public set documentId(value: string) {
-    this.baseDocumentId = value;
-  }
-  @Input({required: true}) public tabKey: string;
-  @Input() public set widgetConfiguration(value: CollectionCaseWidget) {
+  @Input() public set widgetConfiguration(value: CollectionWidget) {
     if (!value) return;
-    this.baseWidgetConfiguration = value;
     this.widgetConfiguration$.next(value);
   }
+
   public readonly showPagination$ = new BehaviorSubject<boolean>(false);
 
   private readonly _initialNumberOfElementsSubject$ = new BehaviorSubject<number>(null);
@@ -94,73 +86,64 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
     );
   }
 
-  @Input() public set widgetData(value: Page<CollectionCaseWidgetCardData> | null) {
+  private readonly _widgetData$ = new BehaviorSubject<Page<CollectionWidgetCardData> | null>(null);
+
+  public get widgetData$(): Observable<Page<CollectionWidgetCardData>> {
+    return this._widgetData$.pipe(filter(data => !!data));
+  }
+
+  private _paginationInitialized = false;
+
+  @Input() public set widgetData(value: Page<CollectionWidgetCardData> | null) {
     if (!value) return;
 
-    this.showPagination$.next(value.totalElements > value.size);
-    this._initialNumberOfElementsSubject$.next(value.numberOfElements);
-    this._widgetDataSubject$.next(value.content);
+    console.log('new data', value);
 
-    this.paginationModel.set(
-      value.totalPages < 0
-        ? null
-        : {
-            currentPage: 1,
-            totalDataLength: Math.ceil(value.totalElements / value.size),
-            pageLength: value.size,
-          }
-    );
+    this._widgetData$.next(value);
+
+    if (!this._paginationInitialized) {
+      this.showPagination$.next(value.totalElements > value.size);
+      this._initialNumberOfElementsSubject$.next(value.numberOfElements);
+
+      this.paginationModel.set(
+        value.totalPages < 0
+          ? null
+          : {
+              currentPage: 1,
+              totalDataLength: Math.ceil(value.totalElements / value.size),
+              pageLength: value.size,
+            }
+      );
+
+      this._paginationInitialized = true;
+    } else {
+      this.paginationModel.update((model: PaginationModel) => ({
+        ...model,
+        currentPage: value.number + 1,
+      }));
+    }
+
     this.cdr.detectChanges();
   }
+
+  @Output() paginationEvent = new EventEmitter<PaginationModel>();
 
   public readonly noVisibleFields$ = new BehaviorSubject<boolean>(true);
   public readonly widgetTitle = signal('-');
 
-  public readonly widgetConfiguration$ = new BehaviorSubject<CollectionCaseWidget | null>(null);
+  public readonly widgetConfiguration$ = new BehaviorSubject<CollectionWidget | null>(null);
   public readonly paginationModel = signal<PaginationModel>(new PaginationModel());
   public readonly amountOfColumns = signal(0);
 
-  private readonly _widgetDataSubject$ = new BehaviorSubject<CollectionCaseWidgetCardData[]>(null);
-
-  private readonly _queryParams$ = new BehaviorSubject<string | null>(null);
-
-  private readonly _widgetData$: Observable<CollectionCaseWidgetCardData[]> = combineLatest([
-    this._widgetDataSubject$,
-    this._queryParams$,
-    this._initialNumberOfElements$,
-    this.widgetConfiguration$,
-  ]).pipe(
-    switchMap(([data, queryParams, initialNumberOfElements, widgetConfiguration]) =>
-      combineLatest([
-        !queryParams
-          ? of(data)
-          : this.widgetApiService
-              .getWidgetData(this.baseDocumentId, this.tabKey, widgetConfiguration.key, queryParams)
-              .pipe(map((res: Page<CollectionCaseWidgetCardData>) => res.content)),
-        of(initialNumberOfElements),
-      ])
-    ),
-    filter(([items]) => !!items),
-    map(([items, initialNumberOfElements]) => {
-      if (items.length === initialNumberOfElements) {
-        return items;
-      }
-
-      const rows = new Array<number>(initialNumberOfElements).fill(null);
-
-      return rows.map((_, index) => items[index] || {...items[0], hidden: true});
-    })
-  );
-
   public readonly collectionWidgetCards$: Observable<
     {title: string; fields: CollectionWidgetResolvedField[]; key: number; hidden: boolean}[]
-  > = combineLatest([this.widgetConfiguration$, this._widgetData$]).pipe(
+  > = combineLatest([this.widgetConfiguration$, this.widgetData$]).pipe(
     filter(([widgetConfig, widgetData]) => !!widgetConfig && !!widgetData),
     tap(([widgetConfig]) => {
       this.widgetTitle.set(widgetConfig.title);
     }),
     map(([widgetConfig, widgetData]) =>
-      widgetData.map((cardData, index) => ({
+      widgetData.content.map((cardData, index) => ({
         hidden: cardData.hidden,
         key: index,
         title: this.getCardTitle({
@@ -176,21 +159,16 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
         ),
       }))
     ),
-    tap(card => this.checkEmptyFields(card))
+    tap(card => this.checkEmptyFields(card)),
+    tap(cards => console.log('cards', cards))
   );
 
   private _observer!: ResizeObserver;
 
   constructor(
-    protected readonly documentService: DocumentService,
-    protected readonly permissionService: PermissionService,
     private readonly viewContentService: ViewContentService,
-    private readonly cdr: ChangeDetectorRef,
-    private readonly widgetApiService: CaseWidgetsApiService,
-    private readonly widgetsService: WidgetsService
-  ) {
-    super(documentService, permissionService);
-  }
+    private readonly cdr: ChangeDetectorRef
+  ) {}
 
   public ngAfterViewInit(): void {
     this.openWidthObserver();
@@ -201,25 +179,20 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
   }
 
   public onSelectPage(page: number): void {
-    this._queryParams$.next(`page=${page - 1}&size=${this.paginationModel().pageLength}`);
-    this.paginationModel.update((model: PaginationModel) => ({
-      ...model,
-      currentPage: page,
-    }));
-  }
-
-  public onProcessStartClick(process: CaseWidgetAction): void {
-    this.widgetsService.startProcess(process.processDefinitionKey);
+    this.paginationEvent.emit({...this.paginationModel(), currentPage: page});
   }
 
   private getCardField(
-    field: CollectionCaseWidgetField,
-    data: CollectionCaseWidgetCardData
+    field: CollectionWidgetField,
+    data: CollectionWidgetCardData
   ): CollectionWidgetResolvedField {
-    const resolvedValue = this.viewContentService.get(data.fields[field.key], {
-      ...field.displayProperties,
-      viewType: field.displayProperties?.type ?? CaseWidgetDisplayTypeKey.TEXT,
-    });
+    const resolvedValue = this.viewContentService.get(
+      data.fields && field.key ? data.fields[field.key] : '',
+      {
+        ...field.displayProperties,
+        viewType: field.displayProperties?.type ?? WidgetDisplayTypeKey.TEXT,
+      }
+    );
 
     return {
       key: field.key,
@@ -253,7 +226,7 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
     }
   }
 
-  private getCardTitle(collectionCaseWidgetTitle: CollectionCaseWidgetTitle): string {
+  private getCardTitle(collectionCaseWidgetTitle: CollectionWidgetTitle): string {
     const widgetTitleValue = collectionCaseWidgetTitle.value;
     const widgetTitleDisplayProperties = collectionCaseWidgetTitle.displayProperties;
 
@@ -277,6 +250,7 @@ export class WidgetCollectionComponent extends WidgetProcess implements AfterVie
       collection.fields.forEach(field => {
         if (!field.hideWhenEmpty || (field.hideWhenEmpty && field.value && field.value !== '-'))
           this.noVisibleFields$.next(false);
+        console.log('set to false');
       });
     });
   }

@@ -28,7 +28,6 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CaseWidgetAction, CustomCaseWidget, CustomCaseWidgetConfig} from '../../../../../../models';
 import {CUSTOM_CASE_WIDGET_TOKEN} from '../../../../../../constants';
 import {BehaviorSubject, combineLatest, filter, Observable, Subscription} from 'rxjs';
 import {CarbonListModule} from '@valtimo/components';
@@ -38,33 +37,34 @@ import {PermissionService} from '@valtimo/access-control';
 import {ButtonModule} from 'carbon-components-angular';
 import {WidgetProcess} from '../widget-process/widget-process';
 import {WidgetsService} from '../../widgets.service';
+import {CustomWidget, CustomWidgetConfig, WidgetAction} from '@valtimo/layout';
 
 @Component({
-  selector: 'valtimo-widget-custom',
-  templateUrl: './widget-custom.component.html',
-  styleUrls: ['./widget-custom.component.scss'],
+  selector: 'valtimo-case-widget-custom',
+  templateUrl: './case-widget-custom.component.html',
+  styleUrls: ['./case-widget-custom.component.scss'],
   standalone: true,
   imports: [CommonModule, CarbonListModule, TranslateModule, ButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WidgetCustomComponent extends WidgetProcess implements AfterViewInit, OnDestroy {
+export class CaseWidgetCustomComponent extends WidgetProcess implements AfterViewInit, OnDestroy {
   @ViewChild('customWidgetContainer', {read: ViewContainerRef})
   private readonly _customWidgetContainerRef: ViewContainerRef;
 
   @Input({required: true}) public set documentId(value: string) {
     this.baseDocumentId = value;
   }
-  @Input() public set widgetConfig(value: CustomCaseWidget) {
+  @Input() public set widgetConfig(value: CustomWidget) {
     if (!value) return;
     this.baseWidgetConfiguration = value;
     this._widgetConfigSubject$.next(value);
   }
 
-  private readonly _customCaseWidgetConfig$ = new BehaviorSubject<CustomCaseWidgetConfig | {}>({});
+  private readonly _customCaseWidgetConfig$ = new BehaviorSubject<CustomWidgetConfig | {}>({});
 
-  private readonly _widgetConfigSubject$ = new BehaviorSubject<CustomCaseWidget | null>(null);
+  private readonly _widgetConfigSubject$ = new BehaviorSubject<CustomWidget | null>(null);
 
-  public get widgetConfig$(): Observable<CustomCaseWidget> {
+  public get widgetConfig$(): Observable<CustomWidget> {
     return this._widgetConfigSubject$.pipe(filter(config => config !== null));
   }
 
@@ -75,7 +75,7 @@ export class WidgetCustomComponent extends WidgetProcess implements AfterViewIni
   constructor(
     @Optional()
     @Inject(CUSTOM_CASE_WIDGET_TOKEN)
-    private readonly customCaseWidgetConfig: CustomCaseWidgetConfig,
+    private readonly customCaseWidgetConfig: CustomWidgetConfig,
     private readonly cdr: ChangeDetectorRef,
     private readonly widgetsService: WidgetsService,
     protected readonly documentService: DocumentService,
@@ -93,7 +93,7 @@ export class WidgetCustomComponent extends WidgetProcess implements AfterViewIni
     this._subscriptions.unsubscribe();
   }
 
-  public onProcessStartClick(process: CaseWidgetAction): void {
+  public onProcessStartClick(process: WidgetAction): void {
     this.widgetsService.startProcess(process.processDefinitionKey);
   }
 
