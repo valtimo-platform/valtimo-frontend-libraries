@@ -95,11 +95,24 @@ export class WidgetTableComponent {
 
   private _paginationInitialized = false;
 
+  private _initialNumberOfElements!: number;
+
   @Input({required: true}) set widgetData(value: Page<CarbonListItem> | null) {
     if (!value) return;
 
     this.showPagination$.next(value.totalElements > value.size);
-    this.widgetData$.next(value.content);
+
+    if (!this._initialNumberOfElements) this._initialNumberOfElements = value.numberOfElements;
+
+    let widgetData: CarbonListItem[] = value.content;
+
+    if (value.content.length < this._initialNumberOfElements) {
+      const rows = new Array<number>(this._initialNumberOfElements).fill(null);
+
+      widgetData = rows.map((_, index) => value.content[index] || {...value[0], hidden: true});
+    }
+
+    this.widgetData$.next(widgetData);
 
     if (!this._paginationInitialized) {
       this.showPagination$.next(value.totalElements > value.size);
