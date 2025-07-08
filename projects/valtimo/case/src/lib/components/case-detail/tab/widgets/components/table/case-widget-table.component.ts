@@ -35,7 +35,6 @@ import {TableWidget, WidgetAction, WidgetTableComponent} from '@valtimo/layout';
 @Component({
   selector: 'valtimo-case-widget-table',
   templateUrl: './case-widget-table.component.html',
-  styleUrls: ['./case-widget-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,

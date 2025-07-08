@@ -42,7 +42,6 @@ import {
 @Component({
   selector: 'valtimo-case-widget-collection',
   templateUrl: './case-widget-collection.component.html',
-  styleUrls: ['./case-widget-collection.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
