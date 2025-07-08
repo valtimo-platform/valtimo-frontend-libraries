@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  signal,
-  ViewEncapsulation,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, ViewEncapsulation} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
-import {CarbonListItem, CarbonListModule, ColumnConfig, ViewType} from '@valtimo/components';
+import {CarbonListItem, CarbonListModule} from '@valtimo/components';
 import {Page} from '@valtimo/shared';
 import {
   ButtonModule,
@@ -37,7 +30,7 @@ import {WidgetProcess} from '../widget-process/widget-process';
 import {DocumentService} from '@valtimo/document';
 import {PermissionService} from '@valtimo/access-control';
 import {WidgetsService} from '../../widgets.service';
-import {FieldsWidgetValue, TableWidget, WidgetAction} from '@valtimo/layout';
+import {TableWidget, WidgetAction, WidgetTableComponent} from '@valtimo/layout';
 
 @Component({
   selector: 'valtimo-case-widget-table',
@@ -53,6 +46,7 @@ import {FieldsWidgetValue, TableWidget, WidgetAction} from '@valtimo/layout';
     TilesModule,
     TranslateModule,
     ButtonModule,
+    WidgetTableComponent,
   ],
 })
 export class CaseWidgetTableComponent extends WidgetProcess {
@@ -65,30 +59,6 @@ export class CaseWidgetTableComponent extends WidgetProcess {
   @Input({required: true}) public set widgetConfiguration(value: TableWidget) {
     this._widgetConfiguration = value;
     this.baseWidgetConfiguration = value;
-    this.fields$.next(
-      value.properties.columns.map((column: FieldsWidgetValue, index: number) => ({
-        key: column.key,
-        label: column.title,
-        viewType: column.displayProperties?.type ?? ViewType.TEXT,
-        className: `valtimo-widget-table--transparent ${index === 0 && value.properties.firstColumnAsTitle ? 'valtimo-widget-table--title' : ''}`,
-        ...(!!column.displayProperties?.['format'] && {
-          format: column.displayProperties['format'],
-        }),
-        ...(!!column.displayProperties?.['digitsInfo'] && {
-          digitsInfo: column.displayProperties['digitsInfo'],
-        }),
-        ...(!!column.displayProperties?.['display'] && {
-          display: column.displayProperties['display'],
-        }),
-        ...(!!column.displayProperties?.['currencyCode'] && {
-          currencyCode: column.displayProperties['currencyCode'],
-        }),
-        ...(!!column.displayProperties?.['values'] && {
-          values: column.displayProperties['values'],
-        }),
-      }))
-    );
-    this.cdr.detectChanges();
   }
   public get widgetConfiguration(): TableWidget {
     return this._widgetConfiguration;
@@ -102,34 +72,17 @@ export class CaseWidgetTableComponent extends WidgetProcess {
     );
   }
 
-  public readonly showPagination$ = new BehaviorSubject<boolean>(false);
-
-  private _widgetData$ = new BehaviorSubject<CarbonListItem[] | null>(null);
+  private _widgetData$ = new BehaviorSubject<Page<CarbonListItem> | null>(null);
   @Input({required: true}) set widgetData(value: Page<CarbonListItem> | null) {
     if (!value) return;
 
-    this.showPagination$.next(value.totalElements > value.size);
     this._initialNumberOfElementsSubject$.next(value.numberOfElements);
-    this._widgetData$.next(value.content);
-
-    this.paginationModel.set(
-      value.totalPages < 2
-        ? null
-        : {
-            currentPage: 1,
-            totalDataLength: Math.ceil(value.totalElements / value.size),
-            pageLength: value.size,
-          }
-    );
-    this.cdr.detectChanges();
+    this._widgetData$.next(value);
   }
 
-  public readonly fields$ = new BehaviorSubject<ColumnConfig[]>([]);
   private readonly _queryParams$ = new BehaviorSubject<string | null>(null);
 
-  public readonly paginationModel = signal<PaginationModel>(new PaginationModel());
-
-  public readonly widgetData$ = combineLatest([
+  public readonly widgetData$: Observable<Page<CarbonListItem>> = combineLatest([
     this._widgetData$,
     this._queryParams$,
     this._initialNumberOfElements$,
@@ -137,27 +90,25 @@ export class CaseWidgetTableComponent extends WidgetProcess {
     switchMap(([data, queryParams, initialNumberOfElements]) =>
       combineLatest([
         !queryParams
-          ? of(data)
-          : this.caseWidgetsApiService
-              .getWidgetData(
-                this.baseDocumentId,
-                this.tabKey,
-                this.widgetConfiguration.key,
-                queryParams
-              )
-              .pipe(map((res: Page<CarbonListItem>) => res.content)),
+          ? of(data as Page<CarbonListItem>)
+          : this.caseWidgetsApiService.getWidgetData(
+              this.baseDocumentId,
+              this.tabKey,
+              this.widgetConfiguration.key,
+              queryParams
+            ),
         of(initialNumberOfElements),
       ])
     ),
-    filter(([items]) => !!items),
-    map(([items, initialNumberOfElements]) => {
-      if (items.length === initialNumberOfElements) {
-        return items;
+    filter(([page]) => !!page),
+    map(([page, initialNumberOfElements]) => {
+      if (page.content.length === initialNumberOfElements) {
+        return page;
       }
 
       const rows = new Array<number>(initialNumberOfElements).fill(null);
 
-      return rows.map((_, index) => items[index] || {});
+      return {...page, content: rows.map((_, index) => page.content[index] || {})};
     })
   );
 
@@ -165,18 +116,13 @@ export class CaseWidgetTableComponent extends WidgetProcess {
     protected readonly documentService: DocumentService,
     protected readonly permissionService: PermissionService,
     private readonly caseWidgetsApiService: CaseWidgetsApiService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly widgetsService: WidgetsService
   ) {
     super(documentService, permissionService);
   }
 
-  public onSelectPage(page: number): void {
-    this._queryParams$.next(`page=${page - 1}&size=${this.paginationModel().pageLength}`);
-    this.paginationModel.update((model: PaginationModel) => ({
-      ...model,
-      currentPage: page,
-    }));
+  public onPaginationEvent(event: PaginationModel): void {
+    this._queryParams$.next(`page=${event.currentPage - 1}&size=${event.pageLength}`);
   }
 
   public onProcessStartClick(process: WidgetAction): void {

@@ -78,14 +78,6 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
 
   public readonly showPagination$ = new BehaviorSubject<boolean>(false);
 
-  private readonly _initialNumberOfElementsSubject$ = new BehaviorSubject<number>(null);
-
-  private get _initialNumberOfElements$(): Observable<number> {
-    return this._initialNumberOfElementsSubject$.pipe(
-      filter(numberOfElements => numberOfElements !== null)
-    );
-  }
-
   private readonly _widgetData$ = new BehaviorSubject<Page<CollectionWidgetCardData> | null>(null);
 
   public get widgetData$(): Observable<Page<CollectionWidgetCardData>> {
@@ -103,7 +95,6 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
 
     if (!this._paginationInitialized) {
       this.showPagination$.next(value.totalElements > value.size);
-      this._initialNumberOfElementsSubject$.next(value.numberOfElements);
 
       this.paginationModel.set(
         value.totalPages < 0
@@ -126,7 +117,7 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
-  @Output() paginationEvent = new EventEmitter<PaginationModel>();
+  @Output() public readonly paginationEvent = new EventEmitter<PaginationModel>();
 
   public readonly noVisibleFields$ = new BehaviorSubject<boolean>(true);
   public readonly widgetTitle = signal('-');
