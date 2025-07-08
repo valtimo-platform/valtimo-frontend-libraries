@@ -14,16 +14,14 @@
   ~ limitations under the License.
   -->
 
-<ng-container *ngIf="{widgetConfig: widgetConfig$ | async} as obs">
-  <valtimo-widget-custom [widgetConfig]="obs.widgetConfig">
-    @if (obs.widgetConfig?.actions?.length === 1) {
-      <button
-        *ngIf="canCreateCamundaExecution$ | async"
-        cdsButton="ghost"
-        (click)="onProcessStartClick(obs.widgetConfig?.actions[0])"
-      >
-        {{ obs.widgetConfig?.actions[0].name }}
-      </button>
-    }
-  </valtimo-widget-custom>
-</ng-container>
+<valtimo-widget-custom *ngIf="widgetConfig$ | async as widgetConfig" [widgetConfig]="widgetConfig">
+  @if (widgetConfig?.actions?.length === 1) {
+    <button
+      *ngIf="canCreateCamundaExecution$ | async"
+      cdsButton="ghost"
+      (click)="onProcessStartClick(widgetConfig?.actions[0])"
+    >
+      {{ widgetConfig?.actions[0].name }}
+    </button>
+  }
+</valtimo-widget-custom>

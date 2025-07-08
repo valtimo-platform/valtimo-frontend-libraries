@@ -14,25 +14,22 @@
   ~ limitations under the License.
   -->
 
-<ng-container
+<valtimo-widget-collection
   *ngIf="{
     widgetConfiguration: widgetConfiguration$ | async,
     widgetData: widgetData$ | async,
   } as obs"
+  [widgetConfiguration]="obs.widgetConfiguration"
+  [widgetData]="obs.widgetData"
+  (paginationEvent)="onPaginationEvent($event)"
 >
-  <valtimo-widget-collection
-    [widgetConfiguration]="obs.widgetConfiguration"
-    [widgetData]="obs.widgetData"
-    (paginationEvent)="onPaginationEvent($event)"
-  >
-    @if (obs.widgetConfiguration?.actions?.length === 1) {
-      <button
-        *ngIf="canCreateCamundaExecution$ | async"
-        cdsButton="ghost"
-        (click)="onProcessStartClick(obs.widgetConfiguration?.actions[0])"
-      >
-        {{ obs.widgetConfiguration?.actions[0].name }}
-      </button>
-    }
-  </valtimo-widget-collection>
-</ng-container>
+  @if (obs.widgetConfiguration?.actions?.length === 1) {
+    <button
+      *ngIf="canCreateCamundaExecution$ | async"
+      cdsButton="ghost"
+      (click)="onProcessStartClick(obs.widgetConfiguration?.actions[0])"
+    >
+      {{ obs.widgetConfiguration?.actions[0].name }}
+    </button>
+  }
+</valtimo-widget-collection>

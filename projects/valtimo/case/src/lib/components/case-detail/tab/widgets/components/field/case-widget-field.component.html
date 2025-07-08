@@ -14,25 +14,22 @@
   ~ limitations under the License.
   -->
 
-<ng-container
+<valtimo-widget-field
   *ngIf="{
     widgetConfiguration: widgetConfiguration$ | async,
     widgetData: widgetData$ | async,
   } as obs"
+  [collapseVertically]="collapseVertically"
+  [widgetConfiguration]="obs.widgetConfiguration"
+  [widgetData]="obs.widgetData"
 >
-  <valtimo-widget-field
-    [collapseVertically]="collapseVertically"
-    [widgetConfiguration]="obs.widgetConfiguration"
-    [widgetData]="obs.widgetData"
-  >
-    @if (obs.widgetConfiguration.actions?.length === 1) {
-      <button
-        *ngIf="canCreateCamundaExecution$ | async"
-        cdsButton="ghost"
-        (click)="onProcessStartClick(obs.widgetConfiguration.actions[0])"
-      >
-        {{ obs.widgetConfiguration.actions[0].name }}
-      </button>
-    }
-  </valtimo-widget-field>
-</ng-container>
+  @if (obs.widgetConfiguration.actions?.length === 1) {
+    <button
+      *ngIf="canCreateCamundaExecution$ | async"
+      cdsButton="ghost"
+      (click)="onProcessStartClick(obs.widgetConfiguration.actions[0])"
+    >
+      {{ obs.widgetConfiguration.actions[0].name }}
+    </button>
+  }
+</valtimo-widget-field>
