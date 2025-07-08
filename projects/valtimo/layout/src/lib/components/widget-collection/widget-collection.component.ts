@@ -86,12 +86,24 @@ export class WidgetCollectionComponent implements AfterViewInit, OnDestroy {
 
   private _paginationInitialized = false;
 
+  private _initialNumberOfElements!: number;
+
   @Input() public set widgetData(value: Page<CollectionWidgetCardData> | null) {
     if (!value) return;
 
-    console.log('new data', value);
+    if (!this._initialNumberOfElements) this._initialNumberOfElements = value.numberOfElements;
 
-    this._widgetData$.next(value);
+    let widgetData: Page<CollectionWidgetCardData> = value;
+
+    if (value.content.length < this._initialNumberOfElements) {
+      const rows = new Array<number>(this._initialNumberOfElements).fill(null);
+      widgetData = {
+        ...value,
+        content: rows.map((_, index) => value.content[index] || {...value[0], hidden: true}),
+      };
+    }
+
+    this._widgetData$.next(widgetData);
 
     if (!this._paginationInitialized) {
       this.showPagination$.next(value.totalElements > value.size);

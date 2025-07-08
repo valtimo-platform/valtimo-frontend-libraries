@@ -68,18 +68,9 @@ export class CaseWidgetCollectionComponent extends WidgetProcess {
     this.widgetConfiguration$.next(value);
   }
 
-  private readonly _initialNumberOfElementsSubject$ = new BehaviorSubject<number>(null);
-
-  private get _initialNumberOfElements$(): Observable<number> {
-    return this._initialNumberOfElementsSubject$.pipe(
-      filter(numberOfElements => numberOfElements !== null)
-    );
-  }
-
   @Input() public set widgetData(value: Page<CollectionWidgetCardData> | null) {
     if (!value) return;
 
-    this._initialNumberOfElementsSubject$.next(value.numberOfElements);
     this._widgetDataSubject$.next(value);
   }
 
@@ -92,32 +83,16 @@ export class CaseWidgetCollectionComponent extends WidgetProcess {
   public readonly widgetData$: Observable<Page<CollectionWidgetCardData>> = combineLatest([
     this._widgetDataSubject$,
     this._queryParams$,
-    this._initialNumberOfElements$,
     this.widgetConfiguration$,
   ]).pipe(
-    switchMap(([data, queryParams, initialNumberOfElements, widgetConfiguration]) =>
-      combineLatest([
-        !queryParams
-          ? of(data)
-          : this.widgetApiService
-              .getWidgetData(this.baseDocumentId, this.tabKey, widgetConfiguration.key, queryParams)
-              .pipe(map((res: Page<CollectionWidgetCardData>) => res)),
-        of(initialNumberOfElements),
-      ])
+    switchMap(([data, queryParams, widgetConfiguration]) =>
+      !queryParams
+        ? of(data)
+        : this.widgetApiService
+            .getWidgetData(this.baseDocumentId, this.tabKey, widgetConfiguration.key, queryParams)
+            .pipe(map((res: Page<CollectionWidgetCardData>) => res))
     ),
-    filter(([page]) => !!page),
-    map(([page, initialNumberOfElements]) => {
-      if (page.content.length === initialNumberOfElements) {
-        return page;
-      }
-
-      const rows = new Array<number>(initialNumberOfElements).fill(null);
-
-      return {
-        ...page,
-        content: rows.map((_, index) => page.content[index] || {...page[0], hidden: true}),
-      };
-    })
+    filter(page => !!page)
   );
 
   constructor(
