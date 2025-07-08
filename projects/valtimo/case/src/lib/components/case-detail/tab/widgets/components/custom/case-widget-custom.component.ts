@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  Input,
-  OnDestroy,
-  Optional,
-  signal,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CUSTOM_CASE_WIDGET_TOKEN} from '../../../../../../constants';
-import {BehaviorSubject, combineLatest, filter, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, filter, Observable} from 'rxjs';
 import {CarbonListModule} from '@valtimo/components';
 import {TranslateModule} from '@ngx-translate/core';
 import {DocumentService} from '@valtimo/document';
@@ -37,20 +24,16 @@ import {PermissionService} from '@valtimo/access-control';
 import {ButtonModule} from 'carbon-components-angular';
 import {WidgetProcess} from '../widget-process/widget-process';
 import {WidgetsService} from '../../widgets.service';
-import {CustomWidget, CustomWidgetConfig, WidgetAction} from '@valtimo/layout';
+import {CustomWidget, WidgetAction, WidgetCustomComponent} from '@valtimo/layout';
 
 @Component({
   selector: 'valtimo-case-widget-custom',
   templateUrl: './case-widget-custom.component.html',
-  styleUrls: ['./case-widget-custom.component.scss'],
   standalone: true,
-  imports: [CommonModule, CarbonListModule, TranslateModule, ButtonModule],
+  imports: [CommonModule, CarbonListModule, TranslateModule, ButtonModule, WidgetCustomComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CaseWidgetCustomComponent extends WidgetProcess implements AfterViewInit, OnDestroy {
-  @ViewChild('customWidgetContainer', {read: ViewContainerRef})
-  private readonly _customWidgetContainerRef: ViewContainerRef;
-
+export class CaseWidgetCustomComponent extends WidgetProcess {
   @Input({required: true}) public set documentId(value: string) {
     this.baseDocumentId = value;
   }
@@ -60,61 +43,21 @@ export class CaseWidgetCustomComponent extends WidgetProcess implements AfterVie
     this._widgetConfigSubject$.next(value);
   }
 
-  private readonly _customCaseWidgetConfig$ = new BehaviorSubject<CustomWidgetConfig | {}>({});
-
   private readonly _widgetConfigSubject$ = new BehaviorSubject<CustomWidget | null>(null);
 
   public get widgetConfig$(): Observable<CustomWidget> {
     return this._widgetConfigSubject$.pipe(filter(config => config !== null));
   }
 
-  public readonly noCustomComponentAvailable = signal(false);
-
-  private readonly _subscriptions = new Subscription();
-
   constructor(
-    @Optional()
-    @Inject(CUSTOM_CASE_WIDGET_TOKEN)
-    private readonly customCaseWidgetConfig: CustomWidgetConfig,
-    private readonly cdr: ChangeDetectorRef,
     private readonly widgetsService: WidgetsService,
     protected readonly documentService: DocumentService,
     protected readonly permissionService: PermissionService
   ) {
     super(documentService, permissionService);
-    if (customCaseWidgetConfig) this._customCaseWidgetConfig$.next(customCaseWidgetConfig);
-  }
-
-  public ngAfterViewInit(): void {
-    this.openCustomWidgetSubscription();
-  }
-
-  public ngOnDestroy(): void {
-    this._subscriptions.unsubscribe();
   }
 
   public onProcessStartClick(process: WidgetAction): void {
     this.widgetsService.startProcess(process.processDefinitionKey);
-  }
-
-  private openCustomWidgetSubscription(): void {
-    this._subscriptions.add(
-      combineLatest([this.widgetConfig$, this._customCaseWidgetConfig$]).subscribe(
-        ([widgetConfig, customCaseWidgetConfig]) => {
-          const customWidgetComponentKey = widgetConfig?.properties?.componentKey;
-          const customComponent = customCaseWidgetConfig[customWidgetComponentKey];
-
-          if (!customComponent) {
-            this.noCustomComponentAvailable.set(true);
-            return;
-          }
-
-          const componentRef = this._customWidgetContainerRef.createComponent(customComponent);
-
-          componentRef.changeDetectorRef.detectChanges();
-          this.cdr.detectChanges();
-        }
-      )
-    );
   }
 }

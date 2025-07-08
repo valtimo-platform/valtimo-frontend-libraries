@@ -22,3 +22,4 @@ export * from './translation-management';
 export * from './widget-formio';
 export * from './widget-collection';
 export * from './widget-table';
+export * from './widget-custom';

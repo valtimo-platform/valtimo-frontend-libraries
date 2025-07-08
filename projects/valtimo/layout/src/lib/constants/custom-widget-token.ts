@@ -15,10 +15,10 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {CustomCaseWidgetConfig} from '../models';
+import {CustomWidgetConfig} from '../models';
 
-const CUSTOM_CASE_WIDGET_TOKEN = new InjectionToken<CustomCaseWidgetConfig>(
-  'Specify a component to display per configured custom case widget component key.'
+const CUSTOM_WIDGET_TOKEN = new InjectionToken<CustomWidgetConfig>(
+  'Specify a component to display per configured custom widget component key.'
 );
 
-export {CUSTOM_CASE_WIDGET_TOKEN};
+export {CUSTOM_WIDGET_TOKEN};
