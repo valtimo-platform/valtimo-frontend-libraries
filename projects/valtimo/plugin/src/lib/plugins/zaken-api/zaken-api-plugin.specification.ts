@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -183,8 +183,10 @@ const zakenApiPluginSpecification: PluginSpecification = {
       teRelaterenZaakUri: 'URL naar de te relateren zaak',
       aardRelatie: 'Aard van de relatie',
       'option-vervolg': 'De andere zaak gaf aanleiding tot het starten van de onderhanden zaak.',
-      'option-onderwerp': 'De andere zaak is relevant voor cq. is onderwerp van de onderhanden zaak.',
-      'option-bijdrage': 'Aan het bereiken van de uitkomst van de andere zaak levert de onderhanden zaak een bijdrage.',
+      'option-onderwerp':
+        'De andere zaak is relevant voor cq. is onderwerp van de onderhanden zaak.',
+      'option-bijdrage':
+        'Aan het bereiken van de uitkomst van de andere zaak levert de onderhanden zaak een bijdrage.',
       identificatie: 'Identificatie',
       identificatieMedewerkerTooltip: 'Een korte unieke aanduiding van de medewerker.',
       identificatieOrganisatorischeEenheidTooltip: 'Een korte identificatie van de organisatorische eenheid.',
