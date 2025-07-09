@@ -300,9 +300,16 @@
 </ng-template>
 
 <ng-template #viewToggle>
-  <button [cdsButton]="buttonTheme()" [iconOnly]="true" (click)="switchView()">
-    <svg cdsIcon="code" size="16"></svg>
-  </button>
+  <cds-tooltip [description]="'JSON editor'">
+    <button
+      [cdsButton]="buttonTheme()"
+      data-testid="case-management-search-fields-switch-view"
+      iconOnly="true"
+      (click)="switchView()"
+    >
+      <svg cdsIcon="code" size="16"></svg>
+    </button>
+  </cds-tooltip>
 </ng-template>
 
 <ng-template #downloadButton let-obs="obs">
