@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,10 +43,16 @@ import {
   ValtimoFormioOptions,
   ValtimoModalService,
 } from '@valtimo/components';
-import {ConfigService, FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
+import {
+  ConfigService,
+  FORM_VIEW_MODEL_TOKEN,
+  FormViewModel,
+  GlobalNotificationService,
+} from '@valtimo/shared';
 import {DocumentService} from '@valtimo/document';
 import {
   FORM_CUSTOM_COMPONENT_TOKEN,
+  FormCustomComponent,
   FormCustomComponentConfig,
   FormFlowComponent,
   FormSubmissionResult,
@@ -59,7 +65,6 @@ import {
 } from '@valtimo/process-link';
 import {IconService} from 'carbon-components-angular';
 import {NGXLogger} from 'ngx-logger';
-import {ToastrService} from 'ngx-toastr';
 import {
   BehaviorSubject,
   combineLatest,
@@ -74,7 +79,6 @@ import {
 import {IntermediateSubmission, Task} from '../../models';
 import {TaskIntermediateSaveService, TaskService} from '../../services';
 import {CAN_ASSIGN_TASK_PERMISSION, TASK_DETAIL_PERMISSION_RESOURCE} from '../../task-permissions';
-import {FormCustomComponent} from '@valtimo/process-link';
 
 @Component({
   selector: 'valtimo-task-detail-content',
@@ -100,9 +104,13 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
 
     this.loadTaskDetails(value.task as any, value.processLinkActivityResult);
   }
-  @Input() public set modalClosed(_: boolean) {
+  @Input() public set modalClosed(closed: boolean) {
     // save form flow data on modal closed
     if (this.formFlow) this.formFlow.saveData();
+
+    if (closed) {
+      this.closeModalEvent.emit();
+    }
   }
   @Output() public readonly closeModalEvent = new EventEmitter();
   @Output() public readonly formSubmit = new EventEmitter();
@@ -152,6 +160,7 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
   constructor(
     private readonly configService: ConfigService,
     private readonly documentService: DocumentService,
+    private readonly globalNotificationService: GlobalNotificationService,
     private readonly iconService: IconService,
     private readonly logger: NGXLogger,
     private readonly modalService: ValtimoModalService,
@@ -161,7 +170,6 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
     private readonly stateService: FormIoStateService,
     private readonly taskIntermediateSaveService: TaskIntermediateSaveService,
     private readonly taskService: TaskService,
-    private readonly toastr: ToastrService,
     private readonly translateService: TranslateService,
     @Optional() @Inject(FORM_VIEW_MODEL_TOKEN) private readonly formViewModel: FormViewModel,
     @Optional()
@@ -223,9 +231,10 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
   public completeTask(task: Task | null): void {
     if (!task) return;
 
-    this.toastr.success(
-      `${task.name} ${this.translateService.instant('taskDetail.taskCompleted')}`
-    );
+    this.globalNotificationService.showToast({
+      title: `${task.name} ${this.translateService.instant('taskDetail.taskCompleted')}`,
+      type: 'success',
+    });
     this.task$.next(null);
     this.formSubmit.emit();
     this.closeModalEvent.emit();
@@ -382,66 +391,86 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   private setFormViewModelComponent() {
-    this._viewInitialized$.subscribe(viewInitialized => {
-      if (viewInitialized) {
-        this.formViewModelDynamicContainer.clear();
-        if (!this.formViewModel) return;
-        const formViewModelComponent = this.formViewModelDynamicContainer.createComponent(
-          this.formViewModel.component
-        );
-        formViewModelComponent.instance.form = this.formDefinition$.getValue();
-        formViewModelComponent.instance.formName = this.formName$.getValue();
-        formViewModelComponent.instance.taskInstanceId = this.taskInstanceId$.getValue();
-        formViewModelComponent.instance.isStartForm = false;
+    combineLatest([this._viewInitialized$, this.processLinkIsFormViewModel$]).subscribe(
+      ([viewInitialized, isFvm]) => {
+        if (viewInitialized && isFvm) {
+          this.formViewModelDynamicContainer.clear();
+          if (!this.formViewModel) {
+            return;
+          }
+          const formViewModelComponent = this.formViewModelDynamicContainer.createComponent(
+            this.formViewModel.component
+          );
+          formViewModelComponent.instance.form = this.formDefinition$.getValue();
+          formViewModelComponent.instance.formName = this.formName$.getValue();
+          formViewModelComponent.instance.taskInstanceId = this.taskInstanceId$.getValue();
+          formViewModelComponent.instance.isStartForm = false;
 
-        formViewModelComponent.instance.formSubmit
-          .pipe(
-            take(1),
-            switchMap(() => this.task$)
-          )
-          .subscribe((task: Task | null) => {
-            this.completeTask(task);
-          });
+          formViewModelComponent.instance.formSubmit
+            .pipe(
+              switchMap(() => this.task$),
+              take(1)
+            )
+            .subscribe((task: Task | null) => {
+              this.completeTask(task);
+            });
 
-        if (this.intermediateSaveEnabled) {
+          if (this.intermediateSaveEnabled) {
+            this._subscriptions.add(
+              formViewModelComponent.instance.submission$.subscribe(submission => {
+                this.taskIntermediateSaveService.setSubmission(submission);
+              })
+            );
+            this._subscriptions.add(
+              this.submission$.pipe(distinctUntilChanged()).subscribe((submission?) => {
+                if (submission?.data && Object.keys(submission.data).length === 0) {
+                  formViewModelComponent.instance.submission = {data: {}};
+                }
+              })
+            );
+            this.getCurrentProgress(formViewModelComponent);
+          }
+
           this._subscriptions.add(
-            formViewModelComponent.instance.submission$.subscribe(submission => {
-              this.taskIntermediateSaveService.setSubmission(submission);
+            this.closeModalEvent.subscribe(() => {
+              formViewModelComponent.destroy();
             })
           );
-          this._subscriptions.add(
-            this.submission$.pipe(distinctUntilChanged()).subscribe((submission?) => {
-              if (submission?.data && Object.keys(submission.data).length === 0) {
-                formViewModelComponent.instance.submission = {data: {}};
-              }
-            })
-          );
-          this.getCurrentProgress(formViewModelComponent);
         }
       }
-    });
+    );
   }
 
   private setFormCustomComponent(formCustomComponentKey: string): void {
-    this._viewInitialized$.subscribe(viewInitialized => {
-      if (viewInitialized) {
-        this.formCustomComponentDynamicContainer.clear();
-        if (!this.formCustomComponentConfig) return;
-        this._subscriptions.add(
-          this._formCustomComponentConfig$.subscribe(formCustomComponentConfig => {
-            const customComponent = formCustomComponentConfig[formCustomComponentKey];
-            const renderedComponent = this.formCustomComponentDynamicContainer.createComponent(
-              customComponent
-            ) as ComponentRef<FormCustomComponent>;
+    combineLatest([this._viewInitialized$, this.processLinkIsUiComponent$]).subscribe(
+      ([viewInitialized, isUiComponent]) => {
+        if (viewInitialized && isUiComponent) {
+          this.formCustomComponentDynamicContainer.clear();
+          if (!this.formCustomComponentConfig) {
+            return;
+          }
+          let renderedComponent: ComponentRef<FormCustomComponent>;
+          this._subscriptions.add(
+            this._formCustomComponentConfig$.subscribe(formCustomComponentConfig => {
+              const customComponent = formCustomComponentConfig[formCustomComponentKey];
+              renderedComponent = this.formCustomComponentDynamicContainer.createComponent(
+                customComponent
+              ) as ComponentRef<FormCustomComponent>;
 
-            renderedComponent.instance.taskInstanceId = this.taskInstanceId$.value;
-            renderedComponent.instance.submittedEvent.subscribe(() => {
-              this.closeModalEvent.emit();
-            });
-          })
-        );
+              renderedComponent.instance.taskInstanceId = this.taskInstanceId$.value;
+              renderedComponent.instance.submittedEvent.subscribe(() => {
+                this.closeModalEvent.emit();
+              });
+            })
+          );
+          this._subscriptions.add(
+            this.closeModalEvent.subscribe(() => {
+              renderedComponent.destroy();
+            })
+          );
+        }
       }
-    });
+    );
   }
 
   private resetFormDefinition(): void {
@@ -456,11 +485,11 @@ export class TaskDetailContentComponent implements OnInit, OnDestroy, AfterViewI
 
   private setDocumentDefinitionNameInService(task: Task): void {
     this.documentService
-      .getProcessDocumentDefinitionFromProcessInstanceId(task.processInstanceId)
-      .subscribe(processDocumentDefinition => {
-        const documentDefinitionName = processDocumentDefinition.id.documentDefinitionId.name;
-        this.modalService.setDocumentDefinitionName(documentDefinitionName);
-        this.stateService.setDocumentDefinitionName(documentDefinitionName);
+      .getProcessDefinitionCaseDefinitionFromProcessInstanceId(task.processInstanceId)
+      .subscribe(ProcessDefinitionCaseDefinition => {
+        const caseDefinitionKey = ProcessDefinitionCaseDefinition.id.caseDefinitionId.key;
+        this.modalService.setCaseDefinitionKey(caseDefinitionKey);
+        this.stateService.setDocumentDefinitionName(caseDefinitionKey);
       });
   }
 }

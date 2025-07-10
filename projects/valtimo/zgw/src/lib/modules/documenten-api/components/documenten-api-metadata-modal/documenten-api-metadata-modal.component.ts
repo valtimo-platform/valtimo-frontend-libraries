@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import {
   DocumentenApiMetadata,
   DocumentLanguage,
   DocumentStatus,
+  SupportedDocumentenApiFeatures,
 } from '../../models';
 import {
   BehaviorSubject,
@@ -38,7 +39,7 @@ import {
   take,
 } from 'rxjs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {DocumentService} from '@valtimo/document';
 import {KeycloakService} from 'keycloak-angular';
 import {tap} from 'rxjs/operators';
@@ -67,6 +68,7 @@ import {
   DropdownModule,
   IconModule,
   InputModule as CarbonInputModule,
+  LayerModule,
   ListItem,
   ModalModule,
   RadioModule,
@@ -76,6 +78,7 @@ import {
 import {DocumentenApiTagService} from '../../services/documenten-api-tag.service';
 import moment from 'moment';
 import {DocumentenApiUploadFieldDefaultValues} from '../../models/documenten-api-upload-field.model';
+import {DocumentenApiVersionService} from '../../services';
 
 @Component({
   selector: 'valtimo-documenten-api-metadata-modal',
@@ -100,6 +103,7 @@ import {DocumentenApiUploadFieldDefaultValues} from '../../models/documenten-api
     TooltipModule,
     TranslateModule,
     VModalModule,
+    LayerModule,
   ],
 })
 export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
@@ -272,7 +276,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     return this.documentenApiMetadataForm.get('bestandsnaam');
   }
 
-  public readonly isDefinitiveStatus$ = new BehaviorSubject<boolean>(false);
+  public readonly editDisabled$ = new BehaviorSubject<boolean>(false);
 
   public readonly CONFIDENTIALITY_LEVELS: Array<ConfidentialityLevel> = [
     'openbaar',
@@ -332,14 +336,19 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     this.translateService.stream('key'),
   ]).pipe(
     tap(([additionalDocumentDate, currentStatus]) => {
-      this.formData$.pipe(take(1)).subscribe(formData => {
-        if (
-          additionalDocumentDate === 'received' &&
-          (formData.status === 'in_bewerking' || formData.status === 'ter_vaststelling')
-        ) {
-          this.clearStatusSelection$.next(null);
-        }
-      });
+      this.formData$
+        .pipe(
+          filter(formData => !!formData),
+          take(1)
+        )
+        .subscribe(formData => {
+          if (
+            additionalDocumentDate === 'received' &&
+            (formData.status === 'in_bewerking' || formData.status === 'ter_vaststelling')
+          ) {
+            this.clearStatusSelection$.next(null);
+          }
+        });
     }),
     map(([additionalDocumentDate, currentStatus]) =>
       (additionalDocumentDate === 'received' ? this.RECEIPT_STATUSES : this.STATUSES).map(
@@ -353,13 +362,13 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   );
 
   public readonly tagItems$: Observable<Array<ListItem>> = combineLatest([
-    this.valtimoModalService.documentDefinitionName$,
+    this.valtimoModalService.caseDefinitionKey$,
     this.tagFormControl.valueChanges.pipe(startWith(this.tagFormControl.value)),
   ]).pipe(
-    filter(([documentDefinitionName]) => !!documentDefinitionName),
-    switchMap(([documentDefinitionName, tagFormControlValue]) =>
+    filter(([caseDefinitionKey]) => !!caseDefinitionKey),
+    switchMap(([caseDefinitionKey, tagFormControlValue]) =>
       combineLatest([
-        this.documentenApiTagService.getTags(documentDefinitionName),
+        this.documentenApiTagService.getTags(caseDefinitionKey),
         of(tagFormControlValue),
       ])
     ),
@@ -389,15 +398,26 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     })
   );
 
+  public readonly documentId$: Observable<string | null> = this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
+    startWith(null),
+    map(() => {
+      const segments = window.location.pathname.split('/');
+      const i = segments.indexOf('document');
+      return i !== -1 && segments.length > i + 1 ? segments[i + 1] : null;
+    })
+  );
+
   public readonly documentTypeItems$: Observable<Array<ListItem>> = combineLatest([
-    this.valtimoModalService.documentDefinitionName$,
+    this.documentId$,
     this.informatieobjecttypeFormControl.valueChanges.pipe(
       startWith(this.informatieobjecttypeFormControl.value)
     ),
   ]).pipe(
-    switchMap(([documentDefinitionName, informatieobjecttypeValue]) =>
+    filter(([documentId]) => !!documentId),
+    switchMap(([documentId, informatieobjecttypeValue]) =>
       combineLatest([
-        this.documentService.getDocumentTypes(documentDefinitionName),
+        this.documentService.getDocumentTypesForDocument(documentId),
         of(informatieobjecttypeValue),
       ])
     ),
@@ -413,6 +433,13 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     map(userProfile => userProfile?.email || '')
   );
 
+  private readonly _supportedDocumentenApiFeatures$: Observable<SupportedDocumentenApiFeatures> =
+    this.valtimoModalService.caseDefinitionKey$.pipe(
+      switchMap(caseDefinitionKey =>
+        this.documentenApiVersionService.getSupportedApiFeatures(caseDefinitionKey)
+      )
+    );
+
   private _subscriptions = new Subscription();
   private _fileSubscription!: Subscription;
   private _fileNameAndAuthorSubscription!: Subscription;
@@ -425,7 +452,9 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     private readonly keycloakService: KeycloakService,
     private readonly modalService: ModalService,
     private readonly translateService: TranslateService,
-    private readonly valtimoModalService: ValtimoModalService
+    private readonly valtimoModalService: ValtimoModalService,
+    private readonly documentenApiVersionService: DocumentenApiVersionService,
+    private readonly router: Router
   ) {}
 
   public ngOnInit(): void {
@@ -439,7 +468,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
     this._fileSubscription?.unsubscribe();
     this._fileNameAndAuthorSubscription?.unsubscribe();
-    this.isDefinitiveStatus$.next(false);
+    this.editDisabled$.next(false);
   }
 
   public languageSelected(event: {item: {id: string}}) {
@@ -452,6 +481,10 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
 
   public tagsSelected(event: Array<ListItem>) {
     this.tagFormControl.patchValue(event.filter(tag => tag.selected).map(tag => tag.id));
+  }
+
+  public setAdditionalDate(value: AdditionalDocumentDate): void {
+    this.additionalDocumentDate$.next(value);
   }
 
   public confidentialityLevelSelected(event: {id: string}) {
@@ -497,18 +530,19 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       else if (ontvangstdatum) this.additionalDocumentDate$.next('received');
       else this.additionalDocumentDate$.next('neither');
 
-      const prefillStatus = this.defaultValues.status || status;
-      const validPrefillStatus = this.STATUSES.includes(prefillStatus) ? prefillStatus : '';
+      const defaultStatus = this.defaultValues.status;
+      const validDefaultStatus = this.STATUSES.includes(defaultStatus as DocumentStatus) && defaultStatus;
+      const validPrefillStatus = this.STATUSES.includes(status) && status;
 
       this.documentenApiMetadataForm.patchValue({
         beschrijving: beschrijving || this.defaultValues.beschrijving,
         taal: taal || this.defaultValues.taal,
         informatieobjecttype: informatieobjecttype || this.defaultValues.informatieobjecttype,
-        status: validPrefillStatus,
+        status: validPrefillStatus || validDefaultStatus || null,
         vertrouwelijkheidaanduiding:
           vertrouwelijkheidaanduiding || this.defaultValues.vertrouwelijkheidaanduiding,
-        ontvangstdatum,
-        verzenddatum,
+        ontvangstdatum: ontvangstdatum ? new Date(ontvangstdatum) : null,
+        verzenddatum: verzenddatum ? new Date(verzenddatum) : null,
         trefwoorden: trefwoorden || this.defaultValues.trefwoorden,
       });
     }
@@ -595,11 +629,16 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
   private openFileSubscription(): void {
     this._fileSubscription?.unsubscribe();
     if (this.file$) {
-      this._fileSubscription = this.file$.subscribe(file => {
+      this._fileSubscription = combineLatest([
+        this.file$,
+        this._supportedDocumentenApiFeatures$,
+      ]).subscribe(([file, support]) => {
         if (file) {
           this.prefillForm(file);
-          this.isDefinitiveStatus$.next(
-            file.status === 'definitief' && this.isEditMode ? true : false
+          this.editDisabled$.next(
+            !support.supportsUpdatingDefinitiveDocument &&
+              file.status === 'definitief' &&
+              this.isEditMode
           );
         }
       });
@@ -640,18 +679,14 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
         .pipe(
           map(
             ([params, firstChildParams]) =>
-              (params?.documentDefinitionName || firstChildParams?.documentDefinitionName) as string
+              (params?.caseDefinitionKey || firstChildParams?.caseDefinitionKey) as string
           ),
-          filter(documentDefinitionName => !!documentDefinitionName)
+          filter(caseDefinitionKey => !!caseDefinitionKey)
         )
-        .subscribe(documentDefinitionName =>
-          this.valtimoModalService.setDocumentDefinitionName(documentDefinitionName)
+        .subscribe(caseDefinitionKey =>
+          this.valtimoModalService.setCaseDefinitionKey(caseDefinitionKey)
         )
     );
-  }
-
-  private setAdditionalDate(value: AdditionalDocumentDate): void {
-    this.additionalDocumentDate$.next(value);
   }
 
   private areAllFieldsHidden(): boolean {

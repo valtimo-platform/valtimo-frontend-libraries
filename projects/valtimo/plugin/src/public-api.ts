@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,6 +69,7 @@ export * from './lib/plugins/zaken-api/components/end-hersteltermijn/end-herstel
 export * from './lib/plugins/zaken-api/components/create-zaakeigenschap/create-zaakeigenschap.component';
 export * from './lib/plugins/zaken-api/components/update-zaakeigenschap/update-zaakeigenschap.component';
 export * from './lib/plugins/zaken-api/components/delete-zaakeigenschap/delete-zaakeigenschap.component';
+export * from './lib/plugins/zaken-api/components/relateer-zaken/relateer-zaken.component';
 /* objecten api plugin */
 export * from './lib/plugins/objecten-api/objecten-api-plugin-module';
 export * from './lib/plugins/objecten-api/objecten-api-plugin.specification';
@@ -81,6 +82,7 @@ export * from './lib/plugins/catalogi-api/components/catalogi-api-configuration/
 export * from './lib/plugins/catalogi-api/components/get-besluittype/get-besluittype-configuration.component';
 export * from './lib/plugins/catalogi-api/components/get-resultaattype/get-resultaattype-configuration.component';
 export * from './lib/plugins/catalogi-api/components/get-statustype/get-statustype-configuration.component';
+export * from './lib/plugins/catalogi-api/components/get-eigenschap/get-eigenschap-configuration.component';
 /* notificaties api plugin */
 export * from './lib/plugins/notificaties-api/notificaties-api-plugin.module';
 export * from './lib/plugins/notificaties-api/notificaties-api-plugin.specification';

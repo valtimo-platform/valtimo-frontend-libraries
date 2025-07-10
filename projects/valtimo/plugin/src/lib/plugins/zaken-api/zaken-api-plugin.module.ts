@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ import {EndHersteltermijnComponent} from './components/end-hersteltermijn/end-he
 import {CreateZaakeigenschapComponent} from './components/create-zaakeigenschap/create-zaakeigenschap.component';
 import {UpdateZaakeigenschapComponent} from './components/update-zaakeigenschap/update-zaakeigenschap.component';
 import {DeleteZaakeigenschapComponent} from './components/delete-zaakeigenschap/delete-zaakeigenschap.component';
+import {RelateerZakenComponent} from './components/relateer-zaken/relateer-zaken.component';
 import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
@@ -65,6 +66,7 @@ import {TranslateModule} from '@ngx-translate/core';
     CreateZaakeigenschapComponent,
     UpdateZaakeigenschapComponent,
     DeleteZaakeigenschapComponent,
+    RelateerZakenComponent,
   ],
   imports: [
     CommonModule,
@@ -98,6 +100,7 @@ import {TranslateModule} from '@ngx-translate/core';
     CreateZaakeigenschapComponent,
     UpdateZaakeigenschapComponent,
     DeleteZaakeigenschapComponent,
+    RelateerZakenComponent,
   ],
 })
 export class ZakenApiPluginModule {}

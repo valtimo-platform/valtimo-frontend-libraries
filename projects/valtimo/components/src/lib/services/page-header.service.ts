@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 Ritense BV, the Netherlands.
+ * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import {Injectable, ViewContainerRef} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {filter} from 'rxjs/operators';
-import {ConfigService} from '@valtimo/config';
+import {ConfigService} from '@valtimo/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +34,8 @@ export class PageHeaderService {
   private readonly _pageActionsHasContent$ = new BehaviorSubject<boolean>(false);
   private readonly _pageHeadHeight$ = new BehaviorSubject<number | null>(null);
 
+  private readonly _smallTitle$ = new BehaviorSubject<boolean>(false);
+
   public get headerViewContainerRef$(): Observable<ViewContainerRef> {
     return this._headerViewContainerRef$.pipe(filter(ref => !!ref));
   }
@@ -44,6 +46,10 @@ export class PageHeaderService {
 
   public get compactMode$(): Observable<boolean> {
     return this._compactMode$.asObservable();
+  }
+
+  public get smallTitle$(): Observable<boolean> {
+    return this._smallTitle$.asObservable();
   }
 
   public get showUserNameInTopBar$(): Observable<boolean> {
@@ -82,6 +88,14 @@ export class PageHeaderService {
 
   public setPageHeadHeight(height: number): void {
     this._pageHeadHeight$.next(height);
+  }
+
+  public enableSmallTitle(): void {
+    this._smallTitle$.next(true);
+  }
+
+  public disableSmallTitle(): void {
+    this._smallTitle$.next(false);
   }
 
   private getDefaultShowUserNameInTopBarValue(): boolean {
