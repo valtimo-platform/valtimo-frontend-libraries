@@ -19,6 +19,7 @@ import {BehaviorSubject} from 'rxjs';
 @Component({
   selector: 'valtimo-json-editor',
   templateUrl: './json-editor.component.html',
+  styleUrl: './json-editor.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,

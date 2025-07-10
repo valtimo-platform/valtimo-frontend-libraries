@@ -47,7 +47,6 @@ import {
   tap,
 } from 'rxjs';
 import {take} from 'rxjs/operators';
-import {v4 as uuidv4} from 'uuid';
 import {ListColumnModal} from '../../../../models';
 
 @Component({
@@ -132,7 +131,6 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     switchMap(([params]) =>
       this.documentService.getCaseListForManagement(params.caseDefinitionKey)
     ),
-    map(caseListColumns => caseListColumns.map(column => ({...column, uuid: uuidv4()}))),
     tap(caseListColumns => {
       this.params$.pipe(take(1)).subscribe(params => {
         if (caseListColumns && Array.isArray(caseListColumns) && caseListColumns.length > 0) {
@@ -420,9 +418,8 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
       }
 
       const unformattedColumns = items.map(column =>
-        this.cachedCaseListColumns.find(cachedColumn => cachedColumn.uuid === column.uuid)
+        this.cachedCaseListColumns.find(cachedColumn => cachedColumn.key === column.key)
       );
-
       this.updateCaseListColumns(caseDefinitionKey, unformattedColumns);
     });
   }
