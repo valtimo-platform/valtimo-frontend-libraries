@@ -1329,9 +1329,9 @@
     "jsonEditor": {
       "cancelModal": {
         "title": "De editor verlaten",
-        "content": "Weet u zeker dat u de editor wilt verlaten? Er kunnen niet-opgeslagen wijzigingen verloren gaan. Houd er bij het opslaan rekening mee dat het verwijderen of wijzigen van een attribuut problemen kan opleveren."
+        "content": "Weet u zeker dat u de editor wilt verlaten? Niet-opgeslagen wijzigingen gaan mogelijk verloren. Houd er bij het opslaan rekening mee dat het verwijderen of wijzigen van een attribuut problemen kan veroorzaken."
       },
-      "saveModalContent": "Weet u zeker dat u wilt opslaan? Het verwijderen of wijzigen van een attribuut problemen kan opleveren."
+      "saveModalContent": "Weet u zeker dat u wilt opslaan? Het verwijderen of wijzigen van een attribuut kan problemen veroorzaken."
     },
     "key": "Key",
     "value": "Waarde",

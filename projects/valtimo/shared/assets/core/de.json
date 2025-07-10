@@ -1332,9 +1332,9 @@
     "jsonEditor": {
       "cancelModal": {
         "title": "Editor verlassen",
-        "content": "Möchten Sie den Editor wirklich verlassen? Möglicherweise gehen nicht gespeicherte Änderungen verloren. Beachten Sie beim Speichern, dass das Entfernen oder Ändern eines Attributs zu Funktionsstörungen führen kann."
+        "content": "Möchten Sie den Editor wirklich verlassen? Nicht gespeicherte Änderungen könnten verloren gehen. Beachten Sie beim Speichern, dass das Entfernen oder Ändern eines Attributs zu Funktionsstörungen führen kann."
       },
-      "saveModalContent": "Möchten Sie wirklich speichern? Das Entfernen oder Ändern eines Attributs kann zu Funktionsstörungen führen."
+      "saveModalContent": "Möchten Sie wirklich speichern? Das Entfernen oder Ändern eines Attributs kann Funktionsstörungen verursachen."
     },
     "key": "Schlüssel",
     "value": "Wert",
