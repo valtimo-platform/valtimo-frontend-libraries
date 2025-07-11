@@ -260,7 +260,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       'create-niet-natuurlijk-persoon-zaak-rol': 'Create Zaakrol - not a natural person',
       'create-medewerker-zaak-rol': 'Create Zaakrol - Employee',
       'create-organisatorische-eenheid-zaak-rol': 'Create Zaakrol - Organizational unit',
-      'create-vestiging-zaak-rol': 'Create Zaakrol - Establishment',
+      'create-vestiging-zaak-rol': 'Create Zaakrol - Branch',
       'set-zaakopschorting': 'Suspend case',
       'start-hersteltermijn': 'Start recovery period',
       startHersteltermijnInformation:
@@ -354,8 +354,8 @@ const zakenApiPluginSpecification: PluginSpecification = {
       isGehuisvestInTooltip: 'Location where the organizational unit is housed. (Max. 24 characters)',
       kvkNummer: 'Chamber of Commerce number',
       kvkNummerTooltip: 'A unique number assigned by the Chamber of Commerce. (Max. 8 characters)',
-      vestigingsNummer: 'Establishment number',
-      vestigingsNummerTooltip: 'A short unique designation of the Establishment. (Max. 24 characters)'
+      vestigingsNummer: 'Branch number',
+      vestigingsNummerTooltip: 'A short unique designation of the branch. (Max. 24 characters)'
     },
     de: {
       title: 'Zaken API',
