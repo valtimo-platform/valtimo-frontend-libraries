@@ -21,6 +21,7 @@ import {CreateOrganisatorischeEenheidZaakRolConfig} from '../../models';
 import {RadioValue} from '@valtimo/components';
 
 @Component({
+  standalone: false,
   selector: 'valtimo-create-organisatorische-eenheid-zaak-rol-configuration',
   templateUrl: './create-organisatorische-eenheid-zaak-rol.component.html'
 })

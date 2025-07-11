@@ -22,6 +22,7 @@ import {RadioValue} from '@valtimo/components';
 import {NGXLogger} from 'ngx-logger';
 
 @Component({
+  standalone: false,
   selector: 'valtimo-create-medewerker-zaak-rol-configuration',
   templateUrl: './create-medewerker-zaak-rol.component.html',
 })

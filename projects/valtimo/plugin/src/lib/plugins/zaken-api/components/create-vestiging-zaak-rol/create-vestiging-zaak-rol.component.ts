@@ -20,6 +20,7 @@ import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rx
 import {CreateVestigingZaakRolConfig} from '../../models';
 
 @Component({
+  standalone: false,
   selector: 'valtimo-create-vestiging-zaak-rol-configuration',
   templateUrl: './create-vestiging-zaak-rol.component.html',
 })
