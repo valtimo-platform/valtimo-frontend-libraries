@@ -1176,7 +1176,7 @@
     "startableWithinCaseTooltip": "When this option is selected, this process definition will be available to start from within an existing case. This is done through the sub process menu on the detail page of the case."
   },
   "openZaak": {
-    "o": "Connected zaak type",
+    "links": "Connected zaak type",
     "documentenApi": {
       "title": "Documenten API",
       "documentenApiVersion": "The Documenten API plugin is using version",
