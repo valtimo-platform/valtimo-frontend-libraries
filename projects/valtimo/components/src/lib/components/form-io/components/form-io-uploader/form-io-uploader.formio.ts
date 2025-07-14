@@ -19,7 +19,7 @@ import {
   createCustomFormioComponent,
   FormioCustomComponentInfo,
   registerCustomFormioComponentWithClass,
-} from '../../../modules';
+} from '../../../../modules';
 import {FormIoUploaderComponent} from './form-io-uploader.component';
 import {formIoUploaderEditForm} from './form-io-uploader-edit-form';
 
