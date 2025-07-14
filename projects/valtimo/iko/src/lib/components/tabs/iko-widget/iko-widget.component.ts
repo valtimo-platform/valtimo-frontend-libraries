@@ -48,8 +48,7 @@ export class IkoWidgetComponent {
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
   public widgets$ = combineLatest([this.dataAggregateKey$, this.key$]).pipe(
-    switchMap(([dataAggregateKey, key]) => this.ikoApiService.getIkoWidget(dataAggregateKey, key)),
-    tap(widgetConfig => console.log({widgetConfig}))
+    switchMap(([dataAggregateKey, key]) => this.ikoApiService.getIkoWidget(dataAggregateKey, key))
   );
   public widgetParams$: Observable<IkoWidgetParams> = combineLatest([
     this.dataAggregateKey$,

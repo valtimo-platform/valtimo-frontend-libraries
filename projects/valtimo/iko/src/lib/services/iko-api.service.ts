@@ -103,9 +103,4 @@ export class IkoApiService extends BaseApiService {
       filters
     );
   }
-
-  public getWidgetsForTab(ikoDataAggregateKey: string, tabKey: string): Observable<Widget[]> {
-    console.log('called');
-    return of(mockWidgetResponse).pipe(delay(500));
-  }
 }
