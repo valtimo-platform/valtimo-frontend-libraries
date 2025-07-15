@@ -16,7 +16,15 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PluginConfigurationComponent} from '../../../../models';
-import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  Observable,
+  Subscription,
+  switchMap,
+  take,
+} from 'rxjs';
 import {IkoConfig} from '../../models';
 
 @Component({
@@ -36,15 +44,15 @@ export class IkoConfigurationComponent implements PluginConfigurationComponent, 
   private readonly formValue$ = new BehaviorSubject<IkoConfig | null>(null);
   private readonly valid$ = new BehaviorSubject<boolean>(false);
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.openSaveSubscription();
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this.saveSubscription?.unsubscribe();
   }
 
-  formValueChange(formValue: IkoConfig): void {
+  public formValueChange(formValue: IkoConfig): void {
     this.formValue$.next(formValue);
     this.handleValid(formValue);
   }
@@ -57,14 +65,12 @@ export class IkoConfigurationComponent implements PluginConfigurationComponent, 
   }
 
   private openSaveSubscription(): void {
-    this.saveSubscription = this.save$?.subscribe(save => {
-      combineLatest([this.formValue$, this.valid$])
-        .pipe(take(1))
-        .subscribe(([formValue, valid]) => {
-          if (valid) {
-            this.configuration.emit(formValue);
-          }
-        });
-    });
+    this.saveSubscription = this.save$
+      ?.pipe(
+        switchMap(() => combineLatest([this.formValue$, this.valid$])),
+        take(1),
+        filter(([_, valid]) => valid)
+      )
+      .subscribe(([formValue]) => this.configuration.emit(formValue));
   }
 }
