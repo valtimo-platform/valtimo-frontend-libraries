@@ -632,7 +632,11 @@
           "toggle": {"onText": "Yes", "offText": "No"}
         }
       },
-      "caseListTab": {"title": "Case list", "searchFields": "Search Fields", "columns": "Columns"},
+      "caseListTab": {
+        "title": "Case list",
+        "searchFields": "Search Fields",
+        "columns": "List columns"
+      },
       "caseDetailsTab": {
         "title": "Case details",
         "tabs": "Tabs",
@@ -746,13 +750,6 @@
       "descriptionPlaceholder": "Enter description here",
       "descriptionTooltip": "The description is used for the visible description of the case definition in the UI"
     },
-    "documentDefinition": {
-      "cancelModal": {
-        "title": "Leaving the editor",
-        "content": "Are you sure you want to leave the editor? There can be unsaved changes that will be lost. When saving, beware that removing or changing an attribute can break the case definition."
-      },
-      "saveModalContent": "Are you sure you want to save the Document definition? Removing or changing an attribute can break the case definition."
-    },
     "statuses": {
       "withoutStatus": "Show cases without a status",
       "searchFieldTitle": "Status",
@@ -773,6 +770,9 @@
       "noResults": {
         "title": "No statuses configured",
         "description": "Click here to configure a status for this case type"
+      },
+      "noResultsFinalVersion": {
+        "description": "No statuses have been created for this case type."
       }
     },
     "caseTags": {
@@ -788,6 +788,9 @@
       "noResults": {
         "title": "No tags configured",
         "description": "Click here to configure a tag for this case type"
+      },
+      "noResultsFinalVersion": {
+        "description": "No tags have been created for this case type."
       }
     },
     "draftWarning": {
@@ -1313,6 +1316,13 @@
       "noDefault": "No default sort"
     },
     "editor": {"visualEditor": "Visual editor", "jsonEditor": "JSON editor"},
+    "jsonEditor": {
+      "cancelModal": {
+        "title": "Leaving the editor",
+        "content": "Are you sure you want to leave the editor? There can be unsaved changes that will be lost. When saving, beware that removing or changing an attribute can be breaking."
+      },
+      "saveModalContent": "Are you sure you want to save? Removing or changing an attribute can be breaking."
+    },
     "key": "Key",
     "value": "Value",
     "title": "Title",
