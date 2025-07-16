@@ -18,7 +18,6 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {FunctionConfigurationComponent} from '../../../../models';
 import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
 import {CreateOrganisatorischeEenheidZaakRolConfig} from '../../models';
-import {RadioValue} from '@valtimo/components';
 import {INDICATIE_MACHTIGING_VALUES} from '../../models/indicatie-machtiging-values';
 
 @Component({
@@ -34,6 +33,8 @@ export class CreateOrganisatorischeEenheidZaakRolComponent implements FunctionCo
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() configuration: EventEmitter<CreateOrganisatorischeEenheidZaakRolConfig> =
     new EventEmitter<CreateOrganisatorischeEenheidZaakRolConfig>();
+
+  public readonly INDICATIE_MACHTIGING_VALUES = INDICATIE_MACHTIGING_VALUES;
 
   private _saveSubscription!: Subscription;
   private readonly _formValue$ =
@@ -77,6 +78,4 @@ export class CreateOrganisatorischeEenheidZaakRolComponent implements FunctionCo
         });
     });
   }
-
-  protected readonly INDICATIE_MACHTIGING_VALUES = INDICATIE_MACHTIGING_VALUES;
 }

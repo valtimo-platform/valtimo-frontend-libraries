@@ -34,6 +34,7 @@ export class CreateMedewerkerZaakRolComponent implements FunctionConfigurationCo
   @Output() configuration: EventEmitter<CreateMedewerkerZaakRolConfig> =
     new EventEmitter<CreateMedewerkerZaakRolConfig>();
 
+  public readonly INDICATIE_MACHTIGING_VALUES = INDICATIE_MACHTIGING_VALUES;
 
   private _saveSubscription!: Subscription;
   private readonly _formValue$ =
@@ -76,6 +77,4 @@ export class CreateMedewerkerZaakRolComponent implements FunctionConfigurationCo
         });
     });
   }
-
-  protected readonly INDICATIE_MACHTIGING_VALUES = INDICATIE_MACHTIGING_VALUES;
 }
