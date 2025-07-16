@@ -24,9 +24,7 @@ import {CreateVestigingZaakRolConfig} from '../../models';
   selector: 'valtimo-create-vestiging-zaak-rol-configuration',
   templateUrl: './create-vestiging-zaak-rol.component.html',
 })
-export class CreateVestigingZaakRolComponent
-  implements FunctionConfigurationComponent, OnInit, OnDestroy
-{
+export class CreateVestigingZaakRolComponent implements FunctionConfigurationComponent, OnInit, OnDestroy {
   @Input() save$: Observable<void>;
   @Input() disabled$: Observable<boolean>;
   @Input() pluginId: string;
@@ -35,21 +33,22 @@ export class CreateVestigingZaakRolComponent
   @Output() configuration: EventEmitter<CreateVestigingZaakRolConfig> =
     new EventEmitter<CreateVestigingZaakRolConfig>();
 
-  private saveSubscription!: Subscription;
+  private _saveSubscription!: Subscription;
 
-  private readonly formValue$ = new BehaviorSubject<CreateVestigingZaakRolConfig | null>(null);
-  private readonly valid$ = new BehaviorSubject<boolean>(false);
+  private readonly _formValue$ =
+    new BehaviorSubject<CreateVestigingZaakRolConfig | null>(null);
+  private readonly _valid$ = new BehaviorSubject<boolean>(false);
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.openSaveSubscription();
   }
 
-  ngOnDestroy() {
-    this.saveSubscription?.unsubscribe();
+  public ngOnDestroy(): void {
+    this._saveSubscription?.unsubscribe();
   }
 
-  formValueChange(formValue: CreateVestigingZaakRolConfig): void {
-    this.formValue$.next(formValue);
+  public formValueChange(formValue: CreateVestigingZaakRolConfig): void {
+    this._formValue$.next(formValue);
     this.handleValid(formValue);
   }
 
@@ -61,13 +60,13 @@ export class CreateVestigingZaakRolComponent
       formValue.vestigingsNummer
     );
 
-    this.valid$.next(valid);
+    this._valid$.next(valid);
     this.valid.emit(valid);
   }
 
   private openSaveSubscription(): void {
-    this.saveSubscription = this.save$?.subscribe(save => {
-      combineLatest([this.formValue$, this.valid$])
+    this._saveSubscription = this.save$?.subscribe(save => {
+      combineLatest([this._formValue$, this._valid$])
         .pipe(take(1))
         .subscribe(([formValue, valid]) => {
           if (valid) {

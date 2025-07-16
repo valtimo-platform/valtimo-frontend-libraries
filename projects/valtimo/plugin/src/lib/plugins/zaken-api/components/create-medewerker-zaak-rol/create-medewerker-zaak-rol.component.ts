@@ -18,17 +18,14 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {FunctionConfigurationComponent} from '../../../../models';
 import {BehaviorSubject, combineLatest, Observable, Subscription, take} from 'rxjs';
 import {CreateMedewerkerZaakRolConfig} from '../../models';
-import {RadioValue} from '@valtimo/components';
-import {NGXLogger} from 'ngx-logger';
+import {INDICATIE_MACHTIGING_VALUES} from '../../models/indicatie-machtiging-values';
 
 @Component({
   standalone: false,
   selector: 'valtimo-create-medewerker-zaak-rol-configuration',
   templateUrl: './create-medewerker-zaak-rol.component.html',
 })
-export class CreateMedewerkerZaakRolComponent
-  implements FunctionConfigurationComponent, OnInit, OnDestroy
-{
+export class CreateMedewerkerZaakRolComponent implements FunctionConfigurationComponent, OnInit, OnDestroy {
   @Input() save$: Observable<void>;
   @Input() disabled$: Observable<boolean>;
   @Input() pluginId: string;
@@ -37,41 +34,22 @@ export class CreateMedewerkerZaakRolComponent
   @Output() configuration: EventEmitter<CreateMedewerkerZaakRolConfig> =
     new EventEmitter<CreateMedewerkerZaakRolConfig>();
 
-  private saveSubscription!: Subscription;
 
-  private readonly formValue$ =
+  private _saveSubscription!: Subscription;
+  private readonly _formValue$ =
     new BehaviorSubject<CreateMedewerkerZaakRolConfig | null>(null);
-  private readonly valid$ = new BehaviorSubject<boolean>(false);
+  private readonly _valid$ = new BehaviorSubject<boolean>(false);
 
-  readonly indicatieMachtigingValues: Array<RadioValue> = [{
-    value: '',
-    title: 'N.v.t',
-    titleTranslationKey: 'nvt'
-  }, {
-    value: 'gemachtigde',
-    title: 'Gemachtigde',
-    titleTranslationKey: 'gemachtigde'
-  }, {
-    value: 'machtiginggever',
-    title: 'Machtiginggever',
-    titleTranslationKey: 'machtiginggever'
-  }]
-
-  constructor(
-    private logger: NGXLogger
-  ) {
-  }
-
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.openSaveSubscription();
   }
 
-  ngOnDestroy() {
-    this.saveSubscription?.unsubscribe();
+  public ngOnDestroy(): void {
+    this._saveSubscription?.unsubscribe();
   }
 
-  formValueChange(formValue: CreateMedewerkerZaakRolConfig): void {
-    this.formValue$.next(formValue);
+  public formValueChange(formValue: CreateMedewerkerZaakRolConfig): void {
+    this._formValue$.next(formValue);
     this.handleValid(formValue);
   }
 
@@ -83,16 +61,13 @@ export class CreateMedewerkerZaakRolComponent
       formValue.voorletters &&
       formValue.achternaam
     );
-    this.logger.debug('formValue', formValue);
-    this.logger.debug('Valid', valid);
-
-    this.valid$.next(valid);
+    this._valid$.next(valid);
     this.valid.emit(valid);
   }
 
   private openSaveSubscription(): void {
-    this.saveSubscription = this.save$?.subscribe(save => {
-      combineLatest([this.formValue$, this.valid$])
+    this._saveSubscription = this.save$?.subscribe(save => {
+      combineLatest([this._formValue$, this._valid$])
         .pipe(take(1))
         .subscribe(([formValue, valid]) => {
           if (valid) {
@@ -101,4 +76,6 @@ export class CreateMedewerkerZaakRolComponent
         });
     });
   }
+
+  protected readonly INDICATIE_MACHTIGING_VALUES = INDICATIE_MACHTIGING_VALUES;
 }

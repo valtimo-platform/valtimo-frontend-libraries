@@ -33,6 +33,7 @@
     [fullWidth]="true"
   >
   </v-input>
+
   <v-input
     name="rolToelichting"
     [title]="'rolToelichting' | pluginTranslate: pluginId | async"
@@ -45,6 +46,7 @@
     [fullWidth]="true"
   >
   </v-input>
+
   <v-input
     name="identificatie"
     [title]="'identificatie' | pluginTranslate: pluginId | async"
@@ -57,6 +59,7 @@
     [fullWidth]="true"
   >
   </v-input>
+
   <v-input
     name="naam"
     [title]="'naam' | pluginTranslate: pluginId | async"
@@ -69,6 +72,7 @@
     [fullWidth]="true"
   >
   </v-input>
+
   <v-input
     name="isGehuisvestIn"
     [title]="'isGehuisvestIn' | pluginTranslate: pluginId | async"
@@ -81,6 +85,7 @@
     [fullWidth]="true"
   >
   </v-input>
+
   <v-input
     name="afwijkendeNaamBetrokkene"
     [title]="'afwijkendeNaamBetrokkene' | pluginTranslate: pluginId | async"
@@ -93,6 +98,7 @@
     [fullWidth]="true"
   >
   </v-input>
+
   <v-radio
     name="indicatieMachtiging"
     [title]="'indicatieMachtiging' | pluginTranslate: pluginId | async"
@@ -102,7 +108,7 @@
     [required]="false"
     [tooltip]="'indicatieMachtigingTooltip' | pluginTranslate: pluginId | async"
     [fullWidth]="true"
-    [radioValues]="indicatieMachtigingValues"
+    [radioValues]="INDICATIE_MACHTIGING_VALUES"
   >
   </v-radio>
 </v-form>
