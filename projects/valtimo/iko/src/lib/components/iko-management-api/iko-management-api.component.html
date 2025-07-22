@@ -18,6 +18,79 @@
   [fields]="FIELDS"
   [items]="apiConfigs$ | async"
   [loading]="loading$ | async"
-  [hideToolbar]="true"
   (rowClicked)="onRowClicked($event)"
-></valtimo-carbon-list>
+>
+  <div carbonToolbarContent>
+    <ng-container [ngTemplateOutlet]="addApiConfigButton"></ng-container>
+  </div>
+</valtimo-carbon-list>
+
+<cds-modal
+  valtimoCdsModal
+  [open]="openModal$ | async"
+  showFooter="true"
+  title="{{ 'ikoManagement.addApiConfig' | translate }}"
+  (close)="closeModal()"
+>
+  <cds-modal-header [showCloseButton]="true" (closeSelect)="closeModal()">
+    <h3 cdsModalHeaderHeading>
+      {{ 'ikoManagement.addApiConfig' | translate }}
+    </h3>
+  </cds-modal-header>
+
+  <section cdsModalContent [cdsLayer]="1">
+    <form [formGroup]="form" class="iko-api-form">
+      <cds-label [invalid]="getControlInvalid('pluginId')">
+        {{ 'ikoManagement.pluginId' | translate }}
+
+        <input
+          [attr.modal-primary-focus]="true"
+          [invalid]="getControlInvalid('pluginId')"
+          formControlName="name"
+          cdsText
+          placeholder="{{ 'ikoManagement.pluginIdPlaceholder' | translate }}"
+        />
+      </cds-label>
+
+      <cds-label [invalid]="getControlInvalid('apiKey')">
+        {{ 'ikoManagement.apiKey' | translate }}
+
+        <input
+          [invalid]="getControlInvalid('apiKey')"
+          formControlName="apiKey"
+          cdsText
+          placeholder="{{ 'ikoManagement.apiKeyPlaceholder' | translate }}"
+        />
+      </cds-label>
+
+      <cds-label [invalid]="getControlInvalid('baseUrl')">
+        {{ 'ikoManagement.baseUrl' | translate }}
+
+        <input
+          [invalid]="getControlInvalid('baseUrl')"
+          formControlName="baseUrl"
+          cdsText
+          placeholder="{{ 'ikoManagement.baseUrlPlaceholder' | translate }}"
+        />
+      </cds-label>
+    </form>
+  </section>
+
+  <cds-modal-footer>
+    <button cdsButton="ghost" (click)="closeModal()">
+      {{ 'ikoManagement.cancel' | translate }}
+    </button>
+
+    <button [disabled]="this.form.invalid" cdsButton="primary" (click)="createApiConfig()">
+      {{ 'ikoManagement.create' | translate }}
+    </button>
+  </cds-modal-footer>
+</cds-modal>
+
+<ng-template #addApiConfigButton>
+  <button cdsButton="primary" (click)="openModal()">
+    {{ 'ikoManagement.addApiConfig' | translate }}
+
+    <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>
+  </button>
+</ng-template>
