@@ -57,6 +57,10 @@ export * from './lib/plugins/iko/components/iko-configuration/iko-configuration.
 export * from './lib/plugins/objecttypen-api/objecttypen-api-plugin-module';
 export * from './lib/plugins/objecttypen-api/objecttypen-api-plugin.specification';
 export * from './lib/plugins/objecttypen-api/components/objecttypen-api-configuration/objecttypen-api-configuration.component';
+/* open-klant plugin */
+export * from './lib/plugins/open-klant-token-authentication/open-klant-token-authentication-plugin.module';
+export * from './lib/plugins/open-klant-token-authentication/open-klant-token-authentication-plugin.specification';
+export * from './lib/plugins/open-klant-token-authentication/components/open-klant-token-authentication-configuration/open-klant-token-authentication-configuration.component';
 /* zaken api plugin */
 export * from './lib/plugins/zaken-api/zaken-api-plugin.module';
 export * from './lib/plugins/zaken-api/zaken-api-plugin.specification';
