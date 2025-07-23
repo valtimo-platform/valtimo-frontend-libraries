@@ -1596,7 +1596,8 @@
     "enum": "Enumeration",
     "arrayCount": "Count",
     "underscoresToSpaces": "Underscores to spaces",
-    "tags": "Tags"
+    "tags": "Tags",
+    "Hidden": "hidden"
   },
   "object": {
     "title": "Objects",

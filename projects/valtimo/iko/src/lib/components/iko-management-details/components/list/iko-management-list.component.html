@@ -14,4 +14,22 @@
   ~ limitations under the License.
   -->
 
-list works
+<ng-container
+  *ngIf="{
+    columns: ikoListColumns$ | async,
+    loading: loading$ | async,
+  } as obs"
+>
+  <valtimo-carbon-list
+    [items]="obs.columns || []"
+    [loading]="obs.loading"
+    [fields]="FIELDS"
+    [header]="false"
+  >
+    <valtimo-no-results
+      [title]="'listColumn.noConfigWarningTitle' | translate"
+      [description]="'listColumn.noConfigWarning' | translate"
+      illustration="valtimo-layout/img/emptystate-empty.svg"
+    ></valtimo-no-results>
+  </valtimo-carbon-list>
+</ng-container>

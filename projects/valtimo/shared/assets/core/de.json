@@ -1609,7 +1609,8 @@
     "enum": "Aufzählung",
     "arrayCount": "Quantität",
     "underscoresToSpaces": "Unterstriche zu Leerzeichen",
-    "tags": "Tags"
+    "tags": "Tags",
+    "hidden": "Versteckt"
   },
   "object": {
     "title": "Objekte",

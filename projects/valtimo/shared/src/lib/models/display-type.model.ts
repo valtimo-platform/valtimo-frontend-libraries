@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-export * from './router.utils';
-export * from './url.utils';
-export * from './global-notification.utils';
-export * from './route-params.utils';
-export * from './display-type.utils';
+interface DisplayType {
+  type: string;
+  displayTypeParameters: DisplayTypeParameters;
+}
+
+interface DisplayTypeParameters {
+  enum?: {
+    [key: string]: string;
+  };
+  dateFormat?: string;
+  tagAmount?: number;
+}
+
+export {DisplayTypeParameters, DisplayType};

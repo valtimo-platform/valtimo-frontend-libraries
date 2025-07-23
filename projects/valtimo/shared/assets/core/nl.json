@@ -1624,7 +1624,8 @@
     "enum": "Opsomming",
     "arrayCount": "Hoeveelheid",
     "underscoresToSpaces": "Lage strepen naar spaties",
-    "tags": "Tags"
+    "tags": "Tags",
+    "hidden": "Verborgen"
   },
   "object": {
     "title": "Objects",
