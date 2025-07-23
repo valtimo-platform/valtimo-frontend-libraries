@@ -40,49 +40,55 @@
 
   <section cdsModalContent [cdsLayer]="1">
     <form [formGroup]="form" class="iko-api-form">
-      <cds-label [invalid]="getControlInvalid('pluginId')">
-        {{ 'ikoManagement.pluginId' | translate }}
+      <cds-label [invalid]="getControlInvalid('title')">
+        {{ 'ikoManagement.titleTitle' | translate }}
 
         <input
-          [attr.modal-primary-focus]="true"
-          [invalid]="getControlInvalid('pluginId')"
-          formControlName="name"
+          [invalid]="getControlInvalid('title')"
+          formControlName="title"
           cdsText
-          placeholder="{{ 'ikoManagement.pluginIdPlaceholder' | translate }}"
+          placeholder="{{ 'ikoManagement.titlePlaceholder' | translate }}"
         />
       </cds-label>
 
-      <cds-label [invalid]="getControlInvalid('apiKey')">
-        {{ 'ikoManagement.apiKey' | translate }}
+      <cds-label [invalid]="getControlInvalid('key')">
+        {{ 'ikoManagement.keyTitle' | translate }}
 
         <input
-          [invalid]="getControlInvalid('apiKey')"
-          formControlName="apiKey"
+          [invalid]="getControlInvalid('key')"
+          formControlName="key"
           cdsText
-          placeholder="{{ 'ikoManagement.apiKeyPlaceholder' | translate }}"
+          placeholder="{{ 'ikoManagement.keyPlaceholder' | translate }}"
         />
       </cds-label>
 
-      <cds-label [invalid]="getControlInvalid('baseUrl')">
-        {{ 'ikoManagement.baseUrl' | translate }}
+      <v-select
+        [items]="(ikoRepositoryTypeSelectItems$ | async) || []"
+        [title]="'ikoManagement.typeTitle' | translate"
+        [disabled]="disabled$ | async"
+        [dropUp]="false"
+        [clearSelectionSubject$]="clearTypeSelection$"
+        (selectedChange)="onTypeSelect($event)"
+      ></v-select>
 
-        <input
-          [invalid]="getControlInvalid('baseUrl')"
-          formControlName="baseUrl"
-          cdsText
-          placeholder="{{ 'ikoManagement.baseUrlPlaceholder' | translate }}"
-        />
-      </cds-label>
+      <v-select
+        [items]="(pluginSelectItems$ | async) || []"
+        [title]="'ikoManagement.pluginIdTitle' | translate"
+        [disabled]="disabled$ | async"
+        [dropUp]="false"
+        [clearSelectionSubject$]="clearPluginIdSelection$"
+        (selectedChange)="onPluginIdSelect($event)"
+      ></v-select>
     </form>
   </section>
 
   <cds-modal-footer>
     <button cdsButton="ghost" (click)="closeModal()">
-      {{ 'ikoManagement.cancel' | translate }}
+      {{ 'interface.cancel' | translate }}
     </button>
 
     <button [disabled]="this.form.invalid" cdsButton="primary" (click)="createApiConfig()">
-      {{ 'ikoManagement.create' | translate }}
+      {{ 'interface.save' | translate }}
     </button>
   </cds-modal-footer>
 </cds-modal>
