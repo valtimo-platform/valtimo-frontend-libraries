@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject, combineLatest, filter, switchMap, tap} from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  Observable,
+  Subscription,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {CarbonListModule, ColumnConfig} from '@valtimo/components';
 import {IkoManagementApiService} from '../../../../services';
 import {TabsModule} from 'carbon-components-angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {getDisplayTypeParametersView} from '@valtimo/shared';
+import {ListColumnDto} from '../../../../models';
 
 @Component({
   standalone: true,
@@ -31,18 +40,19 @@ import {getDisplayTypeParametersView} from '@valtimo/shared';
   styleUrls: ['./iko-management-list.component.scss'],
   imports: [CommonModule, CarbonListModule, TabsModule, TranslateModule],
 })
-export class IkoManagementListComponent {
+export class IkoManagementListComponent implements OnInit, OnDestroy {
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
-  private readonly _dataAggregateKey = this.route.params.pipe(
+  public readonly disableInput$ = new BehaviorSubject<boolean>(true);
+
+  private readonly _dataAggregateKey$: Observable<string> = this.route.params.pipe(
     map(params => params?.key),
     filter(key => !!key)
   );
 
-  private readonly _ikoListColumns$ = this._dataAggregateKey.pipe(
-    switchMap(key => this.ikoManagementApiService.getIkoListColumns(key)),
-    tap(() => this.loading$.next(false))
-  );
+  private readonly _ikoListColumns$ = new BehaviorSubject<ListColumnDto[]>([]);
+
+  private readonly _reloadColumns$ = new BehaviorSubject<null>(null);
 
   public readonly ikoListColumns$ = combineLatest([
     this._ikoListColumns$,
@@ -68,7 +78,8 @@ export class IkoManagementListComponent {
           column.displayType.displayTypeParameters
         ),
       }))
-    )
+    ),
+    tap(() => this.disableInput$.next(false))
   );
 
   public readonly FIELDS: Array<ColumnConfig> = [
@@ -116,9 +127,63 @@ export class IkoManagementListComponent {
     },
   ];
 
+  private readonly _subscriptions = new Subscription();
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly ikoManagementApiService: IkoManagementApiService,
     private readonly translateService: TranslateService
   ) {}
+
+  public ngOnInit(): void {
+    this._subscriptions.add(
+      combineLatest([this._dataAggregateKey$, this._reloadColumns$])
+        .pipe(
+          tap(() => this.disableInput$.next(true)),
+          switchMap(([key]) => this.ikoManagementApiService.getIkoListColumns(key)),
+          tap(res => {
+            this._ikoListColumns$.next(res);
+            this.loading$.next(false);
+          })
+        )
+        .subscribe()
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
+
+  public onItemsReordered(items: {id: string}[]): void {
+    const listColumns = this._ikoListColumns$.getValue();
+    const mappedItems = items
+      .map(item => listColumns.find(column => column.id === item.id))
+      .map((item, index) => ({...item, order: index}));
+
+    this.disableInput();
+
+    this._dataAggregateKey$
+      .pipe(switchMap(key => this.ikoManagementApiService.updateIkoListColumns(key, mappedItems)))
+      .subscribe({
+        next: () => {
+          this.enableInput();
+          this.reloadColumns();
+        },
+        error: () => {
+          this.enableInput();
+        },
+      });
+  }
+
+  private disableInput(): void {
+    this.disableInput$.next(true);
+  }
+
+  private enableInput(): void {
+    this.disableInput$.next(false);
+  }
+
+  private reloadColumns(): void {
+    this._reloadColumns$.next(null);
+  }
 }

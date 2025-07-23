@@ -43,6 +43,7 @@
       [viewMode]="false"
       [header]="false"
       (rowClicked)="columnRowClicked($event)"
+      x
       [dragAndDrop]="true"
       [dragAndDropDisabled]="obs.disableInput"
       (itemsReordered)="onItemsReordered(obs.params.caseDefinitionKey, $event)"

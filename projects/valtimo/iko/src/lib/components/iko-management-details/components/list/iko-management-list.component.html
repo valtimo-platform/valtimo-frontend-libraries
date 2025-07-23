@@ -25,6 +25,9 @@
     [loading]="obs.loading"
     [fields]="FIELDS"
     [header]="false"
+    [dragAndDrop]="true"
+    [dragAndDropDisabled]="disableInput$ | async"
+    (itemsReordered)="onItemsReordered($event)"
   >
     <valtimo-no-results
       [title]="'listColumn.noConfigWarningTitle' | translate"
