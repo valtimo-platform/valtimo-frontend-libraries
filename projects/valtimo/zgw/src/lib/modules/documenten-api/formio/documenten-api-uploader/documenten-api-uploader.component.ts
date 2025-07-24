@@ -40,6 +40,7 @@ import {filter, map, take, tap} from 'rxjs/operators';
 import {UserProviderService} from '@valtimo/security';
 import {ActivatedRoute} from '@angular/router';
 import {DocumentenApiVersionService} from '../../services';
+import {DocumentService} from '@valtimo/document';
 
 @Component({
   selector: 'valtimo-documenten-api-formio-uploader',
@@ -109,6 +110,21 @@ export class DocumentenApiUploaderComponent
 
   @Input() set documentType(defaultValue: string) {
     this.defaultValues['informatieobjecttype'] = defaultValue;
+    this.modalService.documentDefinitionName$
+      .pipe(
+        switchMap(documentDefinitionName => {
+          return this.documentService.getDocumentTypes(String(documentDefinitionName));
+        })
+      )
+      .subscribe(documentTypes => {
+        const foundDocumentType = documentTypes.find(
+          documentType => documentType.name === defaultValue
+        );
+
+        foundDocumentType
+          ? (this.defaultValues['informatieobjecttype'] = foundDocumentType.url)
+          : (this.defaultValues['informatieobjecttype'] = defaultValue);
+      });
   }
 
   @Input() set hideDocumentType(hide: boolean) {
@@ -199,7 +215,8 @@ export class DocumentenApiUploaderComponent
     private readonly modalService: ValtimoModalService,
     private readonly userProviderService: UserProviderService,
     private readonly route: ActivatedRoute,
-    private readonly documentenApiVersionService: DocumentenApiVersionService
+    private readonly documentenApiVersionService: DocumentenApiVersionService,
+    private readonly documentService: DocumentService
   ) {}
 
   public ngOnInit(): void {
