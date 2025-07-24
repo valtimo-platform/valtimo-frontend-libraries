@@ -68,6 +68,41 @@
       [title]="'ikoManagement.displayTypeTitle' | translate"
       [appendInline]="false"
     ></v-select>
+
+    <cds-label *ngIf="isDateDisplayType$ | async">
+      {{ 'listColumn.dateFormat' | translate }}
+
+      <cds-tooltip [description]="'listColumn.dateFormatTooltip' | translate">
+        <i class="mdi mdi-help-circle-outline"></i>
+      </cds-tooltip>
+
+      <input cdsText [formControl]="booleanDisplayTypeParameters" />
+    </cds-label>
+
+    <cds-label *ngIf="isBooleanDisplayType$">
+      {{ 'listColumn.enumTitleOptional' | translate }}
+
+      <cds-tooltip [description]="'listColumn.enumTooltipOptional' | translate">
+        <i class="mdi mdi-help-circle-outline"></i>
+      </cds-tooltip>
+
+      <valtimo-carbon-multi-input
+        type="keyValue"
+        formControlName="booleanDisplayTypeParameters"
+        [hideAddButton]="true"
+        [hideDeleteButton]="true"
+        [maxRows]="1"
+        [keyColumnTitle]="'viewTypeConverter.Yes' | translate"
+        [valueColumnTitle]="'viewTypeConverter.No' | translate"
+      ></valtimo-carbon-multi-input>
+    </cds-label>
+
+    <cds-toggle
+      formControlName="sortable"
+      [label]="'ikoManagement.sortableTitle' | translate"
+      [onText]="'ikoManagement.sortingEnabled' | translate"
+      [offText]="'ikoManagement.sortingDisabled' | translate"
+    ></cds-toggle>
   </form>
 
   <cds-modal-footer>
