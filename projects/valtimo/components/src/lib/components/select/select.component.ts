@@ -69,6 +69,7 @@ export class SelectComponent implements OnInit, OnChanges, OnDestroy {
     this.$disabled.set(value);
   }
   @Input() public dropUp?: boolean;
+  @Input() public invalid = false;
   @Input() public multiple = false;
   @Input() public margin = false;
   @Input() public widthInPx!: number;

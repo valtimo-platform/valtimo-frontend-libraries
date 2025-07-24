@@ -62,6 +62,7 @@
     </cds-label>
 
     <v-select
+      [invalid]="displayTypeType.dirty && displayTypeType.invalid"
       formControlName="displayTypeType"
       [items]="(displayTypeSelectItems$ | async) || []"
       [title]="'ikoManagement.displayTypeTitle' | translate"

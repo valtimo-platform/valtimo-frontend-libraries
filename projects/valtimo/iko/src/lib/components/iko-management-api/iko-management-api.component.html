@@ -66,6 +66,7 @@
     </cds-label>
 
     <v-select
+      [invalid]="getControlInvalid('type')"
       formControlName="type"
       [items]="ikoRepositoryTypeSelectItems$ | async"
       [title]="'ikoManagement.typeTitle' | translate"
@@ -73,6 +74,7 @@
     ></v-select>
 
     <v-select
+      [invalid]="getControlInvalid('pluginId')"
       formControlName="pluginId"
       [items]="pluginSelectItems$ | async"
       [title]="'ikoManagement.pluginIdTitle' | translate"

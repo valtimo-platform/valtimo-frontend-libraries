@@ -44,6 +44,7 @@
     [clearSelectionsTitle]="vars.clearAllText"
     [disabled]="$disabled() || loading || (vars?.items || []).length === 0"
     [dropUp]="dropUp"
+    [invalid]="invalid"
     [placeholder]="
       loading
         ? vars.loadingText
