@@ -29,6 +29,14 @@
     [dragAndDropDisabled]="disableInput$ | async"
     (itemsReordered)="onItemsReordered($event)"
   >
+    <div carbonToolbarContent>
+      <button cdsButton="primary" (click)="openModal()">
+        {{ 'ikoManagement.addColumn' | translate }}
+
+        <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>
+      </button>
+    </div>
+
     <valtimo-no-results
       [title]="'listColumn.noConfigWarningTitle' | translate"
       [description]="'listColumn.noConfigWarning' | translate"
@@ -39,4 +47,5 @@
 
 <valtimo-iko-management-list-modal
   [openModal]="openModal$ | async"
+  (closeModalEvent)="onCloseModalEvent()"
 ></valtimo-iko-management-list-modal>

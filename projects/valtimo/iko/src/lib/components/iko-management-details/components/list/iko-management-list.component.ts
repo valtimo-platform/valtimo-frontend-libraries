@@ -28,7 +28,7 @@ import {
 import {map} from 'rxjs/operators';
 import {CarbonListModule, ColumnConfig} from '@valtimo/components';
 import {IkoManagementApiService} from '../../../../services';
-import {TabsModule} from 'carbon-components-angular';
+import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {getDisplayTypeParametersView} from '@valtimo/shared';
 import {ListColumnDto} from '../../../../models';
@@ -45,6 +45,8 @@ import {IkoManagementListModalComponent} from '../list-modal/list-modal.componen
     TabsModule,
     TranslateModule,
     IkoManagementListModalComponent,
+    ButtonModule,
+    IconModule,
   ],
 })
 export class IkoManagementListComponent implements OnInit, OnDestroy {
@@ -186,6 +188,10 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
 
   public openModal(): void {
     this.openModal$.next(true);
+  }
+
+  public onCloseModalEvent(): void {
+    this.openModal$.next(false);
   }
 
   private disableInput(): void {

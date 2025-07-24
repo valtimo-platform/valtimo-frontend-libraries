@@ -51,10 +51,16 @@ interface IkoListColumnUpdateRequest {
   defaultSort?: ColumnDefaultSort;
 }
 
+enum IkoListColumnModalType {
+  ADD,
+  EDIT,
+}
+
 export {
   IkoListColumnUpdateRequest,
   IkoListColumnCreateRequest,
   ListColumnDto,
   DisplayType,
   ColumnDefaultSort,
+  IkoListColumnModalType,
 };

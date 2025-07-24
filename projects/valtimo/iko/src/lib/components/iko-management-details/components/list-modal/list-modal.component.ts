@@ -14,25 +14,42 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {Component, Input, signal} from '@angular/core';
-import {ModalModule} from 'carbon-components-angular';
+import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
+import {ButtonModule, InputModule, LayerModule, ModalModule} from 'carbon-components-angular';
 import {TranslateModule} from '@ngx-translate/core';
 import {IkoManagementApiService} from '../../../../services';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CARBON_CONSTANTS, ValtimoCdsModalDirective} from '@valtimo/components';
+import {IkoListColumnModalType} from '../../../../models';
 
 @Component({
   standalone: true,
   selector: 'valtimo-iko-management-list-modal',
   templateUrl: './list-modal.component.html',
   styleUrls: ['./list-modal.component.scss'],
-  imports: [CommonModule, TranslateModule, ModalModule, ValtimoCdsModalDirective],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ModalModule,
+    ValtimoCdsModalDirective,
+    ButtonModule,
+    InputModule,
+    ReactiveFormsModule,
+    LayerModule,
+  ],
 })
 export class IkoManagementListModalComponent {
-  public readonly $openModal = signal(false);
+  public readonly $openModal = signal<boolean>(false);
   @Input() public set openModal(value: boolean) {
     this.$openModal.set(value);
   }
+
+  public readonly $type = signal<IkoListColumnModalType>(IkoListColumnModalType.ADD);
+  @Input() public set type(value: IkoListColumnModalType) {
+    this.$type.set(value);
+  }
+
+  @Output() public readonly closeModalEvent = new EventEmitter<void>();
 
   public readonly form = this.formBuilder.group({
     title: this.formBuilder.control('', [Validators.required]),
@@ -50,10 +67,14 @@ export class IkoManagementListModalComponent {
   ) {}
 
   public closeModal(): void {
-    this.$openModal.set(false);
+    this.closeModalEvent.emit();
 
     setTimeout(() => {
       this.form.reset();
     }, CARBON_CONSTANTS.modalAnimationMs);
+  }
+
+  public addColumn(): void {
+    console.log(event);
   }
 }
