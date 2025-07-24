@@ -32,15 +32,24 @@ import {TabsModule} from 'carbon-components-angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {getDisplayTypeParametersView} from '@valtimo/shared';
 import {ListColumnDto} from '../../../../models';
+import {IkoManagementListModalComponent} from '../list-modal/list-modal.component';
 
 @Component({
   standalone: true,
   selector: 'valtimo-iko-management-list-columns',
   templateUrl: './iko-management-list.component.html',
   styleUrls: ['./iko-management-list.component.scss'],
-  imports: [CommonModule, CarbonListModule, TabsModule, TranslateModule],
+  imports: [
+    CommonModule,
+    CarbonListModule,
+    TabsModule,
+    TranslateModule,
+    IkoManagementListModalComponent,
+  ],
 })
 export class IkoManagementListComponent implements OnInit, OnDestroy {
+  public readonly openModal$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   public readonly loading$ = new BehaviorSubject<boolean>(true);
 
   public readonly disableInput$ = new BehaviorSubject<boolean>(true);
@@ -173,6 +182,10 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
           this.enableInput();
         },
       });
+  }
+
+  public openModal(): void {
+    this.openModal$.next(true);
   }
 
   private disableInput(): void {

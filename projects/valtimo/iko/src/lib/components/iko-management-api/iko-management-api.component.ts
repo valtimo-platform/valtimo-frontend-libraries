@@ -54,6 +54,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import {IkoManagementListModalComponent} from '../iko-management-details/components/list-modal/list-modal.component';
 
 @Component({
   selector: 'valtimo-iko-management-api',
@@ -73,6 +74,7 @@ import {
     ValtimoCdsModalDirective,
     LayerModule,
     SelectModule,
+    IkoManagementListModalComponent,
   ],
   styleUrl: './iko-management-api.component.scss',
 })
