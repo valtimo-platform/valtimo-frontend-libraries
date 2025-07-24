@@ -16,11 +16,19 @@
 import {CommonModule} from '@angular/common';
 import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
 import {ButtonModule, InputModule, LayerModule, ModalModule} from 'carbon-components-angular';
-import {TranslateModule} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {IkoManagementApiService} from '../../../../services';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CARBON_CONSTANTS, ValtimoCdsModalDirective} from '@valtimo/components';
+import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  CARBON_CONSTANTS,
+  SelectItem,
+  SelectModule,
+  ValtimoCdsModalDirective,
+  ViewType,
+} from '@valtimo/components';
 import {IkoListColumnModalType} from '../../../../models';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Component({
   standalone: true,
@@ -36,6 +44,7 @@ import {IkoListColumnModalType} from '../../../../models';
     InputModule,
     ReactiveFormsModule,
     LayerModule,
+    SelectModule,
   ],
 })
 export class IkoManagementListModalComponent {
@@ -60,11 +69,56 @@ export class IkoManagementListModalComponent {
     sortable: this.formBuilder.control(false, [Validators.required]),
     defaultSort: this.formBuilder.control('', [Validators.required]),
   });
+  public get title(): AbstractControl<string> {
+    return this.form.get('title') as AbstractControl<string>;
+  }
+  public get key(): AbstractControl<string> {
+    return this.form.get('key') as AbstractControl<string>;
+  }
+  public get path(): AbstractControl<string> {
+    return this.form.get('path') as AbstractControl<string>;
+  }
+  public get displayTypeType(): AbstractControl<string> {
+    return this.form.get('displayTypeType') as AbstractControl<string>;
+  }
+  public get displayTypeParameters(): AbstractControl<string> {
+    return this.form.get('displayTypeParameters') as AbstractControl<string>;
+  }
+  public get sortable(): AbstractControl<boolean> {
+    return this.form.get('sortable') as AbstractControl<boolean>;
+  }
+  public get defaultSort(): AbstractControl<string> {
+    return this.form.get('defaultSort') as AbstractControl<string>;
+  }
+
+  private readonly _DISPLAY_TYPES: Array<ViewType> = [
+    ViewType.TEXT,
+    ViewType.DATE,
+    ViewType.BOOLEAN,
+    ViewType.ENUM,
+    ViewType.ARRAY_COUNT,
+    ViewType.UNDERSCORES_TO_SPACES,
+    ViewType.TAGS,
+  ];
+
+  public readonly displayTypeSelectItems$: Observable<SelectItem[]> = this.translateService
+    .stream('key')
+    .pipe(
+      map(() =>
+        this._DISPLAY_TYPES.map(displayType => ({
+          id: displayType,
+          text: this.translateService.instant(`listColumnDisplayType.${displayType}`),
+        }))
+      )
+    );
 
   constructor(
     private readonly ikoManagementApiService: IkoManagementApiService,
-    private readonly formBuilder: FormBuilder
-  ) {}
+    private readonly formBuilder: FormBuilder,
+    private readonly translateService: TranslateService
+  ) {
+    this.form.valueChanges.subscribe(x => console.log(x));
+  }
 
   public closeModal(): void {
     this.closeModalEvent.emit();

@@ -27,7 +27,47 @@
     </h3>
   </cds-modal-header>
 
-  <form cdsModalContent [cdsLayer]="1" [formGroup]="form" class="iko-column-form"></form>
+  <form cdsModalContent [cdsLayer]="1" [formGroup]="form" class="iko-column-form">
+    <cds-label>
+      {{ 'ikoManagement.titleTitle' | translate }}
+
+      <input
+        [invalid]="title.dirty && title.invalid"
+        formControlName="title"
+        cdsText
+        placeholder="{{ 'ikoManagement.columnTitlePlaceholder' | translate }}"
+      />
+    </cds-label>
+
+    <cds-label>
+      {{ 'ikoManagement.keyTitle' | translate }}
+
+      <input
+        [invalid]="key.dirty && key.invalid"
+        formControlName="key"
+        cdsText
+        placeholder="{{ 'ikoManagement.columnKeyPlaceholder' | translate }}"
+      />
+    </cds-label>
+
+    <cds-label>
+      {{ 'ikoManagement.pathTitle' | translate }}
+
+      <input
+        [invalid]="path.dirty && path.invalid"
+        formControlName="path"
+        cdsText
+        placeholder="{{ 'ikoManagement.columnPathPlaceholder' | translate }}"
+      />
+    </cds-label>
+
+    <v-select
+      formControlName="displayTypeType"
+      [items]="(displayTypeSelectItems$ | async) || []"
+      [title]="'ikoManagement.displayTypeTitle' | translate"
+      [appendInline]="false"
+    ></v-select>
+  </form>
 
   <cds-modal-footer>
     <button cdsButton="ghost" (click)="closeModal()">

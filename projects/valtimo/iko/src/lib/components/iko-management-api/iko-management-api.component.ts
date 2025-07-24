@@ -25,16 +25,7 @@ import {
   ValtimoCdsModalDirective,
 } from '@valtimo/components';
 import {IkoManagementApiService} from '../../services';
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  Observable,
-  Subject,
-  Subscription,
-  switchMap,
-  tap,
-} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, of, Subscription, switchMap, tap} from 'rxjs';
 import {Router} from '@angular/router';
 import {map} from 'rxjs/operators';
 import {
@@ -105,7 +96,6 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
     pluginId: this.formBuilder.control('', [Validators.required]),
   });
 
-  public readonly clearTypeSelection$ = new Subject<null>();
   private readonly _ikoRepositoryTypes$ = this.ikoManagementApiService.getIkoRepositoryTypes();
   public readonly ikoRepositoryTypeSelectItems$: Observable<SelectItem[]> =
     this._ikoRepositoryTypes$.pipe(
@@ -115,15 +105,13 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
       })
     );
 
-  public readonly clearPluginIdSelection$ = new Subject<null>();
   public readonly pluginSelectItems$: Observable<SelectItem[]> = this.form
     .get('type')
     .valueChanges.pipe(
-      filter(type => !!type),
-      tap(() => this.clearPluginIdSelection$.next(null)),
+      tap(() => this.form.patchValue({pluginId: ''})),
       switchMap(type =>
         combineLatest([
-          this.ikoManagementApiService.getIkoRepositoryConfigPropertyFields(type),
+          type ? this.ikoManagementApiService.getIkoRepositoryConfigPropertyFields(type) : of([]),
           this.translateService.stream('key'),
         ])
       ),
@@ -132,7 +120,7 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
           (res as PropertyField[])?.reduce((acc, curr) => {
             return [
               ...acc,
-              ...curr.dropdownList.map(field => ({
+              ...curr?.dropdownList.map(field => ({
                 id: field.first,
                 text: field.second,
               })),
@@ -176,8 +164,6 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.form.reset();
-      this.clearPluginIdSelection$.next(null);
-      this.clearPluginIdSelection$.next(null);
     }, CARBON_CONSTANTS.modalAnimationMs);
   }
 
@@ -189,18 +175,6 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
     }
 
     return !control.valid && !control.pristine;
-  }
-
-  public onPluginIdSelect(pluginId: string): void {
-    this.form.patchValue({
-      pluginId,
-    });
-  }
-
-  public onTypeSelect(type: string): void {
-    this.form.patchValue({
-      type,
-    });
   }
 
   public createApiConfig(): void {
