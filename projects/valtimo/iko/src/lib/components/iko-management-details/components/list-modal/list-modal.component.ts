@@ -20,6 +20,7 @@ import {
   InputModule,
   LayerModule,
   ModalModule,
+  NumberModule,
   ToggleModule,
   TooltipModule,
 } from 'carbon-components-angular';
@@ -35,13 +36,14 @@ import {
 import {
   CARBON_CONSTANTS,
   CarbonMultiInputModule,
+  InputLabelModule,
+  MultiInputOutput,
   SelectItem,
   SelectModule,
   ValtimoCdsModalDirective,
   ViewType,
 } from '@valtimo/components';
 import {IkoListColumnModalType} from '../../../../models';
-import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 @Component({
@@ -62,6 +64,8 @@ import {map} from 'rxjs/operators';
     ToggleModule,
     TooltipModule,
     CarbonMultiInputModule,
+    InputLabelModule,
+    NumberModule,
   ],
 })
 export class IkoManagementListModalComponent {
@@ -81,11 +85,17 @@ export class IkoManagementListModalComponent {
     title: this.formBuilder.control('', [Validators.required]),
     key: this.formBuilder.control('', [Validators.required]),
     path: this.formBuilder.control('', [Validators.required]),
-    displayTypeType: this.formBuilder.control(ViewType.TEXT, [Validators.required]),
+    displayTypeType: this.formBuilder.control('', [Validators.required]),
     sortable: this.formBuilder.control(false, [Validators.required]),
-    defaultSort: this.formBuilder.control('', [Validators.required]),
+    defaultSort: this.formBuilder.control(''),
     dateFormat: this.formBuilder.control(''),
-    booleanDisplayTypeParameters: this.formBuilder.control(''),
+    tagAmount: this.formBuilder.control(1),
+    booleanDisplayTypeParameters: this.formBuilder.control([
+      {key: '', value: ''},
+    ]) as FormControl<MultiInputOutput>,
+    enumDisplayTypeParameters: this.formBuilder.control([
+      {key: '', value: ''},
+    ]) as FormControl<MultiInputOutput>,
   });
   public get title(): AbstractControl<string> {
     return this.form.get('title') as AbstractControl<string>;
@@ -105,6 +115,12 @@ export class IkoManagementListModalComponent {
   public readonly isBooleanDisplayType$ = this.displayTypeType.valueChanges.pipe(
     map(type => type === ViewType.BOOLEAN)
   );
+  public readonly isEnumDisplayType$ = this.displayTypeType.valueChanges.pipe(
+    map(type => type === ViewType.ENUM)
+  );
+  public readonly isTagsDisplayType$ = this.displayTypeType.valueChanges.pipe(
+    map(type => type === ViewType.TAGS)
+  );
   public get sortable(): AbstractControl<boolean> {
     return this.form.get('sortable') as AbstractControl<boolean>;
   }
@@ -113,9 +129,6 @@ export class IkoManagementListModalComponent {
   }
   public get dateFormat(): AbstractControl<string> {
     return this.form.get('dateFormat') as AbstractControl<string>;
-  }
-  public get booleanDisplayTypeParameters(): FormControl<[]> {
-    return this.form.get('booleanDisplayTypeParameters') as any as FormControl<[]>;
   }
 
   private readonly _DISPLAY_TYPES: Array<ViewType> = [
@@ -128,24 +141,18 @@ export class IkoManagementListModalComponent {
     ViewType.TAGS,
   ];
 
-  public readonly displayTypeSelectItems$: Observable<SelectItem[]> = this.translateService
-    .stream('key')
-    .pipe(
-      map(() =>
-        this._DISPLAY_TYPES.map(displayType => ({
-          id: displayType,
-          text: this.translateService.instant(`listColumnDisplayType.${displayType}`),
-        }))
-      )
-    );
+  public readonly displayTypeSelectItems: SelectItem[] = this._DISPLAY_TYPES.map(displayType => ({
+    id: displayType,
+    translationKey: `listColumnDisplayType.${displayType}`,
+  }));
 
   public readonly sortSelectItems: SelectItem[] = [
     {
-      text: 'listColumn.sortableAsc',
+      translationKey: 'listColumn.sortableAsc',
       id: 'ASC',
     },
     {
-      text: 'listColumn.sortableDesc',
+      translationKey: 'listColumn.sortableDesc',
       id: 'DESC',
     },
   ];
