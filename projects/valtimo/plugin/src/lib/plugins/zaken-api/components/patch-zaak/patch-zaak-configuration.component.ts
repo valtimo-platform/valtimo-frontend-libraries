@@ -102,6 +102,10 @@ export class PatchZaakConfigurationComponent implements FunctionConfigurationCom
     this.propertyList.splice(this.propertyList.indexOf(property), 1);
     this._properties.delete(property);
     this.onPropertyChanged(property, undefined);
+
+    if (property === this.CASE_GEOMETRY_TYPE) {
+      this.removeProperty(this.CASE_GEOMETRY_COORDINATES as PatchZaakProperties);
+    }
   }
 
   public hasPropertyBeenAdded(property: PatchZaakProperties): boolean {
