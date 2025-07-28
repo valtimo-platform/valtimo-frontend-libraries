@@ -56,7 +56,11 @@ enum IkoListColumnModalType {
   EDIT,
 }
 
-type CloseListColumnModalEvent = 'close' | 'closeAndRefresh';
+type NewDefaultSortCloseEvent = {
+  newDefaultSortKey: string;
+};
+
+type CloseListColumnModalEvent = 'close' | 'closeAndRefresh' | NewDefaultSortCloseEvent;
 
 export {
   IkoListColumnUpdateRequest,
@@ -66,4 +70,5 @@ export {
   ColumnDefaultSort,
   IkoListColumnModalType,
   CloseListColumnModalEvent,
+  NewDefaultSortCloseEvent,
 };

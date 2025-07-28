@@ -31,7 +31,11 @@ import {IkoManagementApiService} from '../../../../services';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {getDisplayTypeParametersView} from '@valtimo/shared';
-import {CloseListColumnModalEvent, ListColumnDto} from '../../../../models';
+import {
+  CloseListColumnModalEvent,
+  ListColumnDto,
+  NewDefaultSortCloseEvent,
+} from '../../../../models';
 import {IkoManagementListModalComponent} from '../list-modal/list-modal.component';
 
 @Component({
@@ -190,9 +194,20 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
     this.openModal$.next(true);
   }
 
-  public onCloseModalEvent(event: CloseListColumnModalEvent): void {
+  private closeModal(): void {
     this.openModal$.next(false);
-    if (event === 'closeAndRefresh') this.reloadColumns();
+  }
+
+  public onCloseModalEvent(event: CloseListColumnModalEvent): void {
+    if (event === 'close') this.closeModal();
+    if (event === 'closeAndRefresh') {
+      this.closeModal();
+      this.reloadColumns();
+    }
+
+    const newDefaultSortEvent = event as NewDefaultSortCloseEvent;
+    if (newDefaultSortEvent.newDefaultSortKey)
+      this.changeDefaultSortKey(newDefaultSortEvent.newDefaultSortKey);
   }
 
   private disableInput(): void {
@@ -205,5 +220,44 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
 
   private reloadColumns(): void {
     this._reloadColumns$.next(null);
+  }
+
+  private changeDefaultSortKey(newKey: string): void {
+    this._dataAggregateKey$
+      .pipe(
+        switchMap(key =>
+          this.ikoManagementApiService.getIkoListColumns(key).pipe(
+            map(columns =>
+              columns.map((col, index) => {
+                let listColumn = col;
+
+                delete listColumn.defaultSort;
+
+                return {
+                  ...listColumn,
+                  order: index,
+                  ...(newKey === listColumn.key && {defaultSort: listColumn.defaultSort}),
+                };
+              })
+            ),
+            switchMap(
+              updatedColumns =>
+                this.ikoManagementApiService
+                  .updateIkoListColumns(key, updatedColumns)
+                  .pipe(map(() => key)) // pass key to next switchMap
+            ),
+            switchMap(key => this.ikoManagementApiService.getIkoListColumns(key))
+          )
+        )
+      )
+      .subscribe({
+        next: refreshedColumns => {
+          this._ikoListColumns$.next(refreshedColumns);
+          this.closeModal();
+        },
+        error: err => {
+          console.error('Error while updating default sort column:', err);
+        },
+      });
   }
 }

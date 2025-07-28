@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal} from '@angular/core';
 import {
   ButtonModule,
   InputModule,
@@ -24,7 +24,7 @@ import {
   ToggleModule,
   TooltipModule,
 } from 'carbon-components-angular';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateModule} from '@ngx-translate/core';
 import {IkoManagementApiService} from '../../../../services';
 import {
   AbstractControl,
@@ -51,7 +51,7 @@ import {
   IkoListColumnModalType,
 } from '../../../../models';
 import {map} from 'rxjs/operators';
-import {filter, Observable, switchMap} from 'rxjs';
+import {filter, Observable, Subscription, switchMap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -76,7 +76,7 @@ import {ActivatedRoute} from '@angular/router';
     NumberModule,
   ],
 })
-export class IkoManagementListModalComponent {
+export class IkoManagementListModalComponent implements OnInit, OnDestroy {
   public readonly $openModal = signal<boolean>(false);
   @Input() public set openModal(value: boolean) {
     this.$openModal.set(value);
@@ -170,13 +170,29 @@ export class IkoManagementListModalComponent {
     },
   ];
 
+  private readonly _subscriptions = new Subscription();
+
   constructor(
     private readonly ikoManagementApiService: IkoManagementApiService,
     private readonly formBuilder: FormBuilder,
-    private readonly translateService: TranslateService,
     private readonly route: ActivatedRoute
-  ) {
-    this.form.valueChanges.subscribe(x => console.log(x));
+  ) {}
+
+  public ngOnInit(): void {
+    this._subscriptions.add(
+      this.defaultSort.valueChanges.subscribe(defaultSortValue => {
+        if (defaultSortValue) {
+          this.sortable.setValue(true);
+          this.sortable.disable();
+        } else {
+          this.sortable.enable();
+        }
+      })
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   public closeModal(): void {
@@ -202,9 +218,14 @@ export class IkoManagementListModalComponent {
       .subscribe({
         next: () => {
           this.enableForm();
-          this.closeModalEvent.emit('closeAndRefresh');
+          this.closeModalEvent.emit(
+            !!formValue.defaultSort ? {newDefaultSortKey: formValue.key} : 'closeAndRefresh'
+          );
           runAfterCarbonModalClosed(() => {
             this.form.reset();
+            this.form.markAsPristine();
+            this.form.markAsUntouched();
+            this.form.updateValueAndValidity();
           });
         },
         error: () => {
@@ -260,9 +281,11 @@ export class IkoManagementListModalComponent {
     return {
       key: formValue.key,
       path: formValue.path,
+      sortable: Boolean(formValue.sortable),
       ...splitDisplayTypeParameters.rest,
       displayType: {
         type: formValue.displayType,
+        displayTypeParameters: {},
         ...(formValue.displayType === 'date' && {
           displayTypeParameters: {dateFormat: splitDisplayTypeParameters.split.dateFormat},
         }),
