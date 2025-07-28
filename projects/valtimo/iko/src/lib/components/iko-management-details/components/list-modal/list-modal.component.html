@@ -77,10 +77,10 @@
     ></v-select>
 
     <v-select
-      [invalid]="displayTypeType.dirty && displayTypeType.invalid"
-      formControlName="displayTypeType"
+      [invalid]="displayType.dirty && displayType.invalid"
+      formControlName="displayType"
       [items]="displayTypeSelectItems"
-      titleTranslationKey="ikoManagement.displayTypeTitle"
+      titleTranslationKey="ikoManagement.displayType"
       [appendInline]="false"
     ></v-select>
 
@@ -133,7 +133,7 @@
       {{ 'interface.cancel' | translate }}
     </button>
 
-    <button [disabled]="this.form.invalid" cdsButton="primary" (click)="addColumn()">
+    <button [disabled]="form.invalid || form.disabled" cdsButton="primary" (click)="addColumn()">
       {{ 'interface.save' | translate }}
     </button>
   </cds-modal-footer>

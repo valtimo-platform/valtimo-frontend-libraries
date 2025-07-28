@@ -31,7 +31,7 @@ import {IkoManagementApiService} from '../../../../services';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {getDisplayTypeParametersView} from '@valtimo/shared';
-import {ListColumnDto} from '../../../../models';
+import {CloseListColumnModalEvent, ListColumnDto} from '../../../../models';
 import {IkoManagementListModalComponent} from '../list-modal/list-modal.component';
 
 @Component({
@@ -190,8 +190,9 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
     this.openModal$.next(true);
   }
 
-  public onCloseModalEvent(): void {
+  public onCloseModalEvent(event: CloseListColumnModalEvent): void {
     this.openModal$.next(false);
+    if (event === 'closeAndRefresh') this.reloadColumns();
   }
 
   private disableInput(): void {

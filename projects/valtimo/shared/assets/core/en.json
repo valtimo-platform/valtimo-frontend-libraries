@@ -1597,7 +1597,7 @@
     "arrayCount": "Count",
     "underscoresToSpaces": "Underscores to spaces",
     "tags": "Tags",
-    "Hidden": "hidden"
+    "hidden": "hidden"
   },
   "object": {
     "title": "Objects",

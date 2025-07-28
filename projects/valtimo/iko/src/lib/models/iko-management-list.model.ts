@@ -35,10 +35,10 @@ interface IkoListColumnCreateRequest {
   key: string;
   title?: string;
   path: string;
-  order: number;
   displayType?: DisplayType;
   sortable?: boolean;
   defaultSort?: ColumnDefaultSort;
+  displayTypeParameters?: Record<string, any>;
 }
 
 interface IkoListColumnUpdateRequest {
@@ -56,6 +56,8 @@ enum IkoListColumnModalType {
   EDIT,
 }
 
+type CloseListColumnModalEvent = 'close' | 'closeAndRefresh';
+
 export {
   IkoListColumnUpdateRequest,
   IkoListColumnCreateRequest,
@@ -63,4 +65,5 @@ export {
   DisplayType,
   ColumnDefaultSort,
   IkoListColumnModalType,
+  CloseListColumnModalEvent,
 };
