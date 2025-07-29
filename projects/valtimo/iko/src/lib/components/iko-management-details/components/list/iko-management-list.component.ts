@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, signal} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
   BehaviorSubject,
@@ -31,7 +31,7 @@ import {IkoManagementApiService} from '../../../../services';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {getDisplayTypeParametersView} from '@valtimo/shared';
-import {CloseListColumnModalEvent, ListColumnDto} from '../../../../models';
+import {CloseListColumnModalEvent, IkoListColumnModalMode, ListColumnDto} from '../../../../models';
 import {IkoManagementListModalComponent} from '../list-modal/list-modal.component';
 
 @Component({
@@ -50,11 +50,10 @@ import {IkoManagementListModalComponent} from '../list-modal/list-modal.componen
   ],
 })
 export class IkoManagementListComponent implements OnInit, OnDestroy {
-  public readonly openModal$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
-  public readonly loading$ = new BehaviorSubject<boolean>(true);
-
-  public readonly disableInput$ = new BehaviorSubject<boolean>(true);
+  public readonly $openModal = signal<boolean>(false);
+  public readonly $loading = signal<boolean>(true);
+  public readonly $disableInput = signal<boolean>(true);
+  public readonly $modalMode = signal<IkoListColumnModalMode>(IkoListColumnModalMode.ADD);
 
   private readonly _dataAggregateKey$: Observable<string> = this.route.params.pipe(
     map(params => params?.key),
@@ -62,6 +61,8 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
   );
 
   public readonly ikoListColumnsSubject$ = new BehaviorSubject<ListColumnDto[]>([]);
+
+  public readonly $selectedListColumn = signal<ListColumnDto | null>(null);
 
   private readonly _reloadColumns$ = new BehaviorSubject<null>(null);
 
@@ -90,7 +91,7 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
         ),
       }))
     ),
-    tap(() => this.disableInput$.next(false))
+    tap(() => this.$disableInput.set(false))
   );
 
   public readonly FIELDS: Array<ColumnConfig> = [
@@ -150,11 +151,11 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
     this._subscriptions.add(
       combineLatest([this._dataAggregateKey$, this._reloadColumns$])
         .pipe(
-          tap(() => this.disableInput$.next(true)),
+          tap(() => this.$disableInput.set(true)),
           switchMap(([key]) => this.ikoManagementApiService.getIkoListColumns(key)),
           tap(res => {
             this.ikoListColumnsSubject$.next(res);
-            this.loading$.next(false);
+            this.$loading.set(false);
           })
         )
         .subscribe()
@@ -188,16 +189,27 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onRowClicked(event: any): void {
-    console.log(event);
+  public onRowClicked(event: {id: string}): void {
+    const listColumnDto = this.ikoListColumnsSubject$
+      .getValue()
+      .find(column => column.id === event.id);
+    if (!listColumnDto) return;
+    this.$selectedListColumn.set(listColumnDto);
+    this.$openModal.set(true);
+    this.$modalMode.set(IkoListColumnModalMode.EDIT);
   }
 
   public openModal(): void {
-    this.openModal$.next(true);
+    this.$openModal.set(true);
+  }
+
+  public onCreateButtonClicked(): void {
+    this.$modalMode.set(IkoListColumnModalMode.ADD);
+    this.openModal();
   }
 
   private closeModal(): void {
-    this.openModal$.next(false);
+    this.$openModal.set(false);
   }
 
   public onCloseModalEvent(event: CloseListColumnModalEvent): void {
@@ -206,11 +218,11 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
   }
 
   private disableInput(): void {
-    this.disableInput$.next(true);
+    this.$disableInput.set(true);
   }
 
   private enableInput(): void {
-    this.disableInput$.next(false);
+    this.$disableInput.set(false);
   }
 
   private reloadColumns(): void {

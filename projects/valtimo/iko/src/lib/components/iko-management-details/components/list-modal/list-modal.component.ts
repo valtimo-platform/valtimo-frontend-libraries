@@ -48,7 +48,7 @@ import {
   CloseListColumnModalEvent,
   ColumnDefaultSort,
   IkoListColumnCreateRequest,
-  IkoListColumnModalType,
+  IkoListColumnModalMode,
   ListColumnDto,
 } from '../../../../models';
 import {map} from 'rxjs/operators';
@@ -83,17 +83,16 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     this.$openModal.set(value);
   }
 
-  public readonly $type = signal<IkoListColumnModalType>(IkoListColumnModalType.ADD);
-  @Input() public set type(value: IkoListColumnModalType) {
-    this.$type.set(value);
-  }
-
   @Input() public readonly listColumns: ListColumnDto[] = [];
 
   @Input() public set selectedListColumn(value: ListColumnDto) {
     if (!value) return;
-    console.log(value);
+    this.form.setValue(this.mapListColumnDtoToFormValue(value));
   }
+
+  public readonly IkoListColumnModalMode = IkoListColumnModalMode;
+
+  @Input() public readonly modalMode: IkoListColumnModalMode = IkoListColumnModalMode.ADD;
 
   @Output() public readonly closeModalEvent = new EventEmitter<CloseListColumnModalEvent>();
 
@@ -199,6 +198,8 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
         }
       })
     );
+
+    this.form.valueChanges.subscribe(x => console.log(x));
   }
 
   public ngOnDestroy(): void {
@@ -207,7 +208,7 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
 
   public closeModal(): void {
     this.closeModalEvent.emit('close');
-    runAfterCarbonModalClosed(() => this.form.reset());
+    runAfterCarbonModalClosed(this.resetForm);
   }
 
   public addColumn(): void {
@@ -229,12 +230,7 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
         next: () => {
           this.enableForm();
           this.closeModalEvent.emit('closeAndRefresh');
-          runAfterCarbonModalClosed(() => {
-            this.form.reset();
-            this.form.markAsPristine();
-            this.form.markAsUntouched();
-            this.form.updateValueAndValidity();
-          });
+          runAfterCarbonModalClosed(this.resetForm);
         },
         error: () => {
           this.enableForm();
@@ -307,8 +303,10 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     return Object.entries(enumObj).map(([key, value]) => ({key, value}));
   }
 
-  private mapListColumnDtoToFormValue(dto: ListColumnDto): object {
+  private mapListColumnDtoToFormValue(dto: ListColumnDto): any {
     const {key, title, path, sortable, defaultSort, displayType} = dto;
+
+    console.log(dto);
 
     const baseFormValue: any = {
       key,
@@ -353,4 +351,11 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
       return of(exists ? {keyTaken: true} : null).pipe(delay(200));
     };
   }
+
+  private resetForm = (): void => {
+    this.form.reset();
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+    this.form.updateValueAndValidity();
+  };
 }

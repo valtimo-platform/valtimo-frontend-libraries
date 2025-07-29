@@ -51,7 +51,7 @@ interface IkoListColumnUpdateRequest {
   defaultSort?: ColumnDefaultSort;
 }
 
-enum IkoListColumnModalType {
+enum IkoListColumnModalMode {
   ADD,
   EDIT,
 }
@@ -62,13 +62,16 @@ type NewDefaultSortCloseEvent = {
 
 type CloseListColumnModalEvent = 'close' | 'closeAndRefresh';
 
+type ListColumnModalMode = 'edit' | 'create';
+
 export {
   IkoListColumnUpdateRequest,
   IkoListColumnCreateRequest,
   ListColumnDto,
   DisplayType,
   ColumnDefaultSort,
-  IkoListColumnModalType,
+  IkoListColumnModalMode,
   CloseListColumnModalEvent,
   NewDefaultSortCloseEvent,
+  ListColumnModalMode,
 };

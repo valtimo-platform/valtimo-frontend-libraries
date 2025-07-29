@@ -18,22 +18,24 @@
   *ngIf="{
     columns: ikoListColumns$ | async,
     columnsSubject: ikoListColumnsSubject$ | async,
-    loading: loading$ | async,
-    openModal: openModal$ | async,
-  } as obs"
+    loading: $loading(),
+    openModal: $openModal(),
+    disableInput: $disableInput(),
+    modalMode: $modalMode(),
+  } as state"
 >
   <valtimo-carbon-list
-    [items]="obs.columns || []"
-    [loading]="obs.loading"
+    [items]="state.columns || []"
+    [loading]="state.loading"
     [fields]="FIELDS"
     [header]="false"
     [dragAndDrop]="true"
-    [dragAndDropDisabled]="disableInput$ | async"
+    [dragAndDropDisabled]="state.disableInput"
     (itemsReordered)="onItemsReordered($event)"
     (rowClicked)="onRowClicked($event)"
   >
     <div carbonToolbarContent>
-      <button cdsButton="primary" (click)="openModal()">
+      <button cdsButton="primary" (click)="onCreateButtonClicked()">
         {{ 'ikoManagement.addColumn' | translate }}
 
         <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>
@@ -48,8 +50,10 @@
   </valtimo-carbon-list>
 
   <valtimo-iko-management-list-modal
-    [openModal]="obs.openModal"
-    [listColumns]="obs.columnsSubject"
+    [openModal]="state.openModal"
+    [listColumns]="state.columnsSubject"
+    [selectedListColumn]="$selectedListColumn()"
+    [modalMode]="state.modalMode"
     (closeModalEvent)="onCloseModalEvent($event)"
   ></valtimo-iko-management-list-modal>
 </ng-container>
