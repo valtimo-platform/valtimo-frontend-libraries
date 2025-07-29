@@ -47,8 +47,8 @@ import {
 import {
   CloseListColumnModalEvent,
   ColumnDefaultSort,
-  IkoListColumnCreateRequest,
   IkoListColumnModalMode,
+  IkoListColumnRequest,
   ListColumnDto,
 } from '../../../../models';
 import {map} from 'rxjs/operators';
@@ -85,8 +85,10 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
 
   @Input() public readonly listColumns: ListColumnDto[] = [];
 
+  private _selectedListColumn!: ListColumnDto;
   @Input() public set selectedListColumn(value: ListColumnDto) {
     if (!value) return;
+    this._selectedListColumn = value;
     this.form.setValue(this.mapListColumnDtoToFormValue(value));
     this.form.markAsPristine();
   }
@@ -214,8 +216,6 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
         }
       })
     );
-
-    this.form.valueChanges.subscribe(x => console.log(x));
   }
 
   public ngOnDestroy(): void {
@@ -229,18 +229,25 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
 
   public addColumn(): void {
     const formValue = this.form.getRawValue();
+    const requestBody = this.getCreateRequestBodyFromFormValue();
 
     this.disableForm();
 
     this._dataAggregateKey$
       .pipe(
-        switchMap(dataAggregateKey => {
-          return this.ikoManagementApiService.createIkoListColumn(
-            dataAggregateKey,
-            formValue.key,
-            this.getCreateRequestBodyFromFormValue()
-          );
-        })
+        switchMap(dataAggregateKey =>
+          this.modalMode === IkoListColumnModalMode.ADD
+            ? this.ikoManagementApiService.createIkoListColumn(
+                dataAggregateKey,
+                formValue.key,
+                requestBody
+              )
+            : this.ikoManagementApiService.updateListColumn(
+                dataAggregateKey,
+                formValue.key,
+                requestBody
+              )
+        )
       )
       .subscribe({
         next: () => {
@@ -268,7 +275,7 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     }, {});
   }
 
-  private getCreateRequestBodyFromFormValue(): IkoListColumnCreateRequest {
+  private getCreateRequestBodyFromFormValue(): IkoListColumnRequest {
     const {
       key,
       path,
@@ -304,6 +311,9 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
       sortable: Boolean(sortable),
       ...(defaultSort ? {defaultSort: defaultSort as ColumnDefaultSort} : {}),
       ...rest,
+      ...(this.modalMode === IkoListColumnModalMode.EDIT && {
+        order: this._selectedListColumn.order,
+      }),
       displayType: {
         type: displayType,
         displayTypeParameters,
@@ -321,8 +331,6 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
 
   private mapListColumnDtoToFormValue(dto: ListColumnDto): any {
     const {key, title, path, sortable, defaultSort, displayType} = dto;
-
-    console.log(dto);
 
     const baseFormValue: any = {
       key,

@@ -25,8 +25,7 @@ import {
   IkoDataRequestCreateRequest,
   IkoDataRequestResponse,
   IkoDataRequestUpdateRequest,
-  IkoListColumnCreateRequest,
-  IkoListColumnUpdateRequest,
+  IkoListColumnRequest,
   IkoRepositoryConfigCreateRequest,
   IkoRepositoryConfigListResponse,
   IkoRepositoryConfigResponse,
@@ -142,7 +141,6 @@ export class IkoManagementApiService extends BaseApiService {
     actionKey: string,
     body: IkoDataRequestUpdateRequest
   ): Observable<IkoDataRequestResponse> {
-    console.log({aggregateKey, actionKey, body});
     return this.httpClient.put<IkoDataRequestResponse>(
       this.getApiUrl(`management/v1/iko-data-aggregate/${aggregateKey}/data-request/${actionKey}`),
       body
@@ -380,7 +378,7 @@ export class IkoManagementApiService extends BaseApiService {
   public createIkoListColumn(
     aggregateKey: string,
     columnKey: string,
-    body: IkoListColumnCreateRequest
+    body: IkoListColumnRequest
   ): Observable<ListColumnDto> {
     return this.httpClient.post<ListColumnDto>(
       this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/column/${columnKey}`),
@@ -388,9 +386,20 @@ export class IkoManagementApiService extends BaseApiService {
     );
   }
 
+  public updateListColumn(
+    aggregateKey: string,
+    columnKey: string,
+    body: IkoListColumnRequest
+  ): Observable<ListColumnDto> {
+    return this.httpClient.put<ListColumnDto>(
+      this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/column/${columnKey}`),
+      body
+    );
+  }
+
   public updateIkoListColumnOrder(
     aggregateKey: string,
-    body: IkoListColumnUpdateRequest[]
+    body: IkoListColumnRequest[]
   ): Observable<ListColumnDto[]> {
     return this.httpClient.put<ListColumnDto[]>(
       this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/column`),

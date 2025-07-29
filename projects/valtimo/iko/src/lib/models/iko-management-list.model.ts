@@ -29,26 +29,17 @@ interface ListColumnDto {
   displayType: DisplayType;
   sortable: boolean;
   defaultSort?: ColumnDefaultSort;
-}
-
-interface IkoListColumnCreateRequest {
-  key: string;
-  title?: string;
-  path: string;
-  displayType?: DisplayType;
-  sortable?: boolean;
-  defaultSort?: ColumnDefaultSort;
-  displayTypeParameters?: Record<string, any>;
-}
-
-interface IkoListColumnUpdateRequest {
-  key: string;
-  title?: string;
-  path: string;
   order: number;
+}
+
+interface IkoListColumnRequest {
+  key: string;
+  title?: string;
+  path: string;
   displayType?: DisplayType;
   sortable?: boolean;
   defaultSort?: ColumnDefaultSort;
+  order?: number;
 }
 
 enum IkoListColumnModalMode {
@@ -56,22 +47,13 @@ enum IkoListColumnModalMode {
   EDIT,
 }
 
-type NewDefaultSortCloseEvent = {
-  newDefaultSortKey: string;
-};
-
 type CloseListColumnModalEvent = 'close' | 'closeAndRefresh';
 
-type ListColumnModalMode = 'edit' | 'create';
-
 export {
-  IkoListColumnUpdateRequest,
-  IkoListColumnCreateRequest,
+  IkoListColumnRequest,
   ListColumnDto,
   DisplayType,
   ColumnDefaultSort,
   IkoListColumnModalMode,
   CloseListColumnModalEvent,
-  NewDefaultSortCloseEvent,
-  ListColumnModalMode,
 };
