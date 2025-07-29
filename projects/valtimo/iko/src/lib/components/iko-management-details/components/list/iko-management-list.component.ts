@@ -33,6 +33,7 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {getDisplayTypeParametersView} from '@valtimo/shared';
 import {CloseListColumnModalEvent, IkoListColumnModalMode, ListColumnDto} from '../../../../models';
 import {IkoManagementListModalComponent} from '../list-modal/list-modal.component';
+import {toObservable} from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: true,
@@ -60,14 +61,14 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
     filter(key => !!key)
   );
 
-  public readonly ikoListColumnsSubject$ = new BehaviorSubject<ListColumnDto[]>([]);
+  public readonly $ikoListColumnDtos = signal<ListColumnDto[]>([]);
 
   public readonly $selectedListColumn = signal<ListColumnDto | null>(null);
 
   private readonly _reloadColumns$ = new BehaviorSubject<null>(null);
 
   public readonly ikoListColumns$ = combineLatest([
-    this.ikoListColumnsSubject$,
+    toObservable(this.$ikoListColumnDtos),
     this.translateService.stream('key'),
   ]).pipe(
     map(([columns]) =>
@@ -154,7 +155,7 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
           tap(() => this.$disableInput.set(true)),
           switchMap(([key]) => this.ikoManagementApiService.getIkoListColumns(key)),
           tap(res => {
-            this.ikoListColumnsSubject$.next(res);
+            this.$ikoListColumnDtos.set(res);
             this.$loading.set(false);
           })
         )
@@ -167,7 +168,7 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
   }
 
   public onItemsReordered(items: {id: string}[]): void {
-    const listColumns = this.ikoListColumnsSubject$.getValue();
+    const listColumns = this.$ikoListColumnDtos();
     const mappedItems = items
       .map(item => listColumns.find(column => column.id === item.id))
       .map((item, index) => ({...item, order: index}));
@@ -190,9 +191,7 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
   }
 
   public onRowClicked(event: {id: string}): void {
-    const listColumnDto = this.ikoListColumnsSubject$
-      .getValue()
-      .find(column => column.id === event.id);
+    const listColumnDto = this.$ikoListColumnDtos().find(column => column.id === event.id);
     if (!listColumnDto) return;
     this.$selectedListColumn.set(listColumnDto);
     this.$openModal.set(true);

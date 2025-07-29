@@ -16,8 +16,9 @@
 
 <ng-container
   *ngIf="{
-    columns: ikoListColumns$ | async,
-    columnsSubject: ikoListColumnsSubject$ | async,
+    columns: (ikoListColumns$ | async) || [],
+    ikoListColumnDtos: $ikoListColumnDtos(),
+    selectedListColumn: $selectedListColumn(),
     loading: $loading(),
     openModal: $openModal(),
     disableInput: $disableInput(),
@@ -25,7 +26,7 @@
   } as state"
 >
   <valtimo-carbon-list
-    [items]="state.columns || []"
+    [items]="state.columns"
     [loading]="state.loading"
     [fields]="FIELDS"
     [header]="false"
@@ -51,8 +52,8 @@
 
   <valtimo-iko-management-list-modal
     [openModal]="state.openModal"
-    [listColumns]="state.columnsSubject"
-    [selectedListColumn]="$selectedListColumn()"
+    [listColumns]="state.ikoListColumnDtos"
+    [selectedListColumn]="state.selectedListColumn"
     [modalMode]="state.modalMode"
     (closeModalEvent)="onCloseModalEvent($event)"
   ></valtimo-iko-management-list-modal>
