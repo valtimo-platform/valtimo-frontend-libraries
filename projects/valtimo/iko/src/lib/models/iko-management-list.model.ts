@@ -60,7 +60,7 @@ type NewDefaultSortCloseEvent = {
   newDefaultSortKey: string;
 };
 
-type CloseListColumnModalEvent = 'close' | 'closeAndRefresh' | NewDefaultSortCloseEvent;
+type CloseListColumnModalEvent = 'close' | 'closeAndRefresh';
 
 export {
   IkoListColumnUpdateRequest,

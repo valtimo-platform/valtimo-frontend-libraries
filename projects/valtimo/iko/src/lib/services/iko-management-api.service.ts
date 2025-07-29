@@ -365,7 +365,7 @@ export class IkoManagementApiService extends BaseApiService {
     );
   }
 
-  public updateIkoListColumns(
+  public updateIkoListColumnOrder(
     aggregateKey: string,
     body: IkoListColumnUpdateRequest[]
   ): Observable<ListColumnDto[]> {

@@ -17,7 +17,9 @@
 <ng-container
   *ngIf="{
     columns: ikoListColumns$ | async,
+    columnsSubject: ikoListColumnsSubject$ | async,
     loading: loading$ | async,
+    openModal: openModal$ | async,
   } as obs"
 >
   <valtimo-carbon-list
@@ -28,6 +30,7 @@
     [dragAndDrop]="true"
     [dragAndDropDisabled]="disableInput$ | async"
     (itemsReordered)="onItemsReordered($event)"
+    (rowClicked)="onRowClicked($event)"
   >
     <div carbonToolbarContent>
       <button cdsButton="primary" (click)="openModal()">
@@ -43,9 +46,10 @@
       illustration="valtimo-layout/img/emptystate-empty.svg"
     ></valtimo-no-results>
   </valtimo-carbon-list>
-</ng-container>
 
-<valtimo-iko-management-list-modal
-  [openModal]="openModal$ | async"
-  (closeModalEvent)="onCloseModalEvent($event)"
-></valtimo-iko-management-list-modal>
+  <valtimo-iko-management-list-modal
+    [openModal]="obs.openModal"
+    [listColumns]="obs.columnsSubject"
+    (closeModalEvent)="onCloseModalEvent($event)"
+  ></valtimo-iko-management-list-modal>
+</ng-container>

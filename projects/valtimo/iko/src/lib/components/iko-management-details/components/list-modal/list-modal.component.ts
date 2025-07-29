@@ -28,16 +28,15 @@ import {TranslateModule} from '@ngx-translate/core';
 import {IkoManagementApiService} from '../../../../services';
 import {
   AbstractControl,
+  AsyncValidatorFn,
   FormBuilder,
   FormControl,
-  FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import {
   CarbonMultiInputModule,
   InputLabelModule,
-  MultiInputOutput,
   MultiInputValues,
   runAfterCarbonModalClosed,
   SelectItem,
@@ -47,11 +46,13 @@ import {
 } from '@valtimo/components';
 import {
   CloseListColumnModalEvent,
+  ColumnDefaultSort,
   IkoListColumnCreateRequest,
   IkoListColumnModalType,
+  ListColumnDto,
 } from '../../../../models';
 import {map} from 'rxjs/operators';
-import {filter, Observable, Subscription, switchMap} from 'rxjs';
+import {delay, filter, Observable, of, Subscription, switchMap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -87,11 +88,18 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     this.$type.set(value);
   }
 
+  @Input() public readonly listColumns: ListColumnDto[] = [];
+
+  @Input() public set selectedListColumn(value: ListColumnDto) {
+    if (!value) return;
+    console.log(value);
+  }
+
   @Output() public readonly closeModalEvent = new EventEmitter<CloseListColumnModalEvent>();
 
   public readonly form = this.formBuilder.group({
     title: this.formBuilder.control('', [Validators.required]),
-    key: this.formBuilder.control('', [Validators.required]),
+    key: this.formBuilder.control('', [Validators.required], [this.keyNotUsedValidator()]),
     path: this.formBuilder.control('', [Validators.required]),
     displayType: this.formBuilder.control('', [Validators.required]),
     sortable: this.formBuilder.control(false, [Validators.required]),
@@ -100,11 +108,12 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     tagAmount: this.formBuilder.control(1),
     booleanDisplayTypeParameters: this.formBuilder.control([
       {key: '', value: ''},
-    ]) as FormControl<MultiInputOutput>,
+    ]) as FormControl<MultiInputValues>,
     enumDisplayTypeParameters: this.formBuilder.control([
       {key: '', value: ''},
-    ]) as FormControl<MultiInputOutput>,
+    ]) as FormControl<MultiInputValues>,
   });
+
   public get title(): AbstractControl<string> {
     return this.form.get('title') as AbstractControl<string>;
   }
@@ -117,6 +126,16 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
   public get displayType(): AbstractControl<string> {
     return this.form.get('displayType') as AbstractControl<string>;
   }
+  public get sortable(): AbstractControl<boolean> {
+    return this.form.get('sortable') as AbstractControl<boolean>;
+  }
+  public get defaultSort(): AbstractControl<string> {
+    return this.form.get('defaultSort') as AbstractControl<string>;
+  }
+  public get dateFormat(): AbstractControl<string> {
+    return this.form.get('dateFormat') as AbstractControl<string>;
+  }
+
   public readonly isDateDisplayType$ = this.displayType.valueChanges.pipe(
     map(type => type === ViewType.DATE)
   );
@@ -129,15 +148,6 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
   public readonly isTagsDisplayType$ = this.displayType.valueChanges.pipe(
     map(type => type === ViewType.TAGS)
   );
-  public get sortable(): AbstractControl<boolean> {
-    return this.form.get('sortable') as AbstractControl<boolean>;
-  }
-  public get defaultSort(): AbstractControl<string> {
-    return this.form.get('defaultSort') as AbstractControl<string>;
-  }
-  public get dateFormat(): AbstractControl<string> {
-    return this.form.get('dateFormat') as AbstractControl<string>;
-  }
 
   private readonly _DISPLAY_TYPES: Array<ViewType> = [
     ViewType.TEXT,
@@ -211,16 +221,14 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
           return this.ikoManagementApiService.createIkoListColumn(
             dataAggregateKey,
             formValue.key,
-            this.getCreateRequestBody(formValue)
+            this.getCreateRequestBodyFromFormValue()
           );
         })
       )
       .subscribe({
         next: () => {
           this.enableForm();
-          this.closeModalEvent.emit(
-            !!formValue.defaultSort ? {newDefaultSortKey: formValue.key} : 'closeAndRefresh'
-          );
+          this.closeModalEvent.emit('closeAndRefresh');
           runAfterCarbonModalClosed(() => {
             this.form.reset();
             this.form.markAsPristine();
@@ -248,62 +256,101 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     }, {});
   }
 
-  private splitDisplayTypeParameters(form: FormGroup): {
-    rest: Partial<ReturnType<typeof form.getRawValue>>;
-    split: Pick<
-      ReturnType<typeof form.getRawValue>,
-      'dateFormat' | 'booleanDisplayTypeParameters' | 'enumDisplayTypeParameters'
-    >;
-  } {
-    const fullFormValue = form.getRawValue();
-
-    const {dateFormat, booleanDisplayTypeParameters, enumDisplayTypeParameters, ...restFormValue} =
-      fullFormValue;
-
-    const split = {
+  private getCreateRequestBodyFromFormValue(): IkoListColumnCreateRequest {
+    const {
+      key,
+      path,
+      sortable,
+      displayType,
       dateFormat,
-      booleanDisplayTypeParameters,
       enumDisplayTypeParameters,
-    };
+      booleanDisplayTypeParameters,
+      defaultSort,
+      ...rest
+    } = this.form.getRawValue();
 
-    const filteredRestFormValue = {...restFormValue};
-
-    if (filteredRestFormValue.defaultSort === '') {
-      delete filteredRestFormValue.defaultSort;
-    }
-
-    return {rest: filteredRestFormValue, split};
-  }
-
-  private getCreateRequestBody(formValue: any): IkoListColumnCreateRequest {
-    const splitDisplayTypeParameters = this.splitDisplayTypeParameters(this.form);
+    const displayTypeParameters: Record<string, any> = (() => {
+      switch (displayType) {
+        case ViewType.DATE:
+          return {dateFormat};
+        case ViewType.ENUM:
+          return {
+            enum: this.mapMultiInputValueToEnum(enumDisplayTypeParameters),
+          };
+        case ViewType.BOOLEAN:
+          return {
+            enum: this.mapMultiInputValueToEnum(booleanDisplayTypeParameters),
+          };
+        default:
+          return {};
+      }
+    })();
 
     return {
-      key: formValue.key,
-      path: formValue.path,
-      sortable: Boolean(formValue.sortable),
-      ...splitDisplayTypeParameters.rest,
+      key,
+      path,
+      sortable: Boolean(sortable),
+      ...(defaultSort ? {defaultSort: defaultSort as ColumnDefaultSort} : {}),
+      ...rest,
       displayType: {
-        type: formValue.displayType,
-        displayTypeParameters: {},
-        ...(formValue.displayType === 'date' && {
-          displayTypeParameters: {dateFormat: splitDisplayTypeParameters.split.dateFormat},
-        }),
-        ...(formValue.displayType === 'enum' && {
-          displayTypeParameters: {
-            enum: this.mapMultiInputValueToEnum(
-              splitDisplayTypeParameters.split.enumDisplayTypeParameters
-            ),
-          },
-        }),
-        ...(formValue.displayType === 'boolean' && {
-          displayTypeParameters: {
-            enum: this.mapMultiInputValueToEnum(
-              splitDisplayTypeParameters.split.booleanDisplayTypeParameters
-            ),
-          },
-        }),
+        type: displayType,
+        displayTypeParameters,
       },
+    };
+  }
+
+  private mapEnumToMultiInputValues(enumObj: Record<string, string> | undefined): MultiInputValues {
+    if (!enumObj) {
+      return [{key: '', value: ''}];
+    }
+
+    return Object.entries(enumObj).map(([key, value]) => ({key, value}));
+  }
+
+  private mapListColumnDtoToFormValue(dto: ListColumnDto): object {
+    const {key, title, path, sortable, defaultSort, displayType} = dto;
+
+    const baseFormValue: any = {
+      key,
+      title: title || '',
+      path,
+      sortable,
+      defaultSort: defaultSort || '',
+      displayType: displayType.type,
+      dateFormat: '',
+      booleanDisplayTypeParameters: [{key: '', value: ''}],
+      enumDisplayTypeParameters: [{key: '', value: ''}],
+      tagAmount: 1,
+    };
+
+    if (displayType.type === ViewType.DATE) {
+      baseFormValue.dateFormat = displayType.displayTypeParameters?.dateFormat || '';
+    }
+
+    if (displayType.type === ViewType.ENUM) {
+      baseFormValue.enumDisplayTypeParameters = this.mapEnumToMultiInputValues(
+        displayType.displayTypeParameters?.enum
+      );
+    }
+
+    if (displayType.type === ViewType.BOOLEAN) {
+      baseFormValue.booleanDisplayTypeParameters = this.mapEnumToMultiInputValues(
+        displayType.displayTypeParameters?.enum
+      );
+    }
+
+    return baseFormValue;
+  }
+
+  private keyNotUsedValidator(): AsyncValidatorFn {
+    return (control: AbstractControl) => {
+      const value = control.value?.trim();
+      if (!value) return of(null);
+
+      const exists = this.listColumns.some(
+        column => column.key.trim().toLowerCase() === value.toLowerCase()
+      );
+      return of(exists ? {keyTaken: true} : null).pipe(delay(200));
     };
   }
 }
