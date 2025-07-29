@@ -1882,6 +1882,13 @@
       "deleteModalText": "Bist du sicher, dass du dieses Suchfeld löschen möchtest?",
       "noResultsTitle": "Es gibt keine Suchfelder.",
       "noResultsDescription": "Klicke hier, um ein Suchfeld zu konfigurieren."
-    }
+    },
+    "addApiConfig": "API konfigurieren",
+    "titleTitle": "Titel",
+    "titlePlaceholder": "Geben Sie einen Titel für die API-Konfiguration ein",
+    "keyTitle": "Schlüssel",
+    "keyPlaceholder": "Geben Sie einen Schlüssel für die API-Konfiguration ein",
+    "pluginIdTitle": "Plugin-Konfiguration",
+    "typeTitle": "Typ"
   }
 }

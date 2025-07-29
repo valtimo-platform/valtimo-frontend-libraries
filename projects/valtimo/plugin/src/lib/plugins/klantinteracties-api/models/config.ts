@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
-.iko-api-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
+import {PluginConfigurationData} from '../../../models';
+
+interface KlantinteractiesApiConfig extends PluginConfigurationData {
+  url: string;
+  authenticationPluginConfiguration: string;
 }
+
+interface CreatePersoonConfig {
+  bsn: string;
+  voorletters: string;
+  voornaam: string;
+  voorvoegselAchternaam: string;
+  achternaam: string;
+  processVariableName: string;
+}
+
+export {KlantinteractiesApiConfig, CreatePersoonConfig};
