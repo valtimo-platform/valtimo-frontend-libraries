@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/shared';
 import {Observable} from 'rxjs';
 import {
@@ -24,7 +23,6 @@ import {
   IkoDataAggregateResponse,
   IkoDataAggregateUpdateRequest,
   IkoDataRequestCreateRequest,
-  IkoDataRequestListResponse,
   IkoDataRequestResponse,
   IkoDataRequestUpdateRequest,
   IkoListColumnCreateRequest,
@@ -33,9 +31,8 @@ import {
   IkoRepositoryConfigListResponse,
   IkoRepositoryConfigResponse,
   IkoRepositoryConfigUpdateRequest,
+  IkoSearchField,
   IkoSearchFieldCreateRequest,
-  IkoSearchFieldResponse,
-  IkoSearchFieldUpdateRequest,
   IkoTabCreateRequest,
   IkoTabUpdateRequest,
   ListColumnDto,
@@ -107,15 +104,15 @@ export class IkoManagementApiService extends BaseApiService {
     );
   }
 
-  public getIkoDataRequests(aggregateKey: string): Observable<IkoDataRequestListResponse[]> {
-    return this.httpClient.get<IkoDataRequestListResponse[]>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/data-request`)
+  public getManagementIkoDataRequests(aggregateKey: string): Observable<IkoDataRequestResponse[]> {
+    return this.httpClient.get<IkoDataRequestResponse[]>(
+      this.getApiUrl(`management/v1/iko-data-aggregate/${aggregateKey}/data-request`)
     );
   }
 
   public getIkoDataRequest(aggregateKey: string, key: string): Observable<IkoDataRequestResponse> {
     return this.httpClient.get<IkoDataRequestResponse>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/data-request/${key}`)
+      this.getApiUrl(`management/v1/iko-data-aggregate/${aggregateKey}/data-request/${key}`)
     );
   }
 
@@ -125,7 +122,7 @@ export class IkoManagementApiService extends BaseApiService {
     body: IkoDataRequestCreateRequest
   ): Observable<IkoDataRequestResponse> {
     return this.httpClient.post<IkoDataRequestResponse>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/data-request/${key}`),
+      this.getApiUrl(`management/v1/iko-data-aggregate/${aggregateKey}/data-request/${key}`),
       body
     );
   }
@@ -135,14 +132,26 @@ export class IkoManagementApiService extends BaseApiService {
     body: IkoDataRequestUpdateRequest[]
   ): Observable<IkoDataRequestResponse[]> {
     return this.httpClient.put<IkoDataRequestResponse[]>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/data-request`),
+      this.getApiUrl(`management/v1/iko-data-aggregate/${aggregateKey}/data-request`),
+      body
+    );
+  }
+
+  public updateIkoDataRequest(
+    aggregateKey: string,
+    actionKey: string,
+    body: IkoDataRequestUpdateRequest
+  ): Observable<IkoDataRequestResponse> {
+    console.log({aggregateKey, actionKey, body});
+    return this.httpClient.put<IkoDataRequestResponse>(
+      this.getApiUrl(`management/v1/iko-data-aggregate/${aggregateKey}/data-request/${actionKey}`),
       body
     );
   }
 
   public deleteIkoDataRequest(aggregateKey: string, key: string): Observable<void> {
     return this.httpClient.delete<void>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/data-request/${key}`)
+      this.getApiUrl(`management/v1/iko-data-aggregate/${aggregateKey}/data-request/${key}`)
     );
   }
 
@@ -283,10 +292,10 @@ export class IkoManagementApiService extends BaseApiService {
   public getIkoSearchFields(
     aggregateKey: string,
     requestKey: string
-  ): Observable<IkoSearchFieldResponse[]> {
-    return this.httpClient.get<IkoSearchFieldResponse[]>(
+  ): Observable<IkoSearchField[]> {
+    return this.httpClient.get<IkoSearchField[]>(
       this.getApiUrl(
-        `/v1/iko-data-aggregate/${aggregateKey}/data-request/${requestKey}/search-field`
+        `management/v1/iko-data-aggregate/${aggregateKey}/data-request/${requestKey}/search-field`
       )
     );
   }
@@ -295,8 +304,8 @@ export class IkoManagementApiService extends BaseApiService {
     aggregateKey: string,
     requestKey: string,
     key: string
-  ): Observable<IkoSearchFieldResponse> {
-    return this.httpClient.get<IkoSearchFieldResponse>(
+  ): Observable<IkoSearchField> {
+    return this.httpClient.get<IkoSearchField>(
       this.getApiUrl(
         `/v1/iko-data-aggregate/${aggregateKey}/data-request/${requestKey}/search-field/${key}`
       )
@@ -308,10 +317,10 @@ export class IkoManagementApiService extends BaseApiService {
     requestKey: string,
     key: string,
     body: IkoSearchFieldCreateRequest
-  ): Observable<IkoSearchFieldResponse> {
-    return this.httpClient.post<IkoSearchFieldResponse>(
+  ): Observable<IkoSearchField> {
+    return this.httpClient.post<IkoSearchField>(
       this.getApiUrl(
-        `/v1/iko-data-aggregate/${aggregateKey}/data-request/${requestKey}/search-field/${key}`
+        `management/v1/iko-data-aggregate/${aggregateKey}/data-request/${requestKey}/search-field/${key}`
       ),
       body
     );
@@ -320,11 +329,25 @@ export class IkoManagementApiService extends BaseApiService {
   public updateIkoSearchFields(
     aggregateKey: string,
     requestKey: string,
-    body: IkoSearchFieldUpdateRequest[]
-  ): Observable<IkoSearchFieldResponse[]> {
-    return this.httpClient.put<IkoSearchFieldResponse[]>(
+    body: IkoSearchField[]
+  ): Observable<IkoSearchField[]> {
+    return this.httpClient.put<IkoSearchField[]>(
       this.getApiUrl(
-        `/v1/iko-data-aggregate/${aggregateKey}/data-request/${requestKey}/search-field`
+        `management/v1/iko-data-aggregate/${aggregateKey}/data-request/${requestKey}/search-field`
+      ),
+      body
+    );
+  }
+
+  public updateIkoSearchField(
+    aggregateKey: string,
+    requestKey: string,
+    fieldKey: string,
+    body: IkoSearchField
+  ): Observable<IkoSearchField[]> {
+    return this.httpClient.put<IkoSearchField[]>(
+      this.getApiUrl(
+        `management/v1/iko-data-aggregate/${aggregateKey}/data-request/${requestKey}/search-field/${fieldKey}`
       ),
       body
     );
@@ -337,7 +360,7 @@ export class IkoManagementApiService extends BaseApiService {
   ): Observable<void> {
     return this.httpClient.delete<void>(
       this.getApiUrl(
-        `/v1/iko-data-aggregate/${aggregateKey}/data-request/${requestKey}/search-field/${key}`
+        `management/v1/iko-data-aggregate/${aggregateKey}/data-request/${requestKey}/search-field/${key}`
       )
     );
   }
