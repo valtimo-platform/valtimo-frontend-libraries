@@ -88,11 +88,27 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
   @Input() public set selectedListColumn(value: ListColumnDto) {
     if (!value) return;
     this.form.setValue(this.mapListColumnDtoToFormValue(value));
+    this.form.markAsPristine();
   }
 
   public readonly IkoListColumnModalMode = IkoListColumnModalMode;
 
-  @Input() public readonly modalMode: IkoListColumnModalMode = IkoListColumnModalMode.ADD;
+  private _modalMode: IkoListColumnModalMode = IkoListColumnModalMode.ADD;
+  @Input()
+  public set modalMode(value: IkoListColumnModalMode) {
+    this._modalMode = value;
+    if (value === IkoListColumnModalMode.ADD) {
+      this.key.setAsyncValidators(this.keyNotUsedValidator());
+      this.key.enable();
+    } else {
+      this.key.clearAsyncValidators();
+      this.key.disable();
+    }
+    this.key.updateValueAndValidity();
+  }
+  public get modalMode(): IkoListColumnModalMode {
+    return this._modalMode;
+  }
 
   @Output() public readonly closeModalEvent = new EventEmitter<CloseListColumnModalEvent>();
 

@@ -15,6 +15,7 @@
   -->
 
 <cds-modal
+  valtimoCdsModal
   *ngIf="{
     title:
       (modalMode === IkoListColumnModalMode.ADD
@@ -22,9 +23,7 @@
         : 'ikoManagement.editColumn'
       ) | translate,
   } as state"
-  valtimoCdsModal
   [open]="$openModal()"
-  showFooter="true"
   [title]="state.title"
   (close)="closeModal()"
 >
@@ -140,7 +139,11 @@
       {{ 'interface.cancel' | translate }}
     </button>
 
-    <button [disabled]="form.invalid || form.disabled" cdsButton="primary" (click)="addColumn()">
+    <button
+      [disabled]="form.invalid || form.disabled || !form.dirty"
+      cdsButton="primary"
+      (click)="addColumn()"
+    >
       {{ 'interface.save' | translate }}
     </button>
   </cds-modal-footer>
