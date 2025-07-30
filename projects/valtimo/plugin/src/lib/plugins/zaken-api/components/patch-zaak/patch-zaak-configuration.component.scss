@@ -21,7 +21,7 @@ div.property-row {
 
 div.property-input-col {
   float: left;
-  width: 90%;
+  width: 93%;
 
   v-input,
   cds-date-picker-input {
@@ -32,33 +32,32 @@ div.property-input-col {
 div.property-remove-col {
   float: right;
 
-  button {
+  button.delete-button {
     height: 46px;
     width: 46px;
-    margin: 16px;
+    margin-top: 20px;
   }
-}
-
-::ng-deep .cds--overflow-menu-options {
-  z-index: 10000 !important;
-  width: 230px;
-}
-
-.delete-button:hover {
-  background-color: #e12717;
+  button.delete-button:hover {
+    background-color: #e12717;
+  }
 }
 
 div.presets {
   margin-top: 0.2em;
   margin-block-end: var(--v-input-margin);
   font-size: var(--v-font-size-smaller);
+
+  span:first-child {
+    padding-right: 0.3em;
+  }
+
+  a.preset {
+    cursor: pointer;
+    font-style: italic;
+  }
 }
 
-div.presets span:first-child {
-  padding-right: 0.3em;
-}
-
-a.preset {
-  cursor: pointer;
-  font-style: italic;
+::ng-deep .cds--overflow-menu-options {
+  z-index: 10000 !important;
+  width: 230px;
 }
