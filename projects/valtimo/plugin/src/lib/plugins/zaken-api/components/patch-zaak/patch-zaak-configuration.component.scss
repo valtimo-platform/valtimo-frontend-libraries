@@ -47,3 +47,18 @@ div.property-remove-col {
 .delete-button:hover {
   background-color: #e12717;
 }
+
+div.presets {
+  margin-top: 0.2em;
+  margin-block-end: var(--v-input-margin);
+  font-size: var(--v-font-size-smaller);
+}
+
+div.presets span:first-child {
+  padding-right: 0.3em;
+}
+
+a.preset {
+  cursor: pointer;
+  font-style: italic;
+}

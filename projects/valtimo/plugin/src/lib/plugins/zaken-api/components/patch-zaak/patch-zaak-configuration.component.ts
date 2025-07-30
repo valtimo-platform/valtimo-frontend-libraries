@@ -38,10 +38,15 @@ export class PatchZaakConfigurationComponent implements FunctionConfigurationCom
 
   public readonly propertyOptions: string[] = Object.values(PatchZaakPropertyOptions);
   public readonly propertyList: Array<PatchZaakProperties> = [];
+  public readonly geometryTypes: string[] =
+    ['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'GeometryCollection', 'MultiPolygon'];
+  public readonly paymentIndicationTypes: string[] = ['nvt', 'nog_niet', 'gedeeltelijk', 'geheel'];
 
-  protected readonly CASE_GEOMETRY_TYPE: string = 'caseGeometryType'
-  protected readonly CASE_GEOMETRY_COORDINATES: string = 'caseGeometryCoordinates'
+  protected readonly CASE_GEOMETRY_TYPE: string = 'caseGeometryType';
+  protected readonly CASE_GEOMETRY_COORDINATES: string = 'caseGeometryCoordinates';
+  protected readonly PAYMENT_INDICATION_TYPE: string = 'paymentIndication';
 
+  private readonly DATA_TEST_ID_PREFIX: string = 'patch-zaak-property_';
   private readonly _formValue$ = new BehaviorSubject<PatchZaakConfig>({});
   private readonly _properties = new Map<PatchZaakProperties, string>();
   private _saveSubscription!: Subscription;
@@ -110,6 +115,19 @@ export class PatchZaakConfigurationComponent implements FunctionConfigurationCom
 
   public hasPropertyBeenAdded(property: PatchZaakProperties): boolean {
     return this.propertyList.indexOf(property) !== -1;
+  }
+
+  public dataTestIdFor(property: PatchZaakProperties): string {
+    return this.DATA_TEST_ID_PREFIX + property
+  }
+
+  public presetPropertyWithValue(property: PatchZaakProperties, value: string): void {
+    const input =
+      document.querySelector<HTMLInputElement>(`[data-testid="${this.DATA_TEST_ID_PREFIX + property}"]`);
+    if (input) {
+      input.value = value;
+      input.dispatchEvent(new Event('input'));
+    }
   }
 
   private handleValid(formValue: PatchZaakConfig): void {
