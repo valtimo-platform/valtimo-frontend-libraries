@@ -18,6 +18,7 @@ import {IkoManagementTab, IkoManagementTabType} from '../models';
 import {IkoManagementSearchActionsComponent} from '../components/iko-management-details/components/search-actions/iko-management-search-actions.component';
 import {IkoManagementListComponent} from '../components/iko-management-details/components/list/iko-management-list.component';
 import {IkoManagementTabsComponent} from '../components/iko-management-details/components/tabs/iko-management-tabs.component';
+import {IkoManagementWidgetsComponent} from '../components/iko-management-details/components/widgets/iko-management-widgets.component';
 
 const IKO_MANAGEMENT_TABS: IkoManagementTab[] = [
   {
@@ -32,8 +33,13 @@ const IKO_MANAGEMENT_TABS: IkoManagementTab[] = [
   },
   {
     key: IkoManagementTabType.TABS,
-    title: 'ikoManagement.tabs',
+    title: 'ikoManagement.tabs.title',
     component: IkoManagementTabsComponent,
+  },
+  {
+    key: IkoManagementTabType.WIDGETS,
+    title: 'ikoManagement.widgets.title',
+    component: IkoManagementWidgetsComponent,
   },
 ];
 

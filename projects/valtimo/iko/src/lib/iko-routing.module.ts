@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
@@ -22,6 +23,8 @@ import {IkoDetailsComponent} from './components/iko-details/iko-details.componen
 import {IkoListComponent} from './components/iko-list/iko-list.component';
 import {IkoManagementApiComponent} from './components/iko-management-api/iko-management-api.component';
 import {IkoManagementSearchFieldsComponent} from './components/iko-management-details/components/search-fields/iko-management-search-fields.component';
+import {IkoManagementTabDetailsComponent} from './components/iko-management-details/components/tabs/details/iko-management-tab-details.component';
+import {IkoManagementWidgetDetailsComponent} from './components/iko-management-details/components/widgets/details/iko-management-widget-details.component';
 import {IkoManagementDetailsComponent} from './components/iko-management-details/iko-management-details.component';
 import {IkoManagementComponent} from './components/iko-management/iko-management.component';
 import {IkoSearchComponent} from './components/iko-search/iko-search.component';
@@ -83,12 +86,32 @@ const routes: Routes = [
     },
   },
   {
-    path: 'iko-management/:apiKey/:key/:tabKey/:actionKey',
+    path: 'iko-management/:apiKey/:key/:tabKey/search-action/:actionKey',
     component: IkoManagementSearchFieldsComponent,
     canActivate: [AuthGuardService],
     data: {
       customPageTitle: true,
       title: 'IKO Search action details',
+      roles: [ROLE_ADMIN],
+    },
+  },
+  {
+    path: 'iko-management/:apiKey/:key/:tabKey/widget-details/:actionKey',
+    component: IkoManagementWidgetDetailsComponent,
+    canActivate: [AuthGuardService],
+    data: {
+      // customPageTitle: true,
+      title: 'IKO Widget details',
+      roles: [ROLE_ADMIN],
+    },
+  },
+  {
+    path: 'iko-management/:apiKey/:key/:tabKey/tab-details/:actionKey',
+    component: IkoManagementTabDetailsComponent,
+    canActivate: [AuthGuardService],
+    data: {
+      // customPageTitle: true,
+      title: 'IKO Tab details',
       roles: [ROLE_ADMIN],
     },
   },

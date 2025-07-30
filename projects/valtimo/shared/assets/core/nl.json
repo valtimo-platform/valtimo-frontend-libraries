@@ -1884,7 +1884,8 @@
   "ikoManagement": {
     "title": "Configuratie",
     "list": "Lijst",
-    "tabs": "Tabbladen",
+    "tabs": {"title": "Tabbladen"},
+    "widgets": {"title": "Widgets"},
     "searchActions": {
       "addActionTitle": "Zoekactie toevoegen",
       "editActionTitle": "Zoekactie bewerken",

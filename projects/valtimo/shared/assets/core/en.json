@@ -1850,7 +1850,8 @@
   "ikoManagement": {
     "title": "Configuration",
     "list": "List",
-    "tabs": "Tabs",
+    "tabs": {"title": "Tabs"},
+    "widgets": {"title": "Widgets"},
     "searchActions": {
       "addActionTitle": "Add search action",
       "editActionTitle": "Edit search action",
