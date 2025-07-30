@@ -22,7 +22,7 @@
   </cds-modal-header>
 
   <section cdsModalContent [cdsLayer]="1" class="process-start-modal-content">
-    @if (loading$ | async) {
+    @if ($loading()) {
       <cds-loading></cds-loading>
     } @else {
       <ng-template #formViewModelComponent></ng-template>
