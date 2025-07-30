@@ -7,12 +7,29 @@
   <v-paragraph [margin]="true" [italic]="true">
     {{ 'patchZaakInformation' | pluginTranslate: pluginId | async }}
   </v-paragraph>
+
+  <div class="row">
+      <div class="col-12">
+
+        <button
+            cdsButton="primary"
+            [size]="'md'"
+            [cdsOverflowMenu]="addPropertyList"
+            [customPane]="true"
+            placement="bottom"
+            class="add-button"
+          >
+            {{ 'addPatchZaakProperty' | pluginTranslate: pluginId | async }}
+            <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
+        </button>
+      </div>
+  </div>
+
   <v-form (valueChange)="onFormValueChanged($event)" style="background-color: orange">
     @for (property of propertyList; track property) {
       @if (property !== CASE_GEOMETRY_COORDINATES) {
-
-        <div class="property-row">
-          <div class="property-input-col">
+        <div class="row">
+          <div class="col-11">
             @if (property === CASE_GEOMETRY_TYPE) {
               <v-input
                 [name]="CASE_GEOMETRY_TYPE"
@@ -72,27 +89,16 @@
               }
             }
           </div>
-          <div class="property-remove-col">
+          <div class="col-1">
             <button
               class="btn btn-space delete-button"
               (click)="removeProperty(property)">
               <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
             </button>
           </div>
-          <div class="clearfix"></div>
         </div>
       }
     }
-    <button
-      cdsButton="primary"
-      [size]="'md'"
-      [cdsOverflowMenu]="addPropertyList"
-      [customPane]="true"
-      placement="bottom"
-    >
-      {{ 'addPatchZaakProperty' | pluginTranslate: pluginId | async }}
-      <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
-    </button>
   </v-form>
 </ng-container>
 

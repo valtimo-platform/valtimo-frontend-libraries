@@ -172,7 +172,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
         'Aan het bereiken van de uitkomst van de andere zaak levert de onderhanden zaak een bijdrage.',
       'patch-zaak': 'Zaak bijwerken',
       patchZaakInformation: 'Deze actie maakt het mogelijk eigenschappen van de Zaak in de Zaken API gekoppeld aan het dossier bij te werken.',
-      addPatchZaakProperty: 'Voeg bij te werken parameter toe',
+      addPatchZaakProperty: 'Voeg parameter toe',
       dateformatTooltip:
         'Een datum in formaat van yyyy-mm-dd. Kan ook een verwijzing zijn naar het document of process, bijvoorbeeld doc:customer/startDatum of pv:startDatum',
       omschrijving: 'Omschrijving',
@@ -309,7 +309,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       patchZaakInformation: 'This action allows you to update properties of a Zaak in the Zaken API which is linked to the case.',
       dateformatTooltip:
         'A date in the format of yyyy-mm-dd. Can also be a reference to the document or process, for example doc:customer/startDate or pv:startDate',
-      addPatchZaakProperty: 'Add property to be updated',
+      addPatchZaakProperty: 'Add property',
       omschrijving: 'Description',
       explanation: 'Explanation',
       plannedEndDate: 'Planned end date',
@@ -442,7 +442,7 @@ const zakenApiPluginSpecification: PluginSpecification = {
       'option-bijdrage': 'Der aktuelle Zaak trägt zum Ergebnis des anderen Zaak bei.',
       'patch-zaak': 'Zaak aktualisieren',
       patchZaakInformation: 'Mit dieser Aktion können Sie die Eigenschaften des Falls in der mit der Datei verknüpften Zaken-API aktualisieren.',
-      addPatchZaakProperty: 'Zum Aktualisieren Parameter hinzufügen',
+      addPatchZaakProperty: 'Parameter hinzufügen',
       dateformatTooltip:
         'Ein Datum im Format yyyy-mm-dd. Kann auch ein Verweis auf das Dokument oder den Prozess sein, zum Beispiel doc:kunde/startDatum oder pv:startDatum',
       omschrijving: 'Beschreibung',

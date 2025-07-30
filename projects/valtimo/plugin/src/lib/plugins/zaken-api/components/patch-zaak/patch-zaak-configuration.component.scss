@@ -14,34 +14,6 @@
  * limitations under the License.
  */
 
-div.property-row {
-  width: 100%;
-  clear: both;
-}
-
-div.property-input-col {
-  float: left;
-  width: 93%;
-
-  v-input,
-  cds-date-picker-input {
-    flex-grow: 1;
-  }
-}
-
-div.property-remove-col {
-  float: right;
-
-  button.delete-button {
-    height: 46px;
-    width: 46px;
-    margin-top: 20px;
-  }
-  button.delete-button:hover {
-    background-color: #e12717;
-  }
-}
-
 div.presets {
   margin-top: 0.2em;
   margin-block-end: var(--v-input-margin);
@@ -55,6 +27,20 @@ div.presets {
     cursor: pointer;
     font-style: italic;
   }
+}
+
+button.delete-button {
+  height: 46px;
+  width: 46px;
+  margin-top: 20px;
+}
+
+button.delete-button:hover {
+  background-color: #e12717;
+}
+
+button.add-button {
+  margin-block-end: var(--v-input-margin);
 }
 
 ::ng-deep .cds--overflow-menu-options {
