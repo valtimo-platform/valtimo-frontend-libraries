@@ -36,11 +36,6 @@ const IKO_MANAGEMENT_TABS: IkoManagementTab[] = [
     title: 'ikoManagement.tabs.title',
     component: IkoManagementTabsComponent,
   },
-  {
-    key: IkoManagementTabType.WIDGETS,
-    title: 'ikoManagement.widgets.title',
-    component: IkoManagementWidgetsComponent,
-  },
 ];
 
 export {IKO_MANAGEMENT_TABS};

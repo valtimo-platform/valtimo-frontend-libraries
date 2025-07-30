@@ -16,6 +16,12 @@
 
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Params, ActivatedRoute} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
+import {BreadcrumbService} from '@valtimo/components';
+import {Observable, map, switchMap, combineLatest} from 'rxjs';
+import {IkoManagementParams, IkoRepositoryConfigResponse} from '../../../../models';
+import {IkoManagementApiService} from '../../../../services';
 
 @Component({
   templateUrl: './iko-management-widgets.component.html',
@@ -24,4 +30,56 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
 })
-export class IkoManagementWidgetsComponent {}
+export class IkoManagementWidgetsComponent {
+  public readonly params$: Observable<IkoManagementParams> = this.route.params.pipe(
+    map((params: Params) => ({
+      apiKey: params.apiKey,
+      aggregateKey: params.key,
+      actionKey: params.actionKey,
+      tabKey: params.tabKey,
+    }))
+  );
+
+  private readonly _ikoRepositoryConfig$: Observable<IkoRepositoryConfigResponse> =
+    this.params$.pipe(
+      switchMap((params: IkoManagementParams) =>
+        this.ikoManagementApiService.getIkoRepositoryConfig(params.apiKey)
+      )
+    );
+
+  constructor(
+    private readonly breadcrumbService: BreadcrumbService,
+    private readonly ikoManagementApiService: IkoManagementApiService,
+    private readonly route: ActivatedRoute,
+    private readonly translateService: TranslateService
+  ) {}
+
+  public ngOnDestroy(): void {
+    this.breadcrumbService.clearThirdBreadcrumb();
+    this.breadcrumbService.clearFourthBreadcrumb();
+  }
+
+  public ngOnInit(): void {
+    this.setBreadcrumbs();
+  }
+
+  private setBreadcrumbs(): void {
+    combineLatest([
+      this._ikoRepositoryConfig$,
+      this.params$,
+      this.translateService.stream('key'),
+    ]).subscribe(([repositoryConfig, params]) => {
+      this.breadcrumbService.setThirdBreadcrumb({
+        route: [`/iko-management/${repositoryConfig.key}`],
+        content: repositoryConfig.title,
+        href: `/iko-management/${repositoryConfig.key}`,
+      });
+
+      this.breadcrumbService.setFourthBreadcrumb({
+        route: [`/iko-management/${repositoryConfig.key}/${params.aggregateKey}/${params.tabKey}`],
+        content: this.translateService.instant('ikoManagement.tabs.title'),
+        href: `/iko-management/${repositoryConfig.key}/${params.aggregateKey}/${params.tabKey}`,
+      });
+    });
+  }
+}

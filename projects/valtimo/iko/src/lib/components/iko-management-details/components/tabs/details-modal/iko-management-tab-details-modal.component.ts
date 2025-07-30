@@ -24,13 +24,14 @@ import {IkoManagementParams, IkoRepositoryConfigResponse} from '../../../../../m
 import {IkoManagementApiService} from '../../../../../services';
 
 @Component({
+  selector: 'valtimo-iko-management-tab-details-modal',
   templateUrl: './iko-management-tab-details.component.html',
   styleUrl: './iko-management-tab-details.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
 })
-export class IkoManagementTabDetailsComponent implements OnInit, OnDestroy {
+export class IkoManagementTabDetailsModalComponent implements OnInit, OnDestroy {
   public readonly params$: Observable<IkoManagementParams> = this.route.params.pipe(
     map((params: Params) => ({
       apiKey: params.apiKey,
