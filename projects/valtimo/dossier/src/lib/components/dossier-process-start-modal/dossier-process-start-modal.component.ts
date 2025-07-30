@@ -86,6 +86,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
   @Output() noProcessLinked = new EventEmitter();
 
   public readonly modalOpen$ = new BehaviorSubject<boolean>(false);
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
 
   private _subscriptions = new Subscription();
   private readonly _formCustomComponentConfig$ = new BehaviorSubject<
@@ -125,6 +126,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
   }
 
   private loadProcessLink() {
+    this.loading$.next(true);
     this.processLinkId = null;
     this.formDefinition = null;
     this.formFlowInstanceId = null;
@@ -141,6 +143,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
       )
       .pipe(take(1))
       .subscribe(startProcessResult => {
+        this.loading$.next(false);
         if (startProcessResult) {
           switch (startProcessResult.type) {
             case 'form':
