@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {
   Component,
   EventEmitter,
@@ -26,16 +25,10 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import {PermissionService} from '@valtimo/access-control';
-import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
-import {
-  FormFlowService,
-  FormSubmissionResult,
-  ProcessLinkService,
-  UrlResolverService,
-} from '@valtimo/process-link';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ProcessService} from '@valtimo/process';
+import {FormioForm} from '@formio/angular';
+import {FormioBeforeSubmit} from '@formio/angular/formio.common';
+import {PermissionService} from '@valtimo/access-control';
 import {
   FormioComponent,
   FormioOptionsImpl,
@@ -43,16 +36,20 @@ import {
   ModalComponent,
   ValtimoFormioOptions,
 } from '@valtimo/components';
-import {FormioBeforeSubmit} from '@formio/angular/formio.common';
-import {FormioForm} from '@formio/angular';
+import {ConfigService, FORM_VIEW_MODEL_TOKEN, FormViewModel} from '@valtimo/config';
+import {DocumentService, ProcessDocumentDefinition} from '@valtimo/document';
+import {ProcessService} from '@valtimo/process';
+import {
+  FormFlowService,
+  FormSubmissionResult,
+  ProcessLinkService,
+  UrlResolverService,
+} from '@valtimo/process-link';
 import {UserProviderService} from '@valtimo/security';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {CAN_VIEW_CASE_PERMISSION, DOSSIER_DETAIL_PERMISSION_RESOURCE} from '../../permissions';
 import {DossierListService, StartModalService} from '../../services';
-import {ConfigService} from '@valtimo/config';
-import {FORM_VIEW_MODEL_TOKEN} from '@valtimo/config';
-import {FormViewModel} from '@valtimo/config';
-import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'valtimo-dossier-process-start-modal',
@@ -82,6 +79,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
   @Output() formFlowComplete = new EventEmitter();
   @Output() noProcessLinked = new EventEmitter();
 
+  public readonly loading$ = new BehaviorSubject<boolean>(true);
   private _subscriptions = new Subscription();
 
   constructor(
@@ -112,6 +110,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
   }
 
   private loadProcessLink() {
+    this.loading$.next(true);
     this.processLinkId = null;
     this.formDefinition = null;
     this.formFlowInstanceId = null;
@@ -128,6 +127,7 @@ export class DossierProcessStartModalComponent implements OnInit, OnDestroy {
       )
       .pipe(take(1))
       .subscribe(startProcessResult => {
+        this.loading$.next(false);
         if (startProcessResult) {
           switch (startProcessResult.type) {
             case 'form':

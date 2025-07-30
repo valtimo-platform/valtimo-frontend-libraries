@@ -14,39 +14,49 @@
   ~ limitations under the License.
   -->
 <valtimo-modal #processStartModal elementId="processStartModal" [title]="modalTitle">
-  <div body *ngIf="formDefinition && !isFormViewModel">
-    <valtimo-form-io #form [form]="formDefinition" [options]="options" (submit)="onSubmit($event)">
-    </valtimo-form-io>
-  </div>
   <div body>
-    <ng-template #formViewModelComponent></ng-template>
-  </div>
-  <div body *ngIf="formFlowInstanceId">
-    <valtimo-form-flow
-      [formFlowInstanceId]="formFlowInstanceId"
-      (formFlowComplete)="formFlowSubmitted()"
-    ></valtimo-form-flow>
-  </div>
-  <div body *ngIf="!formFlowInstanceId && !formDefinition && isAdmin">
-    <div
-      class="bg-warning text-black mb-0 p-3 text-center"
-      [translate]="'formManagement.noFormDefinitionFoundAdmin'"
-    ></div>
-    <div class="mb-0 mt-4 p-3 text-center">
-      <button
-        (click)="gotoProcessLinkScreen()"
-        class="btn btn-secondary btn-space"
-        id="process-link-button"
-        type="button"
+    @if (loading$ | async) {
+      <cds-loading></cds-loading>
+    } @else {
+      <valtimo-form-io
+        *ngIf="formDefinition && !isFormViewModel"
+        #form
+        [form]="formDefinition"
+        [options]="options"
+        (submit)="onSubmit($event)"
       >
-        {{ 'formManagement.gotoProcessLinksButton' | translate }}
-      </button>
-    </div>
-  </div>
-  <div body *ngIf="!formFlowInstanceId && !formDefinition && !isAdmin">
-    <div
-      class="bg-warning text-black mb-0 p-3 text-center"
-      [translate]="'formManagement.noFormDefinitionFoundUser'"
-    ></div>
+      </valtimo-form-io>
+
+      <ng-template #formViewModelComponent></ng-template>
+
+      <valtimo-form-flow
+        *ngIf="formFlowInstanceId"
+        [formFlowInstanceId]="formFlowInstanceId"
+        (formFlowComplete)="formFlowSubmitted()"
+      ></valtimo-form-flow>
+
+      @if (!formFlowInstanceId && !formDefinition && isAdmin) {
+        <div
+          class="bg-warning text-black mb-0 p-3 text-center"
+          [translate]="'formManagement.noFormDefinitionFoundAdmin'"
+        ></div>
+        <div class="mb-0 mt-4 p-3 text-center">
+          <button
+            (click)="gotoProcessLinkScreen()"
+            class="btn btn-secondary btn-space"
+            id="process-link-button"
+            type="button"
+          >
+            {{ 'formManagement.gotoProcessLinksButton' | translate }}
+          </button>
+        </div>
+      }
+
+      <div
+        *ngIf="!formFlowInstanceId && !formDefinition && !isAdmin"
+        class="bg-warning text-black mb-0 p-3 text-center"
+        [translate]="'formManagement.noFormDefinitionFoundUser'"
+      ></div>
+    }
   </div>
 </valtimo-modal>
