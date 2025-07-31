@@ -56,6 +56,7 @@ interface IkoManagementParams {
   aggregateKey: string;
   actionKey: string;
   tabKey: string;
+  widgetTabKey?: string;
 }
 
 interface IkoDataRequestResponse {

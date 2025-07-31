@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-::ng-deep.cds--tab-content {
-  display: none;
-}
+import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
 
-::ng-deep.page-actions {
-  margin-left: unset !important; 
-}
+@Component({
+  selector: 'valtimo-widget-management-editor',
+  templateUrl: './widget-management-editor.component.html',
+  styleUrl: './widget-management-editor.component.scss',
+  standalone: true,
+  imports: [CommonModule],
+})
+export class WidgetManagementEditorComponent {}

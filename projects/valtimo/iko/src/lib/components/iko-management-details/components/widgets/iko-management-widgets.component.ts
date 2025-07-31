@@ -15,11 +15,12 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {Params, ActivatedRoute} from '@angular/router';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Params} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {BreadcrumbService} from '@valtimo/components';
-import {Observable, map, switchMap, combineLatest} from 'rxjs';
+import {WidgetManagementEditorComponent} from '@valtimo/widget';
+import {combineLatest, map, Observable, switchMap} from 'rxjs';
 import {IkoManagementParams, IkoRepositoryConfigResponse} from '../../../../models';
 import {IkoManagementApiService} from '../../../../services';
 
@@ -28,15 +29,16 @@ import {IkoManagementApiService} from '../../../../services';
   styleUrl: './iko-management-widgets.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [CommonModule, WidgetManagementEditorComponent],
 })
-export class IkoManagementWidgetsComponent {
+export class IkoManagementWidgetsComponent implements OnInit, OnDestroy {
   public readonly params$: Observable<IkoManagementParams> = this.route.params.pipe(
     map((params: Params) => ({
       apiKey: params.apiKey,
       aggregateKey: params.key,
       actionKey: params.actionKey,
       tabKey: params.tabKey,
+      widgetTabKey: params.widgetTabKey,
     }))
   );
 
@@ -61,6 +63,17 @@ export class IkoManagementWidgetsComponent {
 
   public ngOnInit(): void {
     this.setBreadcrumbs();
+    this.params$
+      .pipe(
+        switchMap((params: IkoManagementParams) => {
+          console.log({params});
+          return this.ikoManagementApiService.getIkoWidgets(
+            params.aggregateKey,
+            params.widgetTabKey ?? ''
+          );
+        })
+      )
+      .subscribe(res => console.log({res}));
   }
 
   private setBreadcrumbs(): void {
