@@ -94,12 +94,12 @@ type FormioWidgetWidgetWithUuid = FormioWidget & {
   uuid: string;
 };
 
-interface WidgetsRes {
-  caseDefinitionKey: string;
-  caseDefinitionVersionTag: string;
-  key: string;
-  widgets: BasicWidget[];
-}
+// interface WidgetsRes {
+//   caseDefinitionKey: string;
+//   caseDefinitionVersionTag: string;
+//   key: string;
+//   widgets: BasicWidget[];
+// }
 interface WidgetWidthsPx {
   [uuid: string]: number;
 }
@@ -161,7 +161,7 @@ export {
   WidgetContentHeightsPx,
   WidgetContentHeightsPxWithContainerWidth,
   WidgetPackResult,
-  WidgetsRes,
+  // WidgetsRes,
   WidgetType,
   WidgetWidth,
   WidgetWidthsPx,

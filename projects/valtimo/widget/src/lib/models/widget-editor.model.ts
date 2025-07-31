@@ -14,8 +14,20 @@
  * limitations under the License.
  */
 
-export * from './iko-api.service';
-export * from './iko-tab.service';
-export * from './iko-management-api.service';
-export * from './iko-menu.service';
-export * from './iko-management-widget-api.service';
+import {CaseWidgetType} from '@valtimo/case';
+import {TagType} from 'carbon-components-angular';
+
+enum WidgetEditorTab {
+  VISUAL = 'visual',
+  JSON = 'json',
+}
+
+const WidgetTypeTags: {[key: string]: TagType} = {
+  [CaseWidgetType.COLLECTION]: 'teal',
+  [CaseWidgetType.CUSTOM]: 'magenta',
+  [CaseWidgetType.FIELDS]: 'blue',
+  [CaseWidgetType.FORMIO]: 'green',
+  [CaseWidgetType.TABLE]: 'purple',
+};
+
+export {WidgetEditorTab, WidgetTypeTags};

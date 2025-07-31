@@ -19,10 +19,10 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/co
 import {ActivatedRoute, Params} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {BreadcrumbService} from '@valtimo/components';
-import {WidgetManagementEditorComponent} from '@valtimo/widget';
-import {combineLatest, map, Observable, switchMap} from 'rxjs';
+import {WidgetManagementEditorComponent, BasicWidget} from '@valtimo/widget';
+import {combineLatest, map, Observable, switchMap, tap} from 'rxjs';
 import {IkoManagementParams, IkoRepositoryConfigResponse} from '../../../../models';
-import {IkoManagementApiService} from '../../../../services';
+import {IkoManagementApiService, IkoWidgetManagementApiService} from '../../../../services';
 
 @Component({
   templateUrl: './iko-management-widgets.component.html',
@@ -39,8 +39,13 @@ export class IkoManagementWidgetsComponent implements OnInit, OnDestroy {
       actionKey: params.actionKey,
       tabKey: params.tabKey,
       widgetTabKey: params.widgetTabKey,
-    }))
+    })),
+    tap((params: IkoManagementParams) => this.ikoWidgetManagementApiService.initParams(params))
   );
+
+  public readonly widgets$: Observable<BasicWidget[]> = this.ikoWidgetManagementApiService
+    .getWidgetConfiguration()
+    .pipe(tap(res => console.log({res})));
 
   private readonly _ikoRepositoryConfig$: Observable<IkoRepositoryConfigResponse> =
     this.params$.pipe(
@@ -51,6 +56,7 @@ export class IkoManagementWidgetsComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
+    private readonly ikoWidgetManagementApiService: IkoWidgetManagementApiService,
     private readonly ikoManagementApiService: IkoManagementApiService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService
@@ -63,17 +69,6 @@ export class IkoManagementWidgetsComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.setBreadcrumbs();
-    this.params$
-      .pipe(
-        switchMap((params: IkoManagementParams) => {
-          console.log({params});
-          return this.ikoManagementApiService.getIkoWidgets(
-            params.aggregateKey,
-            params.widgetTabKey ?? ''
-          );
-        })
-      )
-      .subscribe(res => console.log({res}));
   }
 
   private setBreadcrumbs(): void {

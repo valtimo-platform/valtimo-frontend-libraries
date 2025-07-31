@@ -19,11 +19,12 @@ import {Injectable} from '@angular/core';
 import {ConfigService, CaseManagementParams} from '@valtimo/shared';
 import {CaseWidgetsRes} from '@valtimo/case';
 import {Observable} from 'rxjs';
+import {BasicWidget, IWidgetManagementService} from '@valtimo/widget';
 
 @Injectable({
   providedIn: 'root',
 })
-export class WidgetTabManagementService {
+export class WidgetTabManagementService implements IWidgetManagementService {
   private readonly valtimoEndpointBase: string;
 
   constructor(
@@ -31,6 +32,15 @@ export class WidgetTabManagementService {
     private readonly configService: ConfigService
   ) {
     this.valtimoEndpointBase = `${this.configService.config.valtimoApi.endpointUri}management/v1/case-definition`;
+  }
+
+  //TODO: Update when IKO widget management is done
+  public getWidgetConfiguration(...params: any[]): Observable<BasicWidget[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  public updateWidgetConfiguration(...params: any[]): Observable<BasicWidget[]> {
+    throw new Error('Method not implemented.');
   }
 
   public getWidgetTabConfiguration(
