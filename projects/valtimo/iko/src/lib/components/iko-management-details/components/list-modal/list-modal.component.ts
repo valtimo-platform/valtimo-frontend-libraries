@@ -45,10 +45,10 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {
-  CloseListColumnModalEvent,
   ColumnDefaultSort,
-  IkoListColumnModalMode,
   IkoListColumnRequest,
+  IkoModalEvent,
+  IkoModalMode,
   ListColumnDto,
 } from '../../../../models';
 import {map} from 'rxjs/operators';
@@ -93,13 +93,13 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     this.form.markAsPristine();
   }
 
-  public readonly IkoListColumnModalMode = IkoListColumnModalMode;
+  public readonly IkoListColumnModalMode = IkoModalMode;
 
-  private _modalMode: IkoListColumnModalMode = IkoListColumnModalMode.ADD;
+  private _modalMode: IkoModalMode = IkoModalMode.ADD;
   @Input()
-  public set modalMode(value: IkoListColumnModalMode) {
+  public set modalMode(value: IkoModalMode) {
     this._modalMode = value;
-    if (value === IkoListColumnModalMode.ADD) {
+    if (value === IkoModalMode.ADD) {
       this.key.setAsyncValidators(this.keyNotUsedValidator());
       this.key.enable();
     } else {
@@ -108,11 +108,11 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     }
     this.key.updateValueAndValidity();
   }
-  public get modalMode(): IkoListColumnModalMode {
+  public get modalMode(): IkoModalMode {
     return this._modalMode;
   }
 
-  @Output() public readonly closeModalEvent = new EventEmitter<CloseListColumnModalEvent>();
+  @Output() public readonly closeModalEvent = new EventEmitter<IkoModalEvent>();
 
   public readonly form = this.formBuilder.group({
     title: this.formBuilder.control('', [Validators.required]),
@@ -237,7 +237,7 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     this._dataAggregateKey$
       .pipe(
         switchMap(dataAggregateKey =>
-          this.modalMode === IkoListColumnModalMode.ADD
+          this.modalMode === IkoModalMode.ADD
             ? this.ikoManagementApiService.createIkoListColumn(
                 dataAggregateKey,
                 formValue.key,
@@ -312,7 +312,7 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
       sortable: Boolean(sortable),
       ...(defaultSort ? {defaultSort: defaultSort as ColumnDefaultSort} : {}),
       ...rest,
-      ...(this.modalMode === IkoListColumnModalMode.EDIT && {
+      ...(this.modalMode === IkoModalMode.EDIT && {
         order: this._selectedListColumn.order,
       }),
       displayType: {

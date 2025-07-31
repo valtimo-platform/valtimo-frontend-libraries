@@ -33,7 +33,6 @@ import {
   IkoSearchField,
   IkoSearchFieldCreateRequest,
   IkoTabCreateRequest,
-  IkoTabUpdateRequest,
   ListColumnDto,
   PropertyField,
   TabDto,
@@ -225,7 +224,7 @@ export class IkoManagementApiService extends BaseApiService {
     );
   }
 
-  public updateIkoTabs(aggregateKey: string, body: IkoTabUpdateRequest[]): Observable<TabDto[]> {
+  public updateIkoTabs(aggregateKey: string, body: TabDto[]): Observable<TabDto[]> {
     return this.httpClient.put<TabDto[]>(
       this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/tab`),
       body

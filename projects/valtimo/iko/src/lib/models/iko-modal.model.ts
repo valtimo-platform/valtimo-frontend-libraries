@@ -14,32 +14,11 @@
  * limitations under the License.
  */
 
-type ColumnDefaultSort = 'ASC' | 'DESC';
+type IkoModalEvent = 'close' | 'closeAndRefresh';
 
-interface DisplayType {
-  type: string;
-  displayTypeParameters: Record<string, any>;
+enum IkoModalMode {
+  ADD,
+  EDIT,
 }
 
-interface ListColumnDto {
-  id?: string;
-  key: string;
-  title?: string;
-  path: string;
-  displayType: DisplayType;
-  sortable: boolean;
-  defaultSort?: ColumnDefaultSort;
-  order: number;
-}
-
-interface IkoListColumnRequest {
-  key: string;
-  title?: string;
-  path: string;
-  displayType?: DisplayType;
-  sortable?: boolean;
-  defaultSort?: ColumnDefaultSort;
-  order?: number;
-}
-
-export {IkoListColumnRequest, ListColumnDto, DisplayType, ColumnDefaultSort};
+export {IkoModalEvent, IkoModalMode};
