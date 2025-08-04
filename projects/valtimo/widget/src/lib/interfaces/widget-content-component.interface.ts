@@ -14,5 +14,8 @@
  * limitations under the License.
  */
 
-export * from './widget-management-service.interface';
-export * from './widget-content-component.interface';
+import {EventEmitter} from '@angular/core';
+
+export interface IWidgetContentComponent {
+  changeValidEvent: EventEmitter<boolean>;
+}

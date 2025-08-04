@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {CaseWidgetType} from '@valtimo/case';
 import {TagType} from 'carbon-components-angular';
+import { WidgetType } from './widget.model';
 
 enum WidgetEditorTab {
   VISUAL = 'visual',
@@ -23,11 +23,11 @@ enum WidgetEditorTab {
 }
 
 const WidgetTypeTags: {[key: string]: TagType} = {
-  [CaseWidgetType.COLLECTION]: 'teal',
-  [CaseWidgetType.CUSTOM]: 'magenta',
-  [CaseWidgetType.FIELDS]: 'blue',
-  [CaseWidgetType.FORMIO]: 'green',
-  [CaseWidgetType.TABLE]: 'purple',
+  [WidgetType.COLLECTION]: 'teal',
+  [WidgetType.CUSTOM]: 'magenta',
+  [WidgetType.FIELDS]: 'blue',
+  [WidgetType.FORMIO]: 'green',
+  [WidgetType.TABLE]: 'purple',
 };
 
 export {WidgetEditorTab, WidgetTypeTags};

@@ -29,6 +29,7 @@ export class IkoWidgetManagementApiService
   implements IWidgetManagementService<IkoManagementParams>
 {
   public readonly params$ = new BehaviorSubject<IkoManagementParams | null>(null);
+  public readonly valueResolverApi$ = new BehaviorSubject<string | null>('');
 
   constructor(
     protected override httpClient: HttpClient,

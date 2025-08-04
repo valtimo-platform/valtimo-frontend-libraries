@@ -18,6 +18,7 @@ import {BasicWidget} from '../models';
 
 export interface IWidgetManagementService<T> {
   params$: BehaviorSubject<T | null>;
+  valueResolverApi$: BehaviorSubject<string | null>;
   initParams(...params): void;
   getWidgetConfiguration(): Observable<BasicWidget[]>;
   updateWidgetConfiguration(widgets: BasicWidget[]): Observable<BasicWidget[]>;

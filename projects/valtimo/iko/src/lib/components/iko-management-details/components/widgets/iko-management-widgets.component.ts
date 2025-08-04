@@ -45,7 +45,7 @@ export class IkoManagementWidgetsComponent implements OnInit, OnDestroy {
 
   public readonly widgets$: Observable<BasicWidget[]> = this.ikoWidgetManagementApiService
     .getWidgetConfiguration()
-    .pipe(tap(res => console.log({res})));
+    // .pipe(tap(res => console.log({res})));
 
   private readonly _ikoRepositoryConfig$: Observable<IkoRepositoryConfigResponse> =
     this.params$.pipe(
@@ -56,10 +56,10 @@ export class IkoManagementWidgetsComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
-    private readonly ikoWidgetManagementApiService: IkoWidgetManagementApiService,
     private readonly ikoManagementApiService: IkoManagementApiService,
     private readonly route: ActivatedRoute,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    public readonly ikoWidgetManagementApiService: IkoWidgetManagementApiService
   ) {}
 
   public ngOnDestroy(): void {

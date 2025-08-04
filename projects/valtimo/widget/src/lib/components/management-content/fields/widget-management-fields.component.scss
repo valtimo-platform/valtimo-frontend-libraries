@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,5 +14,26 @@
  * limitations under the License.
  */
 
-export * from './widget-management-service.interface';
-export * from './widget-content-component.interface';
+.valtimo-case-management-widget-field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+
+  &__input {
+    max-width: 288px;
+  }
+
+  &__heading {
+    display: flex;
+    align-items: center;
+  }
+
+  #addColumn-header {
+    padding: 0 !important;
+  }
+
+  .cds--tabs__nav-item {
+    padding-right: 0 !important;
+  }
+}

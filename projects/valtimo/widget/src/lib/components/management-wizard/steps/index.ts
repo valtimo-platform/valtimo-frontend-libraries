@@ -13,6 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {WidgetWizardContentStepComponent} from './widget-wizard-content-step/widget-wizard-content-step.component';
+import {WidgetWizardStyleStepComponent} from './widget-wizard-style-step/widget-wizard-style-step.component';
+import {WidgetWizardTypeStepComponent} from './widget-wizard-type-step/widget-wizard-type-step.component';
+import {WidgetWizardWidthStepComponent} from './widget-wizard-width-step/widget-wizard-width-step.component';
 
-export * from './widget-management-service.interface';
-export * from './widget-content-component.interface';
+export const WIDGET_STEPS = [
+  WidgetWizardContentStepComponent,
+  WidgetWizardStyleStepComponent,
+  WidgetWizardTypeStepComponent,
+  WidgetWizardWidthStepComponent,
+];

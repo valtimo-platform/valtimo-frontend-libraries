@@ -19,6 +19,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   signal,
 } from '@angular/core';
@@ -29,14 +30,16 @@ import {
   CarbonListModule,
   ColumnConfig,
   ConfirmationModalModule,
-  KeyGeneratorService,
   ViewType,
 } from '@valtimo/components';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {cloneDeep} from 'lodash';
-import {BehaviorSubject, combineLatest, filter, map, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, of, Subject, take} from 'rxjs';
+
 import {AVAILABLE_WIDGETS, BasicWidget, Widget, WidgetStyle, WidgetTypeTags} from '../../models';
 import {WidgetWizardService} from '../../services';
+import {WidgetManagementWizardComponent} from '../management-wizard/widget-management-wizard.component';
+import {IWidgetManagementService} from '../../interfaces';
 
 @Component({
   selector: 'valtimo-widget-management-editor',
@@ -50,14 +53,39 @@ import {WidgetWizardService} from '../../services';
     ButtonModule,
     IconModule,
     TabsModule,
-    // CasManagementWidgetWizardComponent,
+    WidgetManagementWizardComponent,
     ConfirmationModalModule,
   ],
 })
 export class WidgetManagementEditorComponent {
-  @Input() public set widgets(value: BasicWidget[]) {
-    console.log({value});
-    this._items$.next(value);
+  @Input() public set params(value: any) {
+    if (!value) return;
+    combineLatest([this._serviceInit, of(value)])
+      .pipe(
+        filter(([serviceInit]) => !!serviceInit),
+        take(1)
+      )
+      .subscribe(([_, params]) => {
+        this.widgetManagementService.initParams(params);
+        console.log('params', this.widgetManagementService.params$.getValue());
+      });
+  }
+  private _serviceInit = new BehaviorSubject<boolean>(false);
+  private _widgetManagementService: IWidgetManagementService<any>;
+  @Input() public set widgetManagementService(value: IWidgetManagementService<any>) {
+    this._widgetManagementService = value;
+    console.log('service', value);
+    this._widgetManagementService
+      .getWidgetConfiguration()
+      .pipe(take(1))
+      .subscribe(res => {
+        console.log({res});
+        this._items$.next(res);
+      });
+  }
+  public get widgetManagementService(): IWidgetManagementService<any> {
+    this._serviceInit.next(true);
+    return this._widgetManagementService;
   }
   // @Input() public params: CaseManagementParams;
   // @Input() public tabWidgetKey: string;
@@ -151,7 +179,7 @@ export class WidgetManagementEditorComponent {
   private _usedKeys: string[];
 
   constructor(
-    private readonly keyGeneratorService: KeyGeneratorService,
+    // private readonly keyGeneratorService: KeyGeneratorService,
     private readonly translateService: TranslateService,
     private readonly widgetWizardService: WidgetWizardService
     // private readonly widgetTabManagementService: WidgetTabManagementService,
