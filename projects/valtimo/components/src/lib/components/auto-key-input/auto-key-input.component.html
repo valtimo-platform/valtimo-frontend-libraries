@@ -40,5 +40,14 @@
     >
       <svg cdsIcon="edit" size="16" class="cds--btn__icon"></svg>
     </cds-icon-button>
+
+    <cds-icon-button
+      *ngIf="(mode$ | async) === 'add' && (editingKey$ | async)"
+      [disabled]="$disabled()"
+      (click)="disableKeyEditing()"
+      kind="secondary"
+    >
+      <svg cdsIcon="close" size="16" class="cds--btn__icon"></svg>
+    </cds-icon-button>
   </div>
 </cds-label>

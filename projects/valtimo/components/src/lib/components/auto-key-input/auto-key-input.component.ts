@@ -25,9 +25,10 @@ import {
 import {ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {ButtonModule, InputModule} from 'carbon-components-angular';
+import {ButtonModule, IconModule, IconService, InputModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
 import {ModalMode} from '@valtimo/shared';
+import {Close16, Edit16} from '@carbon/icons';
 
 @Component({
   selector: 'valtimo-auto-key-input',
@@ -35,7 +36,14 @@ import {ModalMode} from '@valtimo/shared';
   templateUrl: './auto-key-input.component.html',
   styleUrls: ['./auto-key-input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, InputModule, ButtonModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    InputModule,
+    ButtonModule,
+    IconModule,
+  ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -74,7 +82,9 @@ export class AutoKeyInputComponent implements ControlValueAccessor, OnDestroy {
 
   private readonly subscription = new Subscription();
 
-  constructor() {
+  constructor(private readonly iconService: IconService) {
+    this.iconService.registerAll([Edit16, Close16]);
+
     this.subscription.add(
       this.mode$.subscribe(mode => {
         this.editingKey$.next(mode === 'edit');
@@ -114,14 +124,16 @@ export class AutoKeyInputComponent implements ControlValueAccessor, OnDestroy {
     this.onTouched = fn;
   }
 
-  public onInputChange(event: Event): void {
-    const inputValue = (event.target as HTMLInputElement).value;
-    this.value = inputValue;
-    this.onChange(inputValue);
+  public onInputChange(event: InputEvent & {target: HTMLInputElement}): void {
+    this.onChange((this.value = event.target.value));
   }
 
   public enableKeyEditing(): void {
     this.editingKey$.next(true);
+  }
+
+  public disableKeyEditing(): void {
+    this.editingKey$.next(false);
   }
 
   private getUniqueKey(sourceText: string, usedKeys: string[]): string {
@@ -140,9 +152,11 @@ export class AutoKeyInputComponent implements ControlValueAccessor, OnDestroy {
 
   private getUniqueKeyWithNumber(base: string, usedKeys: string[], suffix: number = 1): string {
     const newKey = `${base}-${suffix}`;
+
     if (usedKeys.includes(newKey)) {
       return this.getUniqueKeyWithNumber(base, usedKeys, suffix + 1);
     }
+
     return newKey;
   }
 }
