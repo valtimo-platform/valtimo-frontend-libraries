@@ -34,7 +34,7 @@ import {
   ValtimoCdsModalDirective,
 } from '@valtimo/components';
 import {filter, map, Observable, Subscription, switchMap} from 'rxjs';
-import {IkoModalEvent, TabDto} from '../../../../../models';
+import {TabDto} from '../../../../../models';
 import {IkoManagementApiService} from '../../../../../services';
 import {
   ButtonModule,
@@ -46,7 +46,7 @@ import {
   TooltipModule,
 } from 'carbon-components-angular';
 import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ModalMode} from '@valtimo/shared';
+import {ModalCloseEvent, ModalMode} from '@valtimo/shared';
 
 @Component({
   selector: 'valtimo-iko-management-tab-details-modal',
@@ -78,7 +78,7 @@ export class IkoManagementTabDetailsModalComponent {
     this.$openModal.set(value);
   }
 
-  @Input() public readonly tabs: TabDto[] = [];
+  @Input() public readonly usedKeys: string[] = [];
 
   @Input() public set selectedTab(value: TabDto) {
     if (!value) return;
@@ -95,7 +95,7 @@ export class IkoManagementTabDetailsModalComponent {
     return this._modalMode;
   }
 
-  @Output() public readonly closeModalEvent = new EventEmitter<IkoModalEvent>();
+  @Output() public readonly closeModalEvent = new EventEmitter<ModalCloseEvent>();
 
   public readonly form = this.formBuilder.group({
     title: this.formBuilder.control(''),

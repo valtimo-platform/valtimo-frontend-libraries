@@ -16,4 +16,6 @@
 
 type ModalMode = 'add' | 'edit' | 'delete';
 
-export {ModalMode};
+type ModalCloseEvent = 'close' | 'closeAndRefresh';
+
+export {ModalMode, ModalCloseEvent};

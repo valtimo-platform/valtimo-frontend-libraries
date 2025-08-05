@@ -57,20 +57,12 @@
       />
     </cds-label>
 
-    <cds-label>
-      {{ 'ikoManagement.keyTitle' | translate }}
-
-      <input
-        [invalid]="key.dirty && key.invalid"
-        formControlName="key"
-        cdsText
-        placeholder="{{ 'ikoManagement.tabKeyPlaceholder' | translate }}"
-      />
-    </cds-label>
-
     <valtimo-auto-key-input
+      formControlName="key"
       [label]="'ikoManagement.keyTitle' | translate"
       [placeholder]="'ikoManagement.tabKeyPlaceholder' | translate"
+      [usedKeys]="usedKeys"
+      [sourceText]="title.value"
       [mode]="modalMode"
     >
     </valtimo-auto-key-input>

@@ -23,6 +23,7 @@
     openModal: $openModal(),
     disableInput: $disableInput(),
     modalMode: $modalMode(),
+    usedKeys: $usedKeys(),
   } as state"
 >
   <valtimo-carbon-list
@@ -65,7 +66,7 @@
     [openModal]="state.openModal"
     [selectedTab]="state.selectedTab"
     [modalMode]="state.modalMode"
-    [tabs]="state.ikoTabColumnDtos"
+    [usedKeys]="state.usedKeys"
     (closeModalEvent)="onCloseModalEvent($event)"
   ></valtimo-iko-management-tab-details-modal>
 </ng-container>

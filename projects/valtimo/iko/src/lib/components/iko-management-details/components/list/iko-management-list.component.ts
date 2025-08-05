@@ -35,8 +35,8 @@ import {
 import {IkoManagementApiService} from '../../../../services';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {getDisplayTypeParametersView, ModalMode} from '@valtimo/shared';
-import {IkoModalEvent, ListColumnDto} from '../../../../models';
+import {getDisplayTypeParametersView, ModalCloseEvent, ModalMode} from '@valtimo/shared';
+import {ListColumnDto} from '../../../../models';
 import {IkoManagementListModalComponent} from '../list-modal/list-modal.component';
 import {toObservable} from '@angular/core/rxjs-interop';
 
@@ -253,7 +253,7 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
     this.$openModal.set(false);
   }
 
-  public onCloseModalEvent(event: IkoModalEvent): void {
+  public onCloseModalEvent(event: ModalCloseEvent): void {
     this.closeModal();
     if (event === 'closeAndRefresh') this.reloadColumns();
   }

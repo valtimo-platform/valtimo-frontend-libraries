@@ -28,14 +28,13 @@
           : placeholder
       "
       [readOnly]="!(editingKey$ | async)"
-      [disabled]="disabled$ | async"
       (input)="onInputChange($event)"
       (blur)="onTouched()"
     />
 
     <cds-icon-button
       *ngIf="(mode$ | async) === 'add' && !(editingKey$ | async)"
-      [disabled]="disabled$ | async"
+      [disabled]="$disabled()"
       (click)="enableKeyEditing()"
       kind="secondary"
     >

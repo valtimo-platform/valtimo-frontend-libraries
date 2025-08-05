@@ -20,4 +20,3 @@ export * from './iko-widget.model';
 export * from './iko-management.model';
 export * from './iko-management-list.model';
 export * from './iko-search-field.model';
-export * from './iko-modal.model';

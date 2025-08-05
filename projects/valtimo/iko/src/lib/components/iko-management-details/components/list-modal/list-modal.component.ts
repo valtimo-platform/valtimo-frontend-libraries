@@ -44,16 +44,11 @@ import {
   ValtimoCdsModalDirective,
   ViewType,
 } from '@valtimo/components';
-import {
-  ColumnDefaultSort,
-  IkoListColumnRequest,
-  IkoModalEvent,
-  ListColumnDto,
-} from '../../../../models';
+import {ColumnDefaultSort, IkoListColumnRequest, ListColumnDto} from '../../../../models';
 import {map} from 'rxjs/operators';
 import {delay, filter, Observable, of, Subscription, switchMap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {ModalMode} from '@valtimo/shared';
+import {ModalCloseEvent, ModalMode} from '@valtimo/shared';
 
 @Component({
   standalone: true,
@@ -110,7 +105,7 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     return this._modalMode;
   }
 
-  @Output() public readonly closeModalEvent = new EventEmitter<IkoModalEvent>();
+  @Output() public readonly closeModalEvent = new EventEmitter<ModalCloseEvent>();
 
   public readonly form = this.formBuilder.group({
     title: this.formBuilder.control('', [Validators.required]),

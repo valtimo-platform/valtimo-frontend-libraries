@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {Component, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, computed, OnDestroy, OnInit, signal} from '@angular/core';
 import {
   ActionItem,
   CarbonListModule,
@@ -26,11 +26,11 @@ import {BehaviorSubject, combineLatest, filter, Subscription, switchMap, tap} fr
 import {map} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {IkoManagementApiService} from '../../../../services';
-import {IkoModalEvent, TabDto} from '../../../../models';
+import {TabDto} from '../../../../models';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {IkoManagementTabDetailsModalComponent} from './details-modal/iko-management-tab-details-modal.component';
-import {ModalMode} from '@valtimo/shared';
+import {ModalCloseEvent, ModalMode} from '@valtimo/shared';
 
 @Component({
   standalone: true,
@@ -50,6 +50,7 @@ import {ModalMode} from '@valtimo/shared';
 export class IkoManagementTabsComponent implements OnInit, OnDestroy {
   public readonly $disableInput = signal<boolean>(true);
   public readonly $ikoTabDtos = signal<TabDto[]>([]);
+  public readonly $usedKeys = computed(() => this.$ikoTabDtos().map(tab => tab.key));
   public readonly $loading = signal<boolean>(true);
   public readonly $selectedTab = signal<TabDto | null>(null);
   public readonly $openModal = signal<boolean>(false);
@@ -181,7 +182,7 @@ export class IkoManagementTabsComponent implements OnInit, OnDestroy {
     this.$openModal.set(false);
   }
 
-  public onCloseModalEvent(event: IkoModalEvent): void {
+  public onCloseModalEvent(event: ModalCloseEvent): void {
     this.closeModal();
     if (event === 'closeAndRefresh') this.reloadTabs();
   }

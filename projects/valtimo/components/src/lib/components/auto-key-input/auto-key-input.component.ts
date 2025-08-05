@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, forwardRef, Input, OnDestroy} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  forwardRef,
+  Input,
+  OnDestroy,
+  signal,
+} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
@@ -51,15 +58,12 @@ export class AutoKeyInputComponent implements ControlValueAccessor, OnDestroy {
     this._usedKeys$.next(value || []);
   }
 
-  public readonly disabled$ = new BehaviorSubject<boolean>(false);
-  @Input() public set disabled(value: boolean) {
-    this.disabled$.next(value);
+  private readonly _sourceText$ = new BehaviorSubject<string>('');
+  @Input() public set sourceText(value: string) {
+    this._sourceText$.next(value || '');
   }
 
-  private readonly _title$ = new BehaviorSubject<string>('');
-  @Input() public set title(value: string) {
-    this._title$.next(value || '');
-  }
+  public $disabled = signal<boolean>(false);
 
   public value = '';
 
@@ -78,10 +82,10 @@ export class AutoKeyInputComponent implements ControlValueAccessor, OnDestroy {
     );
 
     this.subscription.add(
-      combineLatest([this.mode$, this.editingKey$, this._usedKeys$, this._title$]).subscribe(
-        ([mode, editingKey, usedKeys, title]) => {
+      combineLatest([this.mode$, this.editingKey$, this._usedKeys$, this._sourceText$]).subscribe(
+        ([mode, editingKey, usedKeys, sourceText]) => {
           if (mode === 'add' && !editingKey) {
-            const newKey = title ? this.getUniqueKey(title, usedKeys) : '';
+            const newKey = sourceText ? this.getUniqueKey(sourceText, usedKeys) : '';
             this.value = newKey;
             this.onChange(newKey);
           }
@@ -92,6 +96,10 @@ export class AutoKeyInputComponent implements ControlValueAccessor, OnDestroy {
 
   public ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  public setDisabledState(disabled: boolean): void {
+    this.$disabled.set(disabled);
   }
 
   public writeValue(value: string): void {
@@ -106,10 +114,6 @@ export class AutoKeyInputComponent implements ControlValueAccessor, OnDestroy {
     this.onTouched = fn;
   }
 
-  public setDisabledState(isDisabled: boolean): void {
-    this.disabled$.next(isDisabled);
-  }
-
   public onInputChange(event: Event): void {
     const inputValue = (event.target as HTMLInputElement).value;
     this.value = inputValue;
@@ -120,8 +124,8 @@ export class AutoKeyInputComponent implements ControlValueAccessor, OnDestroy {
     this.editingKey$.next(true);
   }
 
-  private getUniqueKey(title: string, usedKeys: string[]): string {
-    const baseKey = title
+  private getUniqueKey(sourceText: string, usedKeys: string[]): string {
+    const baseKey = sourceText
       .toLowerCase()
       .replace(/[^a-z0-9-_]+|-[^a-z0-9]+/g, '-')
       .replace(/_[-_]+/g, '_')
