@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
-.iko-tab-form {
+.edit-key-input {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
+  align-items: center;
+  gap: 8px;
+
+  input[cdsText] {
+    flex: 1 1 auto;
+  }
+
+  cds-icon-button {
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
 }

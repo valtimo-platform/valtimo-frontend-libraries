@@ -231,6 +231,13 @@ export class IkoManagementApiService extends BaseApiService {
     );
   }
 
+  public updateIkoTab(aggregateKey: string, tabKey: string, body: TabDto): Observable<TabDto> {
+    return this.httpClient.put<TabDto>(
+      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`),
+      body
+    );
+  }
+
   public deleteIkoTab(aggregateKey: string, tabKey: string): Observable<void> {
     return this.httpClient.delete<void>(
       this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`)

@@ -35,8 +35,8 @@ import {
 import {IkoManagementApiService} from '../../../../services';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {getDisplayTypeParametersView} from '@valtimo/shared';
-import {IkoModalEvent, IkoModalMode, ListColumnDto} from '../../../../models';
+import {getDisplayTypeParametersView, ModalMode} from '@valtimo/shared';
+import {IkoModalEvent, ListColumnDto} from '../../../../models';
 import {IkoManagementListModalComponent} from '../list-modal/list-modal.component';
 import {toObservable} from '@angular/core/rxjs-interop';
 
@@ -61,7 +61,7 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
   public readonly openConfirmationModal$ = new BehaviorSubject<boolean>(false);
   public readonly $loading = signal<boolean>(true);
   public readonly $disableInput = signal<boolean>(true);
-  public readonly $modalMode = signal<IkoModalMode>(IkoModalMode.ADD);
+  public readonly $modalMode = signal<ModalMode>('add');
 
   private readonly _dataAggregateKey$: Observable<string> = this.route.params.pipe(
     map(params => params?.key),
@@ -214,7 +214,7 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
     if (!listColumnDto) return;
     this.$selectedListColumn.set({...listColumnDto});
     this.$openModal.set(true);
-    this.$modalMode.set(IkoModalMode.EDIT);
+    this.$modalMode.set('edit');
   }
 
   public onDeleteClicked(event: ListColumnDto): void {
@@ -245,7 +245,7 @@ export class IkoManagementListComponent implements OnInit, OnDestroy {
   }
 
   public onCreateButtonClicked(): void {
-    this.$modalMode.set(IkoModalMode.ADD);
+    this.$modalMode.set('add');
     this.openModal();
   }
 

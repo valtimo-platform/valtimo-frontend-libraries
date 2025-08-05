@@ -26,10 +26,11 @@ import {BehaviorSubject, combineLatest, filter, Subscription, switchMap, tap} fr
 import {map} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {IkoManagementApiService} from '../../../../services';
-import {IkoModalMode, TabDto} from '../../../../models';
+import {IkoModalEvent, TabDto} from '../../../../models';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {IkoManagementListModalComponent} from '../list-modal/list-modal.component';
+import {IkoManagementTabDetailsModalComponent} from './details-modal/iko-management-tab-details-modal.component';
+import {ModalMode} from '@valtimo/shared';
 
 @Component({
   standalone: true,
@@ -41,7 +42,7 @@ import {IkoManagementListModalComponent} from '../list-modal/list-modal.componen
     CarbonListModule,
     ButtonModule,
     IconModule,
-    IkoManagementListModalComponent,
+    IkoManagementTabDetailsModalComponent,
     TranslatePipe,
     ConfirmationModalModule,
   ],
@@ -52,7 +53,7 @@ export class IkoManagementTabsComponent implements OnInit, OnDestroy {
   public readonly $loading = signal<boolean>(true);
   public readonly $selectedTab = signal<TabDto | null>(null);
   public readonly $openModal = signal<boolean>(false);
-  public readonly $modalMode = signal<IkoModalMode>(IkoModalMode.ADD);
+  public readonly $modalMode = signal<ModalMode>('add');
   public readonly openConfirmationModal$ = new BehaviorSubject<boolean>(false);
 
   private readonly _dataAggregateKey$ = this.route.params.pipe(
@@ -140,7 +141,7 @@ export class IkoManagementTabsComponent implements OnInit, OnDestroy {
     if (!tabDto) return;
     this.$selectedTab.set({...tabDto});
     this.$openModal.set(true);
-    this.$modalMode.set(IkoModalMode.EDIT);
+    this.$modalMode.set('edit');
   }
 
   public onDeleteClicked(event: {key: string}): void {
@@ -172,8 +173,17 @@ export class IkoManagementTabsComponent implements OnInit, OnDestroy {
   }
 
   public onCreateButtonClicked(): void {
-    this.$modalMode.set(IkoModalMode.ADD);
+    this.$modalMode.set('add');
     this.openModal();
+  }
+
+  private closeModal(): void {
+    this.$openModal.set(false);
+  }
+
+  public onCloseModalEvent(event: IkoModalEvent): void {
+    this.closeModal();
+    if (event === 'closeAndRefresh') this.reloadTabs();
   }
 
   public openModal(): void {

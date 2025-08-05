@@ -48,12 +48,12 @@ import {
   ColumnDefaultSort,
   IkoListColumnRequest,
   IkoModalEvent,
-  IkoModalMode,
   ListColumnDto,
 } from '../../../../models';
 import {map} from 'rxjs/operators';
 import {delay, filter, Observable, of, Subscription, switchMap} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
+import {ModalMode} from '@valtimo/shared';
 
 @Component({
   standalone: true,
@@ -93,13 +93,11 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     this.form.markAsPristine();
   }
 
-  public readonly IkoListColumnModalMode = IkoModalMode;
-
-  private _modalMode: IkoModalMode = IkoModalMode.ADD;
+  private _modalMode: ModalMode = 'add';
   @Input()
-  public set modalMode(value: IkoModalMode) {
+  public set modalMode(value: ModalMode) {
     this._modalMode = value;
-    if (value === IkoModalMode.ADD) {
+    if (value === 'add') {
       this.key.setAsyncValidators(this.keyNotUsedValidator());
       this.key.enable();
     } else {
@@ -108,7 +106,7 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     }
     this.key.updateValueAndValidity();
   }
-  public get modalMode(): IkoModalMode {
+  public get modalMode(): ModalMode {
     return this._modalMode;
   }
 
@@ -237,7 +235,7 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
     this._dataAggregateKey$
       .pipe(
         switchMap(dataAggregateKey =>
-          this.modalMode === IkoModalMode.ADD
+          this.modalMode === 'add'
             ? this.ikoManagementApiService.createIkoListColumn(
                 dataAggregateKey,
                 formValue.key,
@@ -312,7 +310,7 @@ export class IkoManagementListModalComponent implements OnInit, OnDestroy {
       sortable: Boolean(sortable),
       ...(defaultSort ? {defaultSort: defaultSort as ColumnDefaultSort} : {}),
       ...rest,
-      ...(this.modalMode === IkoModalMode.EDIT && {
+      ...(this.modalMode === 'edit' && {
         order: this._selectedListColumn.order,
       }),
       displayType: {

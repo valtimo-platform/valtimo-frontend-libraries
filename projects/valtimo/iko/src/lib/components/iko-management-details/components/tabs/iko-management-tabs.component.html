@@ -60,12 +60,12 @@
     titleTranslationKey="interface.delete"
     (confirmEvent)="onDeleteTab($event)"
   ></valtimo-confirmation-modal>
-</ng-container>
 
-<!--  <valtimo-iko-management-list-modal-->
-<!--    [openModal]="state.openModal"-->
-<!--    [listColumns]="state.ikoListColumnDtos"-->
-<!--    [selectedListColumn]="state.selectedListColumn"-->
-<!--    [modalMode]="state.modalMode"-->
-<!--    (closeModalEvent)="onCloseModalEvent($event)"-->
-<!--  ></valtimo-iko-management-list-modal>-->
+  <valtimo-iko-management-tab-details-modal
+    [openModal]="state.openModal"
+    [selectedTab]="state.selectedTab"
+    [modalMode]="state.modalMode"
+    [tabs]="state.ikoTabColumnDtos"
+    (closeModalEvent)="onCloseModalEvent($event)"
+  ></valtimo-iko-management-tab-details-modal>
+</ng-container>

@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-.iko-tab-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
-}
+type ModalMode = 'add' | 'edit' | 'delete';
+
+export {ModalMode};

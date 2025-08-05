@@ -16,9 +16,4 @@
 
 type IkoModalEvent = 'close' | 'closeAndRefresh';
 
-enum IkoModalMode {
-  ADD,
-  EDIT,
-}
-
-export {IkoModalEvent, IkoModalMode};
+export {IkoModalEvent};

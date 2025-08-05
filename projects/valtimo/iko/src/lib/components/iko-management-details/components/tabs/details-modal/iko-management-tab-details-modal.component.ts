@@ -15,72 +15,159 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
-import {BreadcrumbService} from '@valtimo/components';
-import {Observable, combineLatest, map, switchMap} from 'rxjs';
-import {IkoManagementParams, IkoRepositoryConfigResponse} from '../../../../../models';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  signal,
+} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
+import {
+  AutoKeyInputComponent,
+  CarbonMultiInputModule,
+  InputLabelModule,
+  runAfterCarbonModalClosed,
+  SelectModule,
+  ValtimoCdsModalDirective,
+} from '@valtimo/components';
+import {filter, map, Observable, Subscription, switchMap} from 'rxjs';
+import {IkoModalEvent, TabDto} from '../../../../../models';
 import {IkoManagementApiService} from '../../../../../services';
+import {
+  ButtonModule,
+  InputModule,
+  LayerModule,
+  ModalModule,
+  NumberModule,
+  ToggleModule,
+  TooltipModule,
+} from 'carbon-components-angular';
+import {AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {ModalMode} from '@valtimo/shared';
 
 @Component({
   selector: 'valtimo-iko-management-tab-details-modal',
-  templateUrl: './iko-management-tab-details.component.html',
-  styleUrl: './iko-management-tab-details.component.scss',
+  templateUrl: './iko-management-tab-details-modal.component.html',
+  styleUrl: './iko-management-tab-details-modal.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ModalModule,
+    ValtimoCdsModalDirective,
+    ButtonModule,
+    InputModule,
+    ReactiveFormsModule,
+    LayerModule,
+    SelectModule,
+    ToggleModule,
+    TooltipModule,
+    CarbonMultiInputModule,
+    InputLabelModule,
+    NumberModule,
+    AutoKeyInputComponent,
+  ],
 })
-export class IkoManagementTabDetailsModalComponent implements OnInit, OnDestroy {
-  public readonly params$: Observable<IkoManagementParams> = this.route.params.pipe(
-    map((params: Params) => ({
-      apiKey: params.apiKey,
-      aggregateKey: params.key,
-      actionKey: params.actionKey,
-      tabKey: params.tabKey,
-    }))
+export class IkoManagementTabDetailsModalComponent {
+  public readonly $openModal = signal<boolean>(false);
+  @Input() public set openModal(value: boolean) {
+    this.$openModal.set(value);
+  }
+
+  @Input() public readonly tabs: TabDto[] = [];
+
+  @Input() public set selectedTab(value: TabDto) {
+    if (!value) return;
+    this.form.setValue({...value, title: value.title || ''});
+    this.form.markAsPristine();
+  }
+
+  private _modalMode: ModalMode = 'add';
+  @Input()
+  public set modalMode(value: ModalMode) {
+    this._modalMode = value;
+  }
+  public get modalMode(): ModalMode {
+    return this._modalMode;
+  }
+
+  @Output() public readonly closeModalEvent = new EventEmitter<IkoModalEvent>();
+
+  public readonly form = this.formBuilder.group({
+    title: this.formBuilder.control(''),
+    key: this.formBuilder.control('', [Validators.required]),
+    type: this.formBuilder.control('', [Validators.required]),
+  });
+
+  public get title(): AbstractControl<string> {
+    return this.form.get('title') as AbstractControl<string>;
+  }
+  public get key(): AbstractControl<string> {
+    return this.form.get('key') as AbstractControl<string>;
+  }
+  public get type(): AbstractControl<string> {
+    return this.form.get('type') as AbstractControl<string>;
+  }
+
+  private readonly _dataAggregateKey$: Observable<string> = this.route.params.pipe(
+    map(params => params?.key),
+    filter(key => !!key)
   );
 
-  private readonly _ikoRepositoryConfig$: Observable<IkoRepositoryConfigResponse> =
-    this.params$.pipe(
-      switchMap((params: IkoManagementParams) =>
-        this.ikoManagementApiService.getIkoRepositoryConfig(params.apiKey)
-      )
-    );
+  private readonly _subscriptions = new Subscription();
 
   constructor(
-    private readonly breadcrumbService: BreadcrumbService,
     private readonly ikoManagementApiService: IkoManagementApiService,
-    private readonly route: ActivatedRoute,
-    private readonly translateService: TranslateService
+    private readonly formBuilder: FormBuilder,
+    private readonly route: ActivatedRoute
   ) {}
 
-  public ngOnDestroy(): void {
-    this.breadcrumbService.clearThirdBreadcrumb();
-    this.breadcrumbService.clearFourthBreadcrumb();
+  public closeModal(): void {
+    this.closeModalEvent.emit('close');
+    runAfterCarbonModalClosed(this.resetForm);
   }
 
-  public ngOnInit(): void {
-    this.setBreadcrumbs();
-  }
+  public addTab(): void {
+    const formValue = this.form.getRawValue();
 
-  private setBreadcrumbs(): void {
-    combineLatest([
-      this._ikoRepositoryConfig$,
-      this.params$,
-      this.translateService.stream('key'),
-    ]).subscribe(([repositoryConfig, params]) => {
-      this.breadcrumbService.setThirdBreadcrumb({
-        route: [`/iko-management/${repositoryConfig.key}`],
-        content: repositoryConfig.title,
-        href: `/iko-management/${repositoryConfig.key}`,
+    this.disableForm();
+
+    this._dataAggregateKey$
+      .pipe(
+        switchMap(dataAggregateKey =>
+          this.modalMode === 'add'
+            ? this.ikoManagementApiService.createIkoTab(dataAggregateKey, formValue.key, formValue)
+            : this.ikoManagementApiService.updateIkoTab(dataAggregateKey, formValue.key, formValue)
+        )
+      )
+      .subscribe({
+        next: () => {
+          this.enableForm();
+          this.closeModalEvent.emit('closeAndRefresh');
+          runAfterCarbonModalClosed(this.resetForm);
+        },
+        error: () => {
+          this.enableForm();
+        },
       });
-
-      this.breadcrumbService.setFourthBreadcrumb({
-        route: [`/iko-management/${repositoryConfig.key}/${params.aggregateKey}/${params.tabKey}`],
-        content: this.translateService.instant('ikoManagement.widgets.title'),
-        href: `/iko-management/${repositoryConfig.key}/${params.aggregateKey}/${params.tabKey}`,
-      });
-    });
   }
+
+  private disableForm(): void {
+    this.form.disable();
+  }
+
+  private enableForm(): void {
+    this.form.enable();
+  }
+
+  private resetForm = (): void => {
+    this.form.reset();
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+    this.form.updateValueAndValidity();
+  };
 }
