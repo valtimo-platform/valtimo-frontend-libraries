@@ -1848,6 +1848,8 @@
     "searchFieldsNoResults": "No search fields found for this entity"
   },
   "ikoManagement": {
+    "ikoServer": "IKO Server",
+    "view": "View",
     "title": "Configuration",
     "list": "List",
     "tabs": {"title": "Tabs"},
@@ -1869,7 +1871,7 @@
       "noResultsTitle": "There are no search fields.",
       "noResultsDescription": "Click here to configure a search field."
     },
-    "addApiConfig": "Configure API",
+    "addApiConfig": "Configure IKO Server",
     "titleTitle": "Title",
     "titlePlaceholder": "Enter a title for the API configuration",
     "keyTitle": "Key",
@@ -1886,6 +1888,17 @@
     "sortingDisabled": "Sorting disabled",
     "defaultSortTitle": "Default Sort",
     "displayType": "Display Type",
-    "sortingEnabled": "Sorting enabled"
+    "sortingEnabled": "Sorting enabled",
+    "tabKey": "Key",
+    "tabTitle": "Tab title",
+    "tabTitlePlaceholder": "Enter tab title",
+    "tabType": "Tab type",
+    "tabTypeTitle": "Tab type",
+    "tabTypePlaceholder": "Enter tab type",
+    "addTab": "Add tab",
+    "editTab": "Edit tab",
+    "tabTypes": {
+      "widgets": "Widgets"
+    }
   }
 }

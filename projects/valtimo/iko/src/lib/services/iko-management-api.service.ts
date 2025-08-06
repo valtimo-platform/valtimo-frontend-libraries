@@ -15,7 +15,7 @@
  */
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BaseApiService, ConfigService} from '@valtimo/shared';
+import {BaseApiService, ConfigService, Page} from '@valtimo/shared';
 import {Observable} from 'rxjs';
 import {
   IkoDataAggregateCreateRequest,
@@ -33,7 +33,6 @@ import {
   IkoSearchField,
   IkoSearchFieldCreateRequest,
   IkoTabCreateRequest,
-  IkoTabUpdateRequest,
   ListColumnDto,
   PropertyField,
   TabDto,
@@ -100,6 +99,25 @@ export class IkoManagementApiService extends BaseApiService {
   public getIkoDataAggregatePropertyFields(type: string): Observable<PropertyField[]> {
     return this.httpClient.get<PropertyField[]>(
       this.getApiUrl(`/v1/iko-property-fields/${type}/data-aggregate`)
+    );
+  }
+
+  public getManagementIkoDataAggregates(
+    key?: string,
+    title?: string,
+    ikoRepositoryConfigKey?: string,
+    page: number = 0,
+    size: number = 100,
+    sort: string = 'title,asc'
+  ): Observable<Page<IkoDataAggregateResponse>> {
+    let params = new HttpParams().set('page', page).set('size', size).set('sort', sort);
+    if (key) params = params.set('key', key);
+    if (title) params = params.set('title', title);
+    if (ikoRepositoryConfigKey)
+      params = params.set('ikoRepositoryConfigKey', ikoRepositoryConfigKey);
+    return this.httpClient.get<Page<IkoDataAggregateResponse>>(
+      this.getApiUrl(`management/v1/iko-data-aggregate`),
+      {params}
     );
   }
 
@@ -220,21 +238,28 @@ export class IkoManagementApiService extends BaseApiService {
     body: IkoTabCreateRequest
   ): Observable<TabDto> {
     return this.httpClient.post<TabDto>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`),
+      this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`),
       body
     );
   }
 
-  public updateIkoTabs(aggregateKey: string, body: IkoTabUpdateRequest[]): Observable<TabDto[]> {
+  public updateIkoTabs(aggregateKey: string, body: TabDto[]): Observable<TabDto[]> {
     return this.httpClient.put<TabDto[]>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/tab`),
+      this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/tab`),
+      body
+    );
+  }
+
+  public updateIkoTab(aggregateKey: string, tabKey: string, body: TabDto): Observable<TabDto> {
+    return this.httpClient.put<TabDto>(
+      this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`),
       body
     );
   }
 
   public deleteIkoTab(aggregateKey: string, tabKey: string): Observable<void> {
     return this.httpClient.delete<void>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`)
+      this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`)
     );
   }
 

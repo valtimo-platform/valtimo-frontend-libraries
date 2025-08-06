@@ -1883,6 +1883,8 @@
   },
   "ikoManagement": {
     "title": "Configuratie",
+    "ikoServer": "IKO Server",
+    "view": "Beeld",
     "list": "Lijst",
     "tabs": {"title": "Tabbladen"},
     "widgets": {"title": "Widgets"},
@@ -1903,7 +1905,7 @@
       "noResultsTitle": "Er zijn geen zoekvelden.",
       "noResultsDescription": "Klik hier om een zoekveld te configureren."
     },
-    "addApiConfig": "API configureren",
+    "addApiConfig": "IKO Server configureren",
     "titleTitle": "Titel",
     "titlePlaceholder": "Voer een titel in voor de API-configuratie",
     "keyTitle": "Sleutel",
@@ -1920,6 +1922,17 @@
     "sortingDisabled": "Sorteren uitgeschakeld",
     "defaultSortTitle": "Standaard sortering",
     "displayType": "Weergavetype",
-    "sortingEnabled": "Sorteren ingeschakeld"
+    "sortingEnabled": "Sorteren ingeschakeld",
+    "tabKey": "Sleutel",
+    "tabTitle": "Tabtitel",
+    "tabTitlePlaceholder": "Voer tabtitel in",
+    "tabType": "Tabtype",
+    "tabTypeTitle": "Tabtype",
+    "tabTypePlaceholder": "Voer tabtype in",
+    "addTab": "Tab toevoegen",
+    "editTab": "Tab bewerken",
+    "tabTypes": {
+      "widgets": "Widgets"
+    }
   }
 }

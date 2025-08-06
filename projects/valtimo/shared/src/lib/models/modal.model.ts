@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,3 +14,8 @@
  * limitations under the License.
  */
 
+type ModalMode = 'add' | 'edit' | 'delete';
+
+type ModalCloseEvent = 'close' | 'closeAndRefresh';
+
+export {ModalMode, ModalCloseEvent};
