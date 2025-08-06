@@ -26,9 +26,10 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@ang
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {ButtonModule, IconModule, IconService, InputModule} from 'carbon-components-angular';
-import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
 import {ModalMode} from '@valtimo/shared';
 import {Close16, Edit16} from '@carbon/icons';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-auto-key-input',
@@ -53,12 +54,15 @@ import {Close16, Edit16} from '@carbon/icons';
   ],
 })
 export class AutoKeyInputComponent implements ControlValueAccessor, OnDestroy {
-  @Input() public label: string = 'Key';
-  @Input() public placeholder: string = '';
+  @Input() public labelTranslationKey: string = 'Key';
+  @Input() public placeholderTranslationKey: string = '';
 
-  public readonly mode$ = new BehaviorSubject<ModalMode>('add');
+  private readonly _mode$ = new BehaviorSubject<ModalMode | null>(null);
   @Input() public set mode(value: ModalMode) {
-    this.mode$.next(value);
+    this._mode$.next(value);
+  }
+  public get mode$(): Observable<ModalMode> {
+    return this._mode$.pipe(filter(mode => !!mode));
   }
 
   private readonly _usedKeys$ = new BehaviorSubject<string[]>([]);

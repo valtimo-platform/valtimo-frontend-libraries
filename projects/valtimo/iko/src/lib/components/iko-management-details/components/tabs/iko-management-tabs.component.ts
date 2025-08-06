@@ -29,7 +29,7 @@ import {IkoManagementApiService} from '../../../../services';
 import {TabDto} from '../../../../models';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {IkoManagementTabDetailsModalComponent} from './details-modal/iko-management-tab-details-modal.component';
+import {IkoManagementTabDetailsModalComponent} from '../tab-detail-modal/iko-management-tab-details-modal.component';
 import {ModalCloseEvent, ModalMode} from '@valtimo/shared';
 
 @Component({
@@ -80,19 +80,19 @@ export class IkoManagementTabsComponent implements OnInit, OnDestroy {
   public readonly FIELDS: Array<ColumnConfig> = [
     {
       key: 'key',
-      label: 'listColumn.key',
+      label: 'ikoManagement.tabKey',
       viewType: 'string',
       sortable: false,
     },
     {
       key: 'title',
-      label: 'listColumn.title',
+      label: 'ikoManagement.tabTitle',
       viewType: 'string',
       sortable: false,
     },
     {
       key: 'type',
-      label: 'listColumn.type',
+      label: 'ikoManagement.tabType',
       viewType: 'string',
       sortable: false,
     },

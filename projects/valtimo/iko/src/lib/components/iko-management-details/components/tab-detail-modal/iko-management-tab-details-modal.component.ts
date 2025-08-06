@@ -32,10 +32,10 @@ import {
   runAfterCarbonModalClosed,
   SelectModule,
   ValtimoCdsModalDirective,
-} from '@valtimo/components';
-import {filter, map, Observable, Subscription, switchMap} from 'rxjs';
-import {TabDto} from '../../../../../models';
-import {IkoManagementApiService} from '../../../../../services';
+} from 'dist/valtimo/components';
+import {filter, map, Observable, switchMap} from 'rxjs';
+import {TabDto} from '../../../../models';
+import {IkoManagementApiService} from '../../../../services';
 import {
   ButtonModule,
   InputModule,
@@ -98,7 +98,7 @@ export class IkoManagementTabDetailsModalComponent {
   @Output() public readonly closeModalEvent = new EventEmitter<ModalCloseEvent>();
 
   public readonly form = this.formBuilder.group({
-    title: this.formBuilder.control(''),
+    title: this.formBuilder.control('', Validators.required),
     key: this.formBuilder.control('', [Validators.required]),
     type: this.formBuilder.control('', [Validators.required]),
   });
@@ -117,8 +117,6 @@ export class IkoManagementTabDetailsModalComponent {
     map(params => params?.key),
     filter(key => !!key)
   );
-
-  private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly ikoManagementApiService: IkoManagementApiService,

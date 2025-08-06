@@ -219,28 +219,28 @@ export class IkoManagementApiService extends BaseApiService {
     body: IkoTabCreateRequest
   ): Observable<TabDto> {
     return this.httpClient.post<TabDto>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`),
+      this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`),
       body
     );
   }
 
   public updateIkoTabs(aggregateKey: string, body: TabDto[]): Observable<TabDto[]> {
     return this.httpClient.put<TabDto[]>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/tab`),
+      this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/tab`),
       body
     );
   }
 
   public updateIkoTab(aggregateKey: string, tabKey: string, body: TabDto): Observable<TabDto> {
     return this.httpClient.put<TabDto>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`),
+      this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`),
       body
     );
   }
 
   public deleteIkoTab(aggregateKey: string, tabKey: string): Observable<void> {
     return this.httpClient.delete<void>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`)
+      this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`)
     );
   }
 
