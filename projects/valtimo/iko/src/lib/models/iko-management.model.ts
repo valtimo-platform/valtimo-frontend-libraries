@@ -169,6 +169,10 @@ interface IkoSearchFieldCreateRequest {
   visible?: boolean;
 }
 
+enum IkoTabType {
+  WIDGETS = 'widgets',
+}
+
 export {
   IkoDataAggregateCreateRequest,
   IkoDataAggregateListResponse,
@@ -192,4 +196,5 @@ export {
   TabDto,
   WidgetAction,
   WidgetDto,
+  IkoTabType,
 };

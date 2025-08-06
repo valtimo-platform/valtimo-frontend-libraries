@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,32 +14,9 @@
  * limitations under the License.
  */
 
-type ColumnDefaultSort = 'ASC' | 'DESC';
-
-interface DisplayType {
-  type: string;
-  displayTypeParameters: Record<string, any>;
+.iko-tab-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
 }
-
-interface ListColumnDto {
-  id?: string;
-  key: string;
-  title?: string;
-  path: string;
-  displayType: DisplayType;
-  sortable: boolean;
-  defaultSort?: ColumnDefaultSort;
-  order: number;
-}
-
-interface IkoListColumnRequest {
-  key: string;
-  title?: string;
-  path: string;
-  displayType?: DisplayType;
-  sortable?: boolean;
-  defaultSort?: ColumnDefaultSort;
-  order?: number;
-}
-
-export {IkoListColumnRequest, ListColumnDto, DisplayType, ColumnDefaultSort};

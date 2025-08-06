@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,32 +14,18 @@
  * limitations under the License.
  */
 
-type ColumnDefaultSort = 'ASC' | 'DESC';
+.edit-key-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 
-interface DisplayType {
-  type: string;
-  displayTypeParameters: Record<string, any>;
+  input[cdsText] {
+    flex: 1 1 auto;
+  }
+
+  cds-icon-button {
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
 }
-
-interface ListColumnDto {
-  id?: string;
-  key: string;
-  title?: string;
-  path: string;
-  displayType: DisplayType;
-  sortable: boolean;
-  defaultSort?: ColumnDefaultSort;
-  order: number;
-}
-
-interface IkoListColumnRequest {
-  key: string;
-  title?: string;
-  path: string;
-  displayType?: DisplayType;
-  sortable?: boolean;
-  defaultSort?: ColumnDefaultSort;
-  order?: number;
-}
-
-export {IkoListColumnRequest, ListColumnDto, DisplayType, ColumnDefaultSort};
