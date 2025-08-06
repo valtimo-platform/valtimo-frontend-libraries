@@ -51,16 +51,13 @@
     >
     </valtimo-auto-key-input>
 
-    <cds-label>
-      {{ 'ikoManagement.tabTypeTitle' | translate }}
-
-      <input
-        [invalid]="type.dirty && type.invalid"
-        formControlName="type"
-        cdsText
-        placeholder="{{ 'ikoManagement.tabTypePlaceholder' | translate }}"
-      />
-    </cds-label>
+    <v-select
+      [invalid]="type.dirty && type.invalid"
+      formControlName="type"
+      [items]="tabTypeSelectItems"
+      titleTranslationKey="ikoManagement.tabTypeTitle"
+      [appendInline]="false"
+    ></v-select>
   </form>
 
   <cds-modal-footer>

@@ -1894,6 +1894,9 @@
     "tabTypeTitle": "Tab type",
     "tabTypePlaceholder": "Enter tab type",
     "addTab": "Add tab",
-    "editTab": "Edit tab"
+    "editTab": "Edit tab",
+    "tabTypes": {
+      "widgets": "Widgets"
+    }
   }
 }

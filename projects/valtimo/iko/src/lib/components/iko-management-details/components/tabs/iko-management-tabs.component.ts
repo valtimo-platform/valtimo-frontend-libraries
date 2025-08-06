@@ -71,7 +71,7 @@ export class IkoManagementTabsComponent implements OnInit, OnDestroy {
     map(([tabs]) =>
       tabs.map(tab => ({
         ...tab,
-        type: this.translateService.instant(`tabType.${tab.type}`),
+        type: this.translateService.instant(`ikoManagement.tabTypes.${tab.type}`),
       }))
     ),
     tap(() => this.$disableInput.set(false))

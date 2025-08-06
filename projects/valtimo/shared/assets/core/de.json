@@ -1910,6 +1910,9 @@
     "tabTypeTitle": "Tabtyp",
     "tabTypePlaceholder": "Tabtyp eingeben",
     "addTab": "Tab hinzufügen",
-    "editTab": "Tab bearbeiten"
+    "editTab": "Tab bearbeiten",
+    "tabTypes": {
+      "widgets": "Widgets"
+    }
   }
 }

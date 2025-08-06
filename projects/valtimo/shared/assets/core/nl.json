@@ -1928,6 +1928,9 @@
     "tabTypeTitle": "Tabtype",
     "tabTypePlaceholder": "Voer tabtype in",
     "addTab": "Tab toevoegen",
-    "editTab": "Tab bewerken"
+    "editTab": "Tab bewerken",
+    "tabTypes": {
+      "widgets": "Widgets"
+    }
   }
 }

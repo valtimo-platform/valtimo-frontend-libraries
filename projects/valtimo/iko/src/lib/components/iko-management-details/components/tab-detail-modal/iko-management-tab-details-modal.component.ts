@@ -30,11 +30,12 @@ import {
   CarbonMultiInputModule,
   InputLabelModule,
   runAfterCarbonModalClosed,
+  SelectItem,
   SelectModule,
   ValtimoCdsModalDirective,
 } from 'dist/valtimo/components';
 import {filter, map, Observable, switchMap} from 'rxjs';
-import {TabDto} from '../../../../models';
+import {IkoTabType, TabDto} from '../../../../models';
 import {IkoManagementApiService} from '../../../../services';
 import {
   ButtonModule,
@@ -117,6 +118,13 @@ export class IkoManagementTabDetailsModalComponent {
     map(params => params?.key),
     filter(key => !!key)
   );
+
+  private readonly _TAB_TYPES: Array<IkoTabType> = [IkoTabType.WIDGETS];
+
+  public readonly tabTypeSelectItems: SelectItem[] = this._TAB_TYPES.map(tabType => ({
+    id: tabType,
+    translationKey: `ikoManagement.tabTypes.${tabType}`,
+  }));
 
   constructor(
     private readonly ikoManagementApiService: IkoManagementApiService,
