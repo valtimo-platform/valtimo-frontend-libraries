@@ -89,6 +89,7 @@ export class BreadcrumbService {
   }
 
   public setThirdBreadcrumb(breadcrumb: BreadcrumbItem): void {
+    console.log('set third', breadcrumb);
     this._manualThirdBreadcrumb$.next(breadcrumb);
   }
 

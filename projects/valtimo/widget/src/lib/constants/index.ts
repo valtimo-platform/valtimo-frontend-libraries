@@ -14,11 +14,4 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of widget
- */
-
-export * from './lib/components';
-export * from './lib/models';
-export * from './lib/interfaces';
-export * from './lib/constants';
+export * from './widget-management.constants';

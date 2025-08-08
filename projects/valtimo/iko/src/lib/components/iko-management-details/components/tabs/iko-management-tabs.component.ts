@@ -24,7 +24,7 @@ import {
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {BehaviorSubject, combineLatest, filter, Subscription, switchMap, tap} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {IkoManagementApiService} from '../../../../services';
 import {TabDto} from '../../../../models';
 import {toObservable} from '@angular/core/rxjs-interop';
@@ -115,7 +115,8 @@ export class IkoManagementTabsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly ikoManagementApiService: IkoManagementApiService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly router: Router
   ) {}
 
   public ngOnInit(): void {
@@ -139,7 +140,14 @@ export class IkoManagementTabsComponent implements OnInit, OnDestroy {
 
   public onRowClicked(event: {key: string}): void {
     const tabDto = this.$ikoTabDtos().find(column => column.key === event.key);
+
     if (!tabDto) return;
+
+    if (tabDto.type === 'widgets') {
+      this.router.navigate(['widget-details', tabDto.key], {relativeTo: this.route});
+      return;
+    }
+
     this.$selectedTab.set({...tabDto});
     this.$openModal.set(true);
     this.$modalMode.set('edit');

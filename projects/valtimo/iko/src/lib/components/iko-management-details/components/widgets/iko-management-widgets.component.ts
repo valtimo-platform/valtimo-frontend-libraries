@@ -15,13 +15,18 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {BreadcrumbService} from '@valtimo/components';
-import {WidgetManagementEditorComponent, BasicWidget} from '@valtimo/widget';
-import {combineLatest, map, Observable, switchMap, tap} from 'rxjs';
-import {IkoManagementParams, IkoRepositoryConfigResponse} from '../../../../models';
+import {
+  BasicWidget,
+  IWidgetManagementService,
+  WIDGET_MANAGEMENT_SERVICE,
+  WidgetManagementEditorComponent,
+} from '@valtimo/widget';
+import {combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
+import {IkoManagementParams, IkoRepositoryConfigResponse, TabDto} from '../../../../models';
 import {IkoManagementApiService, IkoWidgetManagementApiService} from '../../../../services';
 
 @Component({
@@ -29,7 +34,13 @@ import {IkoManagementApiService, IkoWidgetManagementApiService} from '../../../.
   styleUrl: './iko-management-widgets.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, WidgetManagementEditorComponent],
+  imports: [CommonModule, WidgetManagementEditorComponent, TranslateModule],
+  providers: [
+    {
+      provide: WIDGET_MANAGEMENT_SERVICE,
+      useClass: IkoWidgetManagementApiService,
+    },
+  ],
 })
 export class IkoManagementWidgetsComponent implements OnInit, OnDestroy {
   public readonly params$: Observable<IkoManagementParams> = this.route.params.pipe(
@@ -43,51 +54,69 @@ export class IkoManagementWidgetsComponent implements OnInit, OnDestroy {
     tap((params: IkoManagementParams) => this.ikoWidgetManagementApiService.initParams(params))
   );
 
-  public readonly widgets$: Observable<BasicWidget[]> = this.ikoWidgetManagementApiService
-    .getWidgetConfiguration()
-    // .pipe(tap(res => console.log({res})));
+  public readonly widgets$: Observable<BasicWidget[]> =
+    this.ikoWidgetManagementApiService.getWidgetConfiguration();
 
   private readonly _ikoRepositoryConfig$: Observable<IkoRepositoryConfigResponse> =
     this.params$.pipe(
-      switchMap((params: IkoManagementParams) =>
+      switchMap((params: Params) =>
         this.ikoManagementApiService.getIkoRepositoryConfig(params.apiKey)
       )
     );
+
+  private readonly _ikoTabConfig$: Observable<TabDto> = this.params$.pipe(
+    switchMap((params: Params) =>
+      this.ikoManagementApiService.getIkoTab(params.aggregateKey, params.widgetTabKey)
+    )
+  );
+
+  private readonly _subscriptions = new Subscription();
 
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
     private readonly ikoManagementApiService: IkoManagementApiService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
-    public readonly ikoWidgetManagementApiService: IkoWidgetManagementApiService
+    @Inject(WIDGET_MANAGEMENT_SERVICE)
+    private ikoWidgetManagementApiService: IWidgetManagementService<IkoManagementParams>
   ) {}
-
-  public ngOnDestroy(): void {
-    this.breadcrumbService.clearThirdBreadcrumb();
-    this.breadcrumbService.clearFourthBreadcrumb();
-  }
 
   public ngOnInit(): void {
     this.setBreadcrumbs();
   }
 
-  private setBreadcrumbs(): void {
-    combineLatest([
-      this._ikoRepositoryConfig$,
-      this.params$,
-      this.translateService.stream('key'),
-    ]).subscribe(([repositoryConfig, params]) => {
-      this.breadcrumbService.setThirdBreadcrumb({
-        route: [`/iko-management/${repositoryConfig.key}`],
-        content: repositoryConfig.title,
-        href: `/iko-management/${repositoryConfig.key}`,
-      });
+  public ngOnDestroy(): void {
+    this.breadcrumbService.clearThirdBreadcrumb();
+    this.breadcrumbService.clearFourthBreadcrumb();
+    this._subscriptions.unsubscribe();
+  }
 
-      this.breadcrumbService.setFourthBreadcrumb({
-        route: [`/iko-management/${repositoryConfig.key}/${params.aggregateKey}/${params.tabKey}`],
-        content: this.translateService.instant('ikoManagement.tabs.title'),
-        href: `/iko-management/${repositoryConfig.key}/${params.aggregateKey}/${params.tabKey}`,
-      });
-    });
+  private setBreadcrumbs(): void {
+    this._subscriptions.add(
+      combineLatest([
+        this._ikoTabConfig$,
+        this._ikoRepositoryConfig$,
+        this.ikoWidgetManagementApiService.params$,
+        this.translateService.stream('key'),
+      ])
+        .pipe(
+          tap(([tabConfig, repositoryConfig, params]) => {
+            this.breadcrumbService.setThirdBreadcrumb({
+              route: [`/iko-management/${repositoryConfig.key}`],
+              content: repositoryConfig.title,
+              href: `/iko-management/${repositoryConfig.key}`,
+            });
+
+            this.breadcrumbService.setFourthBreadcrumb({
+              route: [
+                `/iko-management/${repositoryConfig.key}/${params.aggregateKey}/${params.tabKey}`,
+              ],
+              content: tabConfig.title || params.widgetTabKey,
+              href: `/iko-management/${repositoryConfig.key}/${params.aggregateKey}/${params.tabKey}`,
+            });
+          })
+        )
+        .subscribe()
+    );
   }
 }

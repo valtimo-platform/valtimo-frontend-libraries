@@ -98,7 +98,6 @@ const routes: Routes = [
     component: IkoManagementWidgetsComponent,
     canActivate: [AuthGuardService],
     data: {
-      // customPageTitle: true,
       title: 'IKO Widget details',
       roles: [ROLE_ADMIN],
     },

@@ -228,7 +228,7 @@ export class IkoManagementApiService extends BaseApiService {
 
   public getIkoTab(aggregateKey: string, tabKey: string): Observable<TabDto> {
     return this.httpClient.get<TabDto>(
-      this.getApiUrl(`/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`)
+      this.getApiUrl(`/management/v1/iko-data-aggregate/${aggregateKey}/tab/${tabKey}`)
     );
   }
 

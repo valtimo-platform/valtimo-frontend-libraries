@@ -17,18 +17,23 @@
 import {HttpClient} from '@angular/common/http';
 import {BaseApiService, ConfigService} from '@valtimo/shared';
 import {BasicWidget, IWidgetManagementService} from '@valtimo/widget';
-import {BehaviorSubject, Observable, Subject, filter, of, switchMap, take, tap} from 'rxjs';
+import {BehaviorSubject, filter, Observable, switchMap} from 'rxjs';
 import {IkoManagementParams} from '../models';
 import {Injectable} from '@angular/core';
+import {isEqual} from 'lodash';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class IkoWidgetManagementApiService
   extends BaseApiService
   implements IWidgetManagementService<IkoManagementParams>
 {
-  public readonly params$ = new BehaviorSubject<IkoManagementParams | null>(null);
+  private readonly _params$ = new BehaviorSubject<IkoManagementParams | null>(null);
+  private get _params(): IkoManagementParams {
+    return this._params$.getValue();
+  }
+  public get params$(): Observable<IkoManagementParams> {
+    return this._params$.pipe(filter(params => !!params));
+  }
   public readonly valueResolverApi$ = new BehaviorSubject<string | null>('');
 
   constructor(
@@ -39,8 +44,8 @@ export class IkoWidgetManagementApiService
   }
 
   public initParams(serviceParams: IkoManagementParams): void {
-    console.log({serviceParams});
-    this.params$.next(serviceParams);
+    if (!isEqual(serviceParams, this._params)) this._params$.next(serviceParams);
+    console.log('initialized params', serviceParams);
   }
 
   public getWidgetConfiguration(): Observable<BasicWidget[]> {

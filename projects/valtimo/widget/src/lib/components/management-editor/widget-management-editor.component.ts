@@ -18,8 +18,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Inject,
   Input,
-  OnInit,
   Output,
   signal,
 } from '@angular/core';
@@ -34,11 +34,12 @@ import {
 } from '@valtimo/components';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {cloneDeep} from 'lodash';
-import {BehaviorSubject, combineLatest, filter, map, Observable, of, Subject, take} from 'rxjs';
+import {BehaviorSubject, combineLatest, filter, map, Observable, Subject, take} from 'rxjs';
 
 import {AVAILABLE_WIDGETS, BasicWidget, Widget, WidgetStyle, WidgetTypeTags} from '../../models';
 import {WidgetWizardService} from '../../services';
 import {WidgetManagementWizardComponent} from '../management-wizard/widget-management-wizard.component';
+import {WIDGET_MANAGEMENT_SERVICE} from '../../constants';
 import {IWidgetManagementService} from '../../interfaces';
 
 @Component({
@@ -60,33 +61,9 @@ import {IWidgetManagementService} from '../../interfaces';
 export class WidgetManagementEditorComponent {
   @Input() public set params(value: any) {
     if (!value) return;
-    combineLatest([this._serviceInit, of(value)])
-      .pipe(
-        filter(([serviceInit]) => !!serviceInit),
-        take(1)
-      )
-      .subscribe(([_, params]) => {
-        this.widgetManagementService.initParams(params);
-        console.log('params', this.widgetManagementService.params$.getValue());
-      });
+    this.widgetManagementService.initParams(value);
   }
-  private _serviceInit = new BehaviorSubject<boolean>(false);
-  private _widgetManagementService: IWidgetManagementService<any>;
-  @Input() public set widgetManagementService(value: IWidgetManagementService<any>) {
-    this._widgetManagementService = value;
-    console.log('service', value);
-    this._widgetManagementService
-      .getWidgetConfiguration()
-      .pipe(take(1))
-      .subscribe(res => {
-        console.log({res});
-        this._items$.next(res);
-      });
-  }
-  public get widgetManagementService(): IWidgetManagementService<any> {
-    this._serviceInit.next(true);
-    return this._widgetManagementService;
-  }
+
   // @Input() public params: CaseManagementParams;
   // @Input() public tabWidgetKey: string;
   // private _currentWidgetTab: CaseWidgetsRes;
@@ -154,7 +131,6 @@ export class WidgetManagementEditorComponent {
     this.translateService.stream('key'),
   ]).pipe(
     filter(([items]) => !!items),
-    // tap(([items]) => console.log({items})),
     map(([items]) =>
       items.map(item => ({
         ...item,
@@ -181,9 +157,13 @@ export class WidgetManagementEditorComponent {
   constructor(
     // private readonly keyGeneratorService: KeyGeneratorService,
     private readonly translateService: TranslateService,
-    private readonly widgetWizardService: WidgetWizardService
+    private readonly widgetWizardService: WidgetWizardService,
     // private readonly widgetTabManagementService: WidgetTabManagementService,
-  ) {}
+    @Inject(WIDGET_MANAGEMENT_SERVICE)
+    private widgetManagementService: IWidgetManagementService<any>
+  ) {
+    this.initWidgetItems();
+  }
 
   public editWidget(tabWidget: Widget): void {
     this.widgetWizardService.$widgetTitle.set(tabWidget.title);
@@ -199,7 +179,6 @@ export class WidgetManagementEditorComponent {
     this.widgetWizardService.$widgetKey.set(tabWidget.key);
     this.widgetWizardService.$widgetActions.set(tabWidget.actions);
     this.$isWizardOpen.set(true);
-    console.log('edit', this.widgetWizardService.$widgetsConfig());
   }
 
   public duplicateWidget(tabWidget: Widget): void {
@@ -255,7 +234,6 @@ export class WidgetManagementEditorComponent {
 
   public onItemsReordered(widgets: Widget[]): void {
     this.$dragAndDropDisabled.set(true);
-    console.log('reordered');
 
     // this.widgetTabManagementService
     //   .updateWidgets({
@@ -286,5 +264,14 @@ export class WidgetManagementEditorComponent {
       default:
         return '-';
     }
+  }
+
+  private initWidgetItems(): void {
+    this.widgetManagementService
+      .getWidgetConfiguration()
+      .pipe(take(1))
+      .subscribe(res => {
+        this._items$.next(res);
+      });
   }
 }

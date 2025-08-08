@@ -43,8 +43,8 @@ import {IKO_MANAGEMENT_TABS} from '../../constants';
   selector: 'valtimo-iko-management-details',
   standalone: true,
   templateUrl: './iko-management-details.component.html',
-  imports: [CommonModule, CarbonListModule, TabsModule, TranslateModule],
   styleUrl: './iko-management-details.component.scss',
+  imports: [CommonModule, CarbonListModule, TabsModule, TranslateModule],
 })
 export class IkoManagementDetailsComponent implements OnInit, OnDestroy {
   private readonly _dynamicContainerSubject$ = new BehaviorSubject<ViewContainerRef | null>(null);

@@ -15,6 +15,8 @@
  */
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {IkoWidgetManagementApiService} from '../../../../services';
+import {WIDGET_MANAGEMENT_SERVICE} from '@valtimo/widget';
 
 @Component({
   templateUrl: './iko-management-widget-details.component.html',
@@ -22,5 +24,11 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
+  providers: [
+    {
+      provide: WIDGET_MANAGEMENT_SERVICE,
+      useClass: IkoWidgetManagementApiService,
+    },
+  ],
 })
 export class IkoManagementWidgetDetailsComponent {}

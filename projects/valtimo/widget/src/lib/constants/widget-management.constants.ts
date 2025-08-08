@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-/*
- * Public API Surface of widget
- */
+import {InjectionToken} from '@angular/core';
+import {IWidgetManagementService} from '../interfaces';
 
-export * from './lib/components';
-export * from './lib/models';
-export * from './lib/interfaces';
-export * from './lib/constants';
+const WIDGET_MANAGEMENT_SERVICE = new InjectionToken<IWidgetManagementService<any>>(
+  'WIDGET_MANAGEMENT_SERVICE'
+);
+
+export {WIDGET_MANAGEMENT_SERVICE};

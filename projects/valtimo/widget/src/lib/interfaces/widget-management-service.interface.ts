@@ -17,7 +17,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {BasicWidget} from '../models';
 
 export interface IWidgetManagementService<T> {
-  params$: BehaviorSubject<T | null>;
+  params$: Observable<T | null>;
   valueResolverApi$: BehaviorSubject<string | null>;
   initParams(...params): void;
   getWidgetConfiguration(): Observable<BasicWidget[]>;
