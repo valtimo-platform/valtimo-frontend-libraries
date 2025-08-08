@@ -18,6 +18,7 @@
   *ngIf="{
     caseListColumn: translatedCaseListColumns$ | async,
     disableInput: disableInput$ | async,
+    enableExport: enableExport$ | async,
     downloadName: downloadName$ | async,
     downloadUrl: downloadUrl$ | async,
     hasEditPermissions: hasEditPermissions$ | async,
@@ -117,6 +118,7 @@
       isYesNo: isYesNo$ | async,
       showTagAmount: showTagAmount$ | async,
       params: params$ | async,
+      enableExport: enableExport$ | async,
     } as modalObs"
     [open]="modalObs.show"
     size="sm"
@@ -288,6 +290,19 @@
         <cds-dropdown-list [items]="(sortItems$ | async) || []"></cds-dropdown-list>
       </cds-dropdown>
     </cds-label>
+
+    <cds-toggle
+      formControlName="exportable"
+      data-testid="export-selector-toggle"
+      [label]="'listColumn.exportField' | translate"
+      [disabled]="!modalObs.enableExport"
+      [onText]="'listColumn.sortableYes' | translate"
+      [offText]="'listColumn.sortableNo' | translate"
+      [keyColumnTitle]="modalObs.isYesNo && ('viewTypeConverter.Yes' | translate)"
+      [valueColumnTitle]="modalObs.isYesNo && ('viewTypeConverter.No' | translate)"
+      [required]="false"
+      [size]="'sm'"
+    ></cds-toggle>
   </form>
 </ng-template>
 

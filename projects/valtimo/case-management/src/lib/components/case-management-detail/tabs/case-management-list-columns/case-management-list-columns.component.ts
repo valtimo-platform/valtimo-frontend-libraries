@@ -116,6 +116,12 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
       key: 'defaultSort',
       label: 'listColumn.defaultSort',
     },
+    {
+      viewType: 'boolean',
+      sortable: false,
+      key: 'exportable',
+      label: 'listColumn.exportField',
+    },
   ];
 
   public readonly disableInput$ = new BehaviorSubject<boolean>(false);
@@ -201,7 +207,17 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     }),
     enum: new FormControl([]),
     tagAmount: new FormControl(1),
+    exportable: new FormControl(false),
   });
+
+  public get enableExport$(): Observable<boolean> {
+    return this.formGroup.get('path').valueChanges.pipe(
+      map(pathValue => {
+        const pathMustStartWithCaseOrDoc = /^(case:|doc:)/;
+        return pathMustStartWithCaseOrDoc.test(pathValue);
+      })
+    );
+  }
 
   public readonly disableDefaultSort$ = combineLatest([
     this.currentModalType$,
@@ -490,6 +506,7 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
           defaultSort: sortItem ? {...sortItem} : {...sortItems[0]},
           ...(columnDateFormat && {dateFormat: columnDateFormat}),
           ...(tagAmount && {tagAmount: tagAmount}),
+          exportable: column?.exportable,
         });
 
         this.openModal('edit');
@@ -670,6 +687,7 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
             }),
         },
       },
+      exportable: formValue.exportable || false,
     };
   }
 }
