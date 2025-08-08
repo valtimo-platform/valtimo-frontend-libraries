@@ -101,7 +101,7 @@ export class IkoManagementTabsComponent implements OnInit, OnDestroy {
   public readonly ACTION_ITEMS: ActionItem[] = [
     {
       label: 'interface.edit',
-      callback: this.onRowClicked.bind(this),
+      callback: this.editTab.bind(this),
     },
     {
       label: 'interface.delete',
@@ -140,7 +140,6 @@ export class IkoManagementTabsComponent implements OnInit, OnDestroy {
 
   public onRowClicked(event: {key: string}): void {
     const tabDto = this.$ikoTabDtos().find(column => column.key === event.key);
-
     if (!tabDto) return;
 
     if (tabDto.type === 'widgets') {
@@ -148,6 +147,12 @@ export class IkoManagementTabsComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.editTab(event);
+  }
+
+  public editTab(event: {key: string}): void {
+    const tabDto = this.$ikoTabDtos().find(column => column.key === event.key);
+    if (!tabDto) return;
     this.$selectedTab.set({...tabDto});
     this.$openModal.set(true);
     this.$modalMode.set('edit');

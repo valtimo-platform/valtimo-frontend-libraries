@@ -45,7 +45,6 @@ export class IkoWidgetManagementApiService
 
   public initParams(serviceParams: IkoManagementParams): void {
     if (!isEqual(serviceParams, this._params)) this._params$.next(serviceParams);
-    console.log('initialized params', serviceParams);
   }
 
   public getWidgetConfiguration(): Observable<BasicWidget[]> {
