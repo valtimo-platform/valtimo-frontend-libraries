@@ -51,7 +51,6 @@
         *ngIf="activeTab() === $index"
         [isFieldWidget]="true"
         [columnData]="$selectedWidgetContent()?.[$index]"
-        [params]="params$ | async"
         [showHideWhenEmptyCheckbox]="true"
         (columnUpdateEvent)="onColumnUpdateEvent($event, $index)"
       ></valtimo-widget-management-fields-column>

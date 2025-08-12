@@ -19,6 +19,7 @@ import {BasicWidget, WidgetType} from './widget.model';
 import {WidgetManagementFieldsComponent} from '../components/management-content/fields/widget-management-fields.component';
 import {Type} from '@angular/core';
 import {IWidgetContentComponent} from '../interfaces';
+import { WidgetManagementTableComponent } from '../components/management-content/table/widget-management-table.component';
 
 // import {WidgetContentComponent} from './widget-content.model';
 // import {
@@ -85,14 +86,13 @@ const AVAILABLE_WIDGETS: WidgetTypeSelection[] = [
   //   // component: CaseManagementWidgetFormioComponent,
   //   component: {},
   // },
-  // {
-  //   titleKey: 'widgetTabManagement.types.table.title',
-  //   descriptionKey: 'widgetTabManagement.types.table.description',
-  //   illustrationUrl: 'valtimo-layout/img/widget-management/types/table.svg',
-  //   type: WidgetType.TABLE,
-  //   // component: CaseManagementWidgetTableComponent,
-  //   component: {},
-  // },
+  {
+    titleKey: 'widgetTabManagement.types.table.title',
+    descriptionKey: 'widgetTabManagement.types.table.description',
+    illustrationUrl: 'valtimo-layout/img/widget-management/types/table.svg',
+    type: WidgetType.TABLE,
+    component: WidgetManagementTableComponent,
+  },
   // {
   //   titleKey: 'widgetTabManagement.types.collection.title',
   //   descriptionKey: 'widgetTabManagement.types.collection.description',

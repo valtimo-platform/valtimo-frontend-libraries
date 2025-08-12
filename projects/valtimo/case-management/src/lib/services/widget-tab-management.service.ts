@@ -40,13 +40,13 @@ export class WidgetTabManagementService implements IWidgetManagementService<any>
   initParams(...params: any[]): void {
     throw new Error('Method not implemented.');
   }
-  deleteWidget?(widget: BasicWidget): Observable<void> {
+  deleteWidget(widget: BasicWidget): Observable<void> {
     throw new Error('Method not implemented.');
   }
-  updateWidget?(widget: BasicWidget): Observable<BasicWidget> {
+  updateWidget(widget: BasicWidget): Observable<BasicWidget> {
     throw new Error('Method not implemented.');
   }
-  createWidget?(widget: BasicWidget): Observable<BasicWidget> {
+  createWidget(widget: BasicWidget): Observable<BasicWidget> {
     throw new Error('Method not implemented.');
   }
 

@@ -93,7 +93,6 @@ export class WidgetManagementFieldsComponent
     )
   );
   public readonly activeTab = signal<number>(0);
-  public readonly params$ = getCaseManagementRouteParams(this.route);
 
   private readonly _subscriptions = new Subscription();
   private readonly _contentValid = signal<boolean>(false);

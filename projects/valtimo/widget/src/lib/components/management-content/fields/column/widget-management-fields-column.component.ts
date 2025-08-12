@@ -97,7 +97,6 @@ export class WidgetManagementFieldsColumnComponent implements OnInit, OnDestroy 
   @HostBinding('class') public readonly class = 'valtimo-widget-management-field-column';
   @Input({required: true}) public columnData: FieldsWidgetValue[];
   @Input() public addTranslateKey = 'widgetTabManagement.content.fields.add';
-  // @Input() public params?: CaseManagementParams;
   @Input() public fieldWidthDropdown?: TemplateRef<Dropdown>;
   @Input() public selectedCollection?: ValuePathItem;
   @Input() public showHideWhenEmptyCheckbox = false;

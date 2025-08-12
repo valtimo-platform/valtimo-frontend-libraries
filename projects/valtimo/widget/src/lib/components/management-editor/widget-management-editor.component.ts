@@ -185,7 +185,7 @@ export class WidgetManagementEditorComponent {
 
   public onDeleteConfirm(widget: BasicWidget): void {
     this.widgetManagementService
-      .deleteWidget(widget)
+      .deleteWidget?.(widget)
       .pipe(take(1))
       .subscribe(() => this._refresh$.next(null));
   }
@@ -203,7 +203,6 @@ export class WidgetManagementEditorComponent {
     )
       .pipe(take(1))
       .subscribe(() => {
-        console.log('here');
         this._refresh$.next(null);
       });
   }

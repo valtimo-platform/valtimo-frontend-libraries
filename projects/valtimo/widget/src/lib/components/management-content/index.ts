@@ -1,0 +1,1 @@
+export * from './fields/widget-management-fields.component';
