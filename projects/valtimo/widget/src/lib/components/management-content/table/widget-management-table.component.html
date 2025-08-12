@@ -17,7 +17,7 @@
 <form
   *ngIf="theme$ | async as theme"
   [formGroup]="form"
-  class="valtimo-case-management-widget-table__form"
+  class="valtimo-widget-management-table__form"
 >
   <cds-text-label [attr.data-carbon-theme]="theme">
     <v-input-label
@@ -49,7 +49,7 @@
     />
   </cds-text-label>
 
-  <div class="valtimo-case-management-widget-table__path-selector">
+  <div class="valtimo-widget-management-table__path-selector">
     <v-input-label
       [title]="'widgetTabManagement.content.table.collection' | translate"
       [tooltip]="'widgetTabManagement.content.table.collectionTooltip' | translate"
@@ -80,7 +80,7 @@
 <!-- For projecting elements such as process selector in case widgets -->
 <ng-content></ng-content>
 
-<span class="valtimo-case-management-widget-table__subtitle">
+<span class="valtimo-widget-management-table__subtitle">
   {{ 'widgetTabManagement.content.table.columns' | translate }}
 </span>
 
@@ -92,8 +92,8 @@
 <!-- TODO: Implement to work for case as well -->
 <!-- [selectedCollection]="selectedCollection$ | async" -->
 
-<section class="valtimo-case-management-widget-table__toggle">
-  <span class="valtimo-case-management-widget-table__subtitle">
+<section class="valtimo-widget-management-table__toggle">
+  <span class="valtimo-widget-management-table__subtitle">
     {{ 'widgetTabManagement.content.table.options' | translate }}
   </span>
 

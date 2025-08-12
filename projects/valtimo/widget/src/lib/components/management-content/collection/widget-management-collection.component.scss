@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.valtimo-widget-management-table {
+
+.valtimo-widget-management-collection {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -31,14 +32,40 @@
     line-height: 22px;
   }
 
-  &__toggle {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
   &__path-selector {
     display: flex;
     flex-direction: column;
+  }
+
+  &__card {
+    flex-direction: column;
+    display: flex;
+    gap: 16px;
+
+    &-title {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      align-items: flex-end;
+    }
+
+    &-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+  }
+
+  &__enum {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    &-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      align-items: flex-end;
+      gap: 16px;
+    }
   }
 }

@@ -16,10 +16,13 @@
 // import {CaseWidgetType} from '@valtimo/case';
 
 import {BasicWidget, WidgetType} from './widget.model';
-import {WidgetManagementFieldsComponent} from '../components/management-content/fields/widget-management-fields.component';
 import {Type} from '@angular/core';
 import {IWidgetContentComponent} from '../interfaces';
-import { WidgetManagementTableComponent } from '../components/management-content/table/widget-management-table.component';
+import {
+  WidgetManagementCollectionComponent,
+  WidgetManagementFieldsComponent,
+  WidgetManagementTableComponent,
+} from '../components/management-content';
 
 // import {WidgetContentComponent} from './widget-content.model';
 // import {
@@ -93,14 +96,13 @@ const AVAILABLE_WIDGETS: WidgetTypeSelection[] = [
     type: WidgetType.TABLE,
     component: WidgetManagementTableComponent,
   },
-  // {
-  //   titleKey: 'widgetTabManagement.types.collection.title',
-  //   descriptionKey: 'widgetTabManagement.types.collection.description',
-  //   illustrationUrl: 'valtimo-layout/img/widget-management/types/collection.svg',
-  //   type: WidgetType.COLLECTION,
-  //   // component: CaseManagementWidgetCollectionComponent,
-  //   component: {},
-  // },
+  {
+    titleKey: 'widgetTabManagement.types.collection.title',
+    descriptionKey: 'widgetTabManagement.types.collection.description',
+    illustrationUrl: 'valtimo-layout/img/widget-management/types/collection.svg',
+    type: WidgetType.COLLECTION,
+    component: WidgetManagementCollectionComponent,
+  },
 ];
 
 const WIDGET_WIDTH_LABELS: {[key: number]: string} = {

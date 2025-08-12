@@ -64,7 +64,7 @@ import {FieldsWidgetValue, WidgetContentProperties, WidgetTableContent} from '..
   ],
 })
 export class WidgetManagementTableComponent implements IWidgetContentComponent, OnInit, OnDestroy {
-  @HostBinding('class') public readonly class = 'valtimo-case-management-widget-table';
+  @HostBinding('class') public readonly class = 'valtimo-widget-management-table';
   @Output() public readonly changeValidEvent = new EventEmitter<boolean>();
 
   public readonly form: FormGroup = this.fb.group({
