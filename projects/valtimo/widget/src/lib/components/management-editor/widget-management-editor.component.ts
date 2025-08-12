@@ -118,7 +118,7 @@ export class WidgetManagementEditorComponent {
   ];
 
   private readonly _refresh$ = new BehaviorSubject<null>(null);
-  public readonly items$: Observable<CarbonListItem[]> = this._refresh$.pipe(
+  public readonly widgets$: Observable<CarbonListItem[]> = this._refresh$.pipe(
     switchMap(() =>
       combineLatest([
         this.widgetManagementService.getWidgetConfiguration(),

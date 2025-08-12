@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-export * from './fields/widget-management-fields.component';
-export * from './table/widget-management-table.component';
-export * from './collection/widget-management-collection.component';
-export * from './custom/widget-management-custom.component';
+import {InjectionToken} from '@angular/core';
+import {CustomWidgetConfig} from '../models';
+
+const CUSTOM_WIDGET_TOKEN = new InjectionToken<CustomWidgetConfig>(
+  'Specify a component to display per configured custom widget component key.'
+);
+
+export {CUSTOM_WIDGET_TOKEN};

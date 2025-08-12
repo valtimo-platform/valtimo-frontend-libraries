@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 // import {CaseWidgetType} from '@valtimo/case';
-
-import {BasicWidget, WidgetType} from './widget.model';
 import {Type} from '@angular/core';
-import {IWidgetContentComponent} from '../interfaces';
+
 import {
   WidgetManagementCollectionComponent,
+  WidgetManagementCustomComponent,
   WidgetManagementFieldsComponent,
   WidgetManagementTableComponent,
 } from '../components/management-content';
-
-// import {WidgetContentComponent} from './widget-content.model';
-// import {
-//   CaseManagementWidgetCollectionComponent,
-//   CaseManagementWidgetCustomComponent,
-//   CaseManagementWidgetFieldsComponent,
-//   CaseManagementWidgetFormioComponent,
-//   CaseManagementWidgetTableComponent,
-// } from '../components/case-management-detail/tabs/case-management-tabs/widget-tab/case-management-widget-configurators';
+import {IWidgetContentComponent} from '../interfaces';
+import {BasicWidget, WidgetType} from './widget.model';
 
 enum WidgetWizardStep {
   TYPE,
@@ -62,7 +54,6 @@ interface WidgetTypeSelection {
   illustrationUrl: string;
   type: WidgetType;
   component: Type<IWidgetContentComponent>;
-  // component: any;
 }
 
 const AVAILABLE_WIDGETS: WidgetTypeSelection[] = [
@@ -73,22 +64,13 @@ const AVAILABLE_WIDGETS: WidgetTypeSelection[] = [
     type: WidgetType.FIELDS,
     component: WidgetManagementFieldsComponent,
   },
-  // {
-  //   titleKey: 'widgetTabManagement.types.custom.title',
-  //   descriptionKey: 'widgetTabManagement.types.custom.description',
-  //   illustrationUrl: 'valtimo-layout/img/widget-management/types/angular.svg',
-  //   type: WidgetType.CUSTOM,
-  //   // component: CaseManagementWidgetCustomComponent,
-  //   component: {},
-  // },
-  // {
-  //   titleKey: 'widgetTabManagement.types.formio.title',
-  //   descriptionKey: 'widgetTabManagement.types.formio.description',
-  //   illustrationUrl: 'valtimo-layout/img/widget-management/types/formio.svg',
-  //   type: WidgetType.FORMIO,
-  //   // component: CaseManagementWidgetFormioComponent,
-  //   component: {},
-  // },
+  {
+    titleKey: 'widgetTabManagement.types.custom.title',
+    descriptionKey: 'widgetTabManagement.types.custom.description',
+    illustrationUrl: 'valtimo-layout/img/widget-management/types/angular.svg',
+    type: WidgetType.CUSTOM,
+    component: WidgetManagementCustomComponent,
+  },
   {
     titleKey: 'widgetTabManagement.types.table.title',
     descriptionKey: 'widgetTabManagement.types.table.description',
