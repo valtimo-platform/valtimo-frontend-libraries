@@ -34,13 +34,20 @@ import {
 } from '@valtimo/components';
 import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
 import {cloneDeep} from 'lodash';
-import {BehaviorSubject, combineLatest, filter, map, Observable, Subject, take} from 'rxjs';
-
-import {AVAILABLE_WIDGETS, BasicWidget, Widget, WidgetStyle, WidgetTypeTags} from '../../models';
-import {WidgetWizardService} from '../../services';
-import {WidgetManagementWizardComponent} from '../management-wizard/widget-management-wizard.component';
+import {BehaviorSubject, combineLatest, filter, map, Observable, switchMap, take, tap} from 'rxjs';
 import {WIDGET_MANAGEMENT_SERVICE} from '../../constants';
 import {IWidgetManagementService} from '../../interfaces';
+import {
+  AVAILABLE_WIDGETS,
+  BasicWidget,
+  Widget,
+  WidgetStyle,
+  WidgetTypeTags,
+  WidgetWizardCloseEvent,
+  WidgetWizardCloseEventType,
+} from '../../models';
+import {WidgetWizardService} from '../../services';
+import {WidgetManagementWizardComponent} from '../management-wizard/widget-management-wizard.component';
 
 @Component({
   selector: 'valtimo-widget-management-editor',
@@ -63,21 +70,6 @@ export class WidgetManagementEditorComponent {
     if (!value) return;
     this.widgetManagementService.initParams(value);
   }
-
-  // @Input() public params: CaseManagementParams;
-  // @Input() public tabWidgetKey: string;
-  // private _currentWidgetTab: CaseWidgetsRes;
-  // @Input() public set currentWidgetTab(value: CaseWidgetsRes) {
-  //   if (!value) return;
-
-  //   this._currentWidgetTab = value;
-  //   this._items$.next(value?.widgets);
-  //   this._usedKeys = value?.widgets.map(widget => widget.key);
-  //   this.$dragAndDropDisabled.set(false);
-  // }
-  // public get currentWidgetTab(): CaseWidgetsRes {
-  //   return this._currentWidgetTab;
-  // }
 
   @Output() public readonly changeSaved = new EventEmitter();
 
@@ -125,14 +117,20 @@ export class WidgetManagementEditorComponent {
     },
   ];
 
-  private readonly _items$ = new BehaviorSubject<CarbonListItem[]>([]);
-  public readonly items$: Observable<CarbonListItem[]> = combineLatest([
-    this._items$,
-    this.translateService.stream('key'),
-  ]).pipe(
-    filter(([items]) => !!items),
-    map(([items]) =>
-      items.map(item => ({
+  private readonly _refresh$ = new BehaviorSubject<null>(null);
+  public readonly items$: Observable<CarbonListItem[]> = this._refresh$.pipe(
+    switchMap(() =>
+      combineLatest([
+        this.widgetManagementService.getWidgetConfiguration(),
+        this.translateService.stream('key'),
+      ])
+    ),
+    filter(([widgets]) => !!widgets),
+    tap(([widgets]) =>
+      this.widgetWizardService.$usedWidgetKeys.set(widgets.map((widget: BasicWidget) => widget.key))
+    ),
+    map(([widgets]) =>
+      widgets.map(item => ({
         ...item,
         widthTranslation: this.translateService.instant(this.getWidthTranslationKey(item.width)),
         tags: [
@@ -148,22 +146,16 @@ export class WidgetManagementEditorComponent {
   public readonly $isWizardOpen = signal<boolean>(false);
   public readonly $isEditMode = this.widgetWizardService.$editMode;
   public readonly deleteModalOpen$ = new BehaviorSubject<boolean>(false);
-  public readonly deleteRowKey$ = new Subject<number>();
+  public readonly $deleteWidget = signal<BasicWidget | null>(null);
 
   public readonly $dragAndDropDisabled = signal(false);
 
-  private _usedKeys: string[];
-
   constructor(
-    // private readonly keyGeneratorService: KeyGeneratorService,
     private readonly translateService: TranslateService,
     private readonly widgetWizardService: WidgetWizardService,
-    // private readonly widgetTabManagementService: WidgetTabManagementService,
     @Inject(WIDGET_MANAGEMENT_SERVICE)
     private widgetManagementService: IWidgetManagementService<any>
-  ) {
-    this.initWidgetItems();
-  }
+  ) {}
 
   public editWidget(tabWidget: Widget): void {
     this.widgetWizardService.$widgetTitle.set(tabWidget.title);
@@ -191,63 +183,41 @@ export class WidgetManagementEditorComponent {
     this.$isWizardOpen.set(true);
   }
 
-  public onDeleteConfirm(widgetKey: string): void {
-    // this.widgetTabManagementService
-    //   .updateWidgets({
-    //     ...this.currentWidgetTab,
-    //     widgets: this.currentWidgetTab.widgets.filter(widget => widget.key !== widgetKey),
-    //   })
-    //   .pipe(take(1))
-    //   .subscribe(() => {
-    //     this.changeSaved.emit();
-    //   });
+  public onDeleteConfirm(widget: BasicWidget): void {
+    this.widgetManagementService
+      .deleteWidget(widget)
+      .pipe(take(1))
+      .subscribe(() => this._refresh$.next(null));
   }
 
-  public onCloseEvent(widgetResult: BasicWidget, existingWidgets: Widget[]): void {
+  public onCloseEvent(event: WidgetWizardCloseEvent): void {
     this.$isWizardOpen.set(false);
     this.widgetWizardService.resetWizard();
+    const {type, widget} = event;
 
-    if (!widgetResult) return;
+    if (!widget || type === WidgetWizardCloseEventType.CANCEL) return;
 
-    // this.widgetTabManagementService
-    //   .updateWidgets({
-    //     caseDefinitionKey: this.params.caseDefinitionKey,
-    //     caseDefinitionVersionTag: this.params.caseDefinitionVersionTag,
-    //     key: this.tabWidgetKey,
-    //     widgets: !!widgetResult.key
-    //       ? existingWidgets.map((widget: BasicCaseWidget) =>
-    //           widget.key === widgetResult.key ? widgetResult : widget
-    //         )
-    //       : [
-    //           ...existingWidgets,
-    //           {
-    //             ...widgetResult,
-    //             key: this.keyGeneratorService.getUniqueKey(widgetResult.title, this._usedKeys),
-    //           },
-    //         ],
-    //   })
-    //   .pipe(take(1))
-    //   .subscribe(() => {
-    //     this.changeSaved.emit();
-    //   });
+    (type === WidgetWizardCloseEventType.CREATE
+      ? this.widgetManagementService.createWidget(widget)
+      : this.widgetManagementService.updateWidget(widget)
+    )
+      .pipe(take(1))
+      .subscribe(() => {
+        console.log('here');
+        this._refresh$.next(null);
+      });
   }
 
   public onItemsReordered(widgets: Widget[]): void {
     this.$dragAndDropDisabled.set(true);
-
-    // this.widgetTabManagementService
-    //   .updateWidgets({
-    //     ...this.currentWidgetTab,
-    //     widgets,
-    //   })
-    //   .pipe(take(1))
-    //   .subscribe(() => {
-    //     this.changeSaved.emit();
-    //   });
+    this.widgetManagementService
+      .updateWidgetConfiguration(widgets)
+      .pipe(take(1))
+      .subscribe(() => this.$dragAndDropDisabled.set(false));
   }
 
-  private deleteWidget(tabWidget: any): void {
-    this.deleteRowKey$.next(tabWidget.key);
+  private deleteWidget(tabWidget: BasicWidget): void {
+    this.$deleteWidget.set(tabWidget);
     this.deleteModalOpen$.next(true);
   }
 
@@ -264,14 +234,5 @@ export class WidgetManagementEditorComponent {
       default:
         return '-';
     }
-  }
-
-  private initWidgetItems(): void {
-    this.widgetManagementService
-      .getWidgetConfiguration()
-      .pipe(take(1))
-      .subscribe(res => {
-        this._items$.next(res);
-      });
   }
 }

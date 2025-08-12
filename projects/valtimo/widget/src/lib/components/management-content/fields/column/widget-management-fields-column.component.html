@@ -75,18 +75,26 @@
               >
               </v-input-label>
 
-              <valtimo-value-path-selector
+              <input
+                cdsText
+                [attr.data-carbon-theme]="inputTheme"
+                [placeholder]="'valuePathSelector.placeholder' | translate"
+                type="text"
+                formControlName="content"
+              />
+              <!-- TODO: Implement when selector is up and parameterise -->
+              <!-- <valtimo-value-path-selector
                 formControlName="content"
                 [caseDefinitionKey]="params?.caseDefinitionKey"
                 [caseDefinitionVersionTag]="params?.caseDefinitionVersionTag"
                 [parentItem]="selectedCollection"
-              ></valtimo-value-path-selector>
+              ></valtimo-value-path-selector> -->
             </div>
           </div>
 
           <div class="valtimo-widget-management-field-column__options">
             @switch (formRow.get('type').value.id) {
-              @case (CaseWidgetDisplayTypeKey.CURRENCY) {
+              @case (WidgetDisplayTypeKey.CURRENCY) {
                 <cds-text-label>
                   <v-input-label
                     [title]="'widgetTabManagement.content.fields.currencyCode' | translate"
@@ -144,7 +152,7 @@
                   />
                 </cds-text-label>
               }
-              @case (CaseWidgetDisplayTypeKey.DATE) {
+              @case (WidgetDisplayTypeKey.DATE) {
                 <cds-text-label>
                   <v-input-label
                     [title]="'widgetTabManagement.content.fields.format' | translate"
@@ -162,7 +170,7 @@
                   />
                 </cds-text-label>
               }
-              @case (CaseWidgetDisplayTypeKey.DATE_TIME) {
+              @case (WidgetDisplayTypeKey.DATE_TIME) {
                 <cds-text-label>
                   <v-input-label
                     [title]="'widgetTabManagement.content.fields.format' | translate"
@@ -182,11 +190,8 @@
                   />
                 </cds-text-label>
               }
-              @case (CaseWidgetDisplayTypeKey.ENUM) {
-                <div
-                  class="valtimo-widget-management-field-column__enum"
-                  formArrayName="values"
-                >
+              @case (WidgetDisplayTypeKey.ENUM) {
+                <div class="valtimo-widget-management-field-column__enum" formArrayName="values">
                   @for (rowValue of formRow.get('values')?.controls; track $index) {
                     <form
                       [formGroup]="rowValue"
@@ -253,7 +258,7 @@
                   </button>
                 </div>
               }
-              @case (CaseWidgetDisplayTypeKey.NUMBER) {
+              @case (WidgetDisplayTypeKey.NUMBER) {
                 <cds-text-label>
                   <v-input-label
                     [title]="'widgetTabManagement.content.fields.digitsInfo' | translate"
@@ -277,7 +282,7 @@
                   />
                 </cds-text-label>
               }
-              @case (CaseWidgetDisplayTypeKey.PERCENT) {
+              @case (WidgetDisplayTypeKey.PERCENT) {
                 <cds-text-label>
                   <v-input-label
                     [title]="'widgetTabManagement.content.fields.digitsInfo' | translate"
@@ -304,9 +309,7 @@
             }
 
             <cds-text-label
-              *ngIf="
-                formRow.get('type').value.id === CaseWidgetDisplayTypeKey.TEXT && $isFieldWidget
-              "
+              *ngIf="formRow.get('type').value.id === WidgetDisplayTypeKey.TEXT && $isFieldWidget()"
             >
               <v-input-label
                 [title]="'widgetTabManagement.content.fields.ellipsisCharacterLimit' | translate"

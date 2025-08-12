@@ -15,7 +15,7 @@
  */
 // import {CaseWidgetType} from '@valtimo/case';
 
-import {WidgetType} from './widget.model';
+import {BasicWidget, WidgetType} from './widget.model';
 import {WidgetManagementFieldsComponent} from '../components/management-content/fields/widget-management-fields.component';
 import {Type} from '@angular/core';
 import {IWidgetContentComponent} from '../interfaces';
@@ -36,9 +36,20 @@ enum WidgetWizardStep {
   CONTENT,
 }
 
+enum WidgetWizardCloseEventType {
+  CANCEL,
+  CREATE,
+  EDIT,
+}
+
 enum WidgetStyle {
   DEFAULT = 'default',
   HIGH_CONTRAST = 'high-contrast',
+}
+
+interface WidgetWizardCloseEvent {
+  type: WidgetWizardCloseEventType;
+  widget: BasicWidget | null;
 }
 
 interface WidgetTypeSelection {
@@ -111,4 +122,6 @@ export {
   WidgetStyle,
   WIDGET_WIDTH_LABELS,
   WIDGET_STYLE_LABELS,
+  WidgetWizardCloseEventType,
+  WidgetWizardCloseEvent,
 };

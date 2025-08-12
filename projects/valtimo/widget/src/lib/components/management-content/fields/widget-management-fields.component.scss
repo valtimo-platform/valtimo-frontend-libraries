@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-.valtimo-case-management-widget-field {
+.cds--tab-content {
+  padding: 0 !important;
+}
+
+.valtimo-widget-management-fields {
   display: flex;
   flex-direction: column;
 

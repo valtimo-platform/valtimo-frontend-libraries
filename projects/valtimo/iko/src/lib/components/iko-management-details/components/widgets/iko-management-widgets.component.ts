@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
@@ -101,6 +100,8 @@ export class IkoManagementWidgetsComponent implements OnInit, OnDestroy {
       ])
         .pipe(
           tap(([tabConfig, repositoryConfig, params]) => {
+            if (!params) return;
+
             this.breadcrumbService.setThirdBreadcrumb({
               route: [`/iko-management/${repositoryConfig.key}`],
               content: repositoryConfig.title,
@@ -111,7 +112,7 @@ export class IkoManagementWidgetsComponent implements OnInit, OnDestroy {
               route: [
                 `/iko-management/${repositoryConfig.key}/${params.aggregateKey}/${params.tabKey}`,
               ],
-              content: tabConfig.title || params.widgetTabKey,
+              content: tabConfig.title || params.widgetTabKey || '',
               href: `/iko-management/${repositoryConfig.key}/${params.aggregateKey}/${params.tabKey}`,
             });
           })

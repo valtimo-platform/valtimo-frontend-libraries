@@ -125,7 +125,7 @@ export class WidgetManagementFieldsColumnComponent implements OnInit, OnDestroy 
     return this.widgetFieldsService.getDisplayItemsSelected(row);
   }
 
-  public readonly CaseWidgetDisplayTypeKey = WidgetDisplayTypeKey;
+  public readonly WidgetDisplayTypeKey = WidgetDisplayTypeKey;
   public readonly $widgetType: Signal<WidgetType> = computed(
     () => this.widgetWizardService.$selectedWidget()?.type ?? WidgetType.FIELDS
   );

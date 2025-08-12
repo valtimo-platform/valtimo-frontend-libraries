@@ -27,10 +27,16 @@ import {
 } from '@angular/core';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CARBON_CONSTANTS} from '@valtimo/components';
+import {CARBON_CONSTANTS, KeyGeneratorService} from '@valtimo/components';
 import {ButtonModule, ModalModule, ProgressIndicatorModule, Step} from 'carbon-components-angular';
 import {combineLatest, map, Observable} from 'rxjs';
-import {WIDGET_STYLE_LABELS, WIDGET_WIDTH_LABELS, WidgetWizardStep} from '../../models';
+import {
+  WIDGET_STYLE_LABELS,
+  WIDGET_WIDTH_LABELS,
+  WidgetWizardCloseEvent,
+  WidgetWizardCloseEventType,
+  WidgetWizardStep,
+} from '../../models';
 import {WidgetWizardService} from '../../services';
 import {WIDGET_STEPS} from './steps';
 
@@ -62,7 +68,7 @@ export class WidgetManagementWizardComponent {
   public get editMode(): boolean {
     return this._editMode;
   }
-  @Output() public closeEvent = new EventEmitter<any>();
+  @Output() public closeEvent = new EventEmitter<WidgetWizardCloseEvent>();
 
   public readonly WidgetWizardSteps = WidgetWizardStep;
   private readonly _secondaryLabels = computed(() => {
@@ -143,6 +149,7 @@ export class WidgetManagementWizardComponent {
   });
 
   constructor(
+    private readonly keyGeneratorService: KeyGeneratorService,
     private readonly translateService: TranslateService,
     private readonly widgetWizardService: WidgetWizardService
   ) {}
@@ -153,7 +160,18 @@ export class WidgetManagementWizardComponent {
 
   public onNextButtonClick(): void {
     if (this.$currentStep() === WidgetWizardStep.CONTENT) {
-      this.closeEvent.emit(this.widgetWizardService.$widgetsConfig());
+      if (!this.editMode && !this.widgetWizardService.$widgetKey())
+        this.widgetWizardService.$widgetKey.set(
+          this.keyGeneratorService.getUniqueKey(
+            this.widgetWizardService.$widgetTitle() ?? '',
+            this.widgetWizardService.$usedWidgetKeys()
+          )
+        );
+
+      this.closeEvent.emit({
+        type: this.editMode ? WidgetWizardCloseEventType.EDIT : WidgetWizardCloseEventType.CREATE,
+        widget: this.widgetWizardService.$widgetsConfig(),
+      });
       this.resetWizard();
       return;
     }
@@ -166,7 +184,7 @@ export class WidgetManagementWizardComponent {
   }
 
   public onClose(): void {
-    this.closeEvent.emit(null);
+    this.closeEvent.emit({type: WidgetWizardCloseEventType.CANCEL, widget: null});
     this.resetWizard();
   }
 

@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {BaseApiService, ConfigService} from '@valtimo/shared';
 import {BasicWidget, IWidgetManagementService} from '@valtimo/widget';
 import {BehaviorSubject, filter, Observable, switchMap} from 'rxjs';
 import {IkoManagementParams} from '../models';
-import {Injectable} from '@angular/core';
 import {isEqual} from 'lodash';
 
 @Injectable()
@@ -66,7 +65,7 @@ export class IkoWidgetManagementApiService
       switchMap((params: IkoManagementParams | null) =>
         this.httpClient.put<BasicWidget[]>(
           this.getApiUrl(
-            `/v1/iko-data-aggregate/${params?.aggregateKey}/tab/${params?.widgetTabKey}/widget`
+            `management/v1/iko-data-aggregate/${params?.aggregateKey}/tab/${params?.widgetTabKey}/widget`
           ),
           widget
         )
@@ -80,7 +79,7 @@ export class IkoWidgetManagementApiService
       switchMap((params: IkoManagementParams | null) =>
         this.httpClient.delete<void>(
           this.getApiUrl(
-            `/v1/iko-data-aggregate/${params?.aggregateKey}/tab/${params?.tabKey}/widget/${widget.key}`
+            `management/v1/iko-data-aggregate/${params?.aggregateKey}/tab/${params?.widgetTabKey}/widget/${widget.key}`
           )
         )
       )
@@ -93,7 +92,7 @@ export class IkoWidgetManagementApiService
       switchMap((params: IkoManagementParams | null) =>
         this.httpClient.put<BasicWidget>(
           this.getApiUrl(
-            `/v1/iko-data-aggregate/${params?.aggregateKey}/tab/${params?.tabKey}/widget/${widget.key}`
+            `management/v1/iko-data-aggregate/${params?.aggregateKey}/tab/${params?.widgetTabKey}/widget/${widget.key}`
           ),
           widget
         )
@@ -107,7 +106,7 @@ export class IkoWidgetManagementApiService
       switchMap((params: IkoManagementParams | null) =>
         this.httpClient.post<BasicWidget>(
           this.getApiUrl(
-            `/v1/iko-data-aggregate/${params?.aggregateKey}/tab/${params?.tabKey}/widget/${widget.key}`
+            `management/v1/iko-data-aggregate/${params?.aggregateKey}/tab/${params?.widgetTabKey}/widget/${widget.key}`
           ),
           widget
         )

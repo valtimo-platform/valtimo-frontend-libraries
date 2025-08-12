@@ -55,6 +55,8 @@ export class WidgetWizardService {
 
   public readonly $editMode: WritableSignal<boolean> = signal(false);
 
+  public readonly $usedWidgetKeys: WritableSignal<string[]> = signal([]);
+
   public resetWizard(): void {
     this.$selectedWidget.set(null);
     this.$widgetWidth.set(null);

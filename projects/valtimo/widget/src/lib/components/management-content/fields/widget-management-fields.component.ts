@@ -47,7 +47,7 @@ import {FieldsWidgetValue, WidgetFieldsContent} from '../../../models';
 
 @Component({
   templateUrl: './widget-management-fields.component.html',
-  styleUrls: ['./widget-management-fields.component.scss'],
+  styleUrl: './widget-management-fields.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
@@ -67,7 +67,7 @@ import {FieldsWidgetValue, WidgetFieldsContent} from '../../../models';
 export class WidgetManagementFieldsComponent
   implements IWidgetContentComponent, OnDestroy, OnInit, AfterViewInit
 {
-  @HostBinding('class') public readonly class = 'valtimo-case-management-widget-field';
+  @HostBinding('class') public readonly class = 'valtimo-widget-management-fields';
   @Output() public readonly changeValidEvent = new EventEmitter<boolean>();
   @ViewChild(Tab) private readonly _tab: Tab;
 
