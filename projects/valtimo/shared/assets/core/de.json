@@ -1873,7 +1873,8 @@
     "view": "Bild",
     "title": "Konfiguration",
     "list": "Liste",
-    "tabs": "Tabs",
+    "tabs": {"title": "Tabs"},
+    "widgets": {"title": "Widgets"},
     "searchActions": {
       "addActionTitle": "Suchaktion hinzufügen",
       "editActionTitle": "Suchaktion bearbeiten",
@@ -1908,6 +1909,17 @@
     "sortingDisabled": "Sortierung deaktiviert",
     "defaultSortTitle": "Standardsortierung",
     "displayType": "Anzeigetyp",
-    "sortingEnabled": "Sortierung aktiviert"
+    "sortingEnabled": "Sortierung aktiviert",
+    "tabKey": "Schlüssel",
+    "tabTitle": "Tabtitel",
+    "tabTitlePlaceholder": "Tabtitel eingeben",
+    "tabType": "Tabtyp",
+    "tabTypeTitle": "Tabtyp",
+    "tabTypePlaceholder": "Tabtyp eingeben",
+    "addTab": "Tab hinzufügen",
+    "editTab": "Tab bearbeiten",
+    "tabTypes": {
+      "widgets": "Widgets"
+    }
   }
 }
