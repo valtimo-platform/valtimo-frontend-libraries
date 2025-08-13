@@ -17,7 +17,7 @@
 import {TagType} from 'carbon-components-angular';
 import { WidgetType } from './widget.model';
 
-enum WidgetEditorTab {
+enum WidgetManagementTab {
   VISUAL = 'visual',
   JSON = 'json',
 }
@@ -30,4 +30,4 @@ const WidgetTypeTags: {[key: string]: TagType} = {
   [WidgetType.TABLE]: 'purple',
 };
 
-export {WidgetEditorTab, WidgetTypeTags};
+export {WidgetManagementTab, WidgetTypeTags};

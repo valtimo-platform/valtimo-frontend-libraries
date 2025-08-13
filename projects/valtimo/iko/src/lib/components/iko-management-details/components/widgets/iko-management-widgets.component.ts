@@ -22,7 +22,7 @@ import {
   BasicWidget,
   IWidgetManagementService,
   WIDGET_MANAGEMENT_SERVICE,
-  WidgetManagementEditorComponent,
+  WidgetManagementComponent,
 } from '@valtimo/widget';
 import {combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
 import {IkoManagementParams, IkoRepositoryConfigResponse, TabDto} from '../../../../models';
@@ -33,7 +33,7 @@ import {IkoManagementApiService, IkoWidgetManagementApiService} from '../../../.
   styleUrl: './iko-management-widgets.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, WidgetManagementEditorComponent, TranslateModule],
+  imports: [CommonModule, WidgetManagementComponent, TranslateModule],
   providers: [
     {
       provide: WIDGET_MANAGEMENT_SERVICE,

@@ -13,16 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import {CommonModule} from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  Output,
-  signal,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, signal} from '@angular/core';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   ActionItem,
@@ -70,8 +63,6 @@ export class WidgetManagementEditorComponent {
     if (!value) return;
     this.widgetManagementService.initParams(value);
   }
-
-  @Output() public readonly changeSaved = new EventEmitter();
 
   public readonly FIELDS: ColumnConfig[] = [
     {

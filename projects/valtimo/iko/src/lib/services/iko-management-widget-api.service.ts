@@ -59,7 +59,7 @@ export class IkoWidgetManagementApiService
     );
   }
 
-  public updateWidgetConfiguration(widget: BasicWidget[]): Observable<BasicWidget[]> {
+  public updateWidgetConfiguration(widgets: BasicWidget[]): Observable<BasicWidget[]> {
     return this.params$.pipe(
       filter((params: IkoManagementParams | null) => !!params),
       switchMap((params: IkoManagementParams | null) =>
@@ -67,7 +67,7 @@ export class IkoWidgetManagementApiService
           this.getApiUrl(
             `management/v1/iko-data-aggregate/${params?.aggregateKey}/tab/${params?.widgetTabKey}/widget`
           ),
-          widget
+          widgets
         )
       )
     );

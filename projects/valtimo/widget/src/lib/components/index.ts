@@ -15,3 +15,4 @@
  */
 
 export * from './management-editor/widget-management-editor.component';
+export * from './management/widget-management.component';
