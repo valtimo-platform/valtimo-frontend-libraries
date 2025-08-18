@@ -20,7 +20,6 @@ export class ValtimoToggleComponent {
   public toggleValue$ = new BehaviorSubject<any>(undefined);
 
   toggle(value: boolean): void {
-    console.log(value);
     this.toggleValue$.next(value);
   }
 }
