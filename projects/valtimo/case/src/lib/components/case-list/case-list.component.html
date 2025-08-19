@@ -191,7 +191,7 @@
   <button
     *ngIf="canExportCase$ | async"
     cdsButton="primary"
-    [disabled]="disableStartButton$ | async"
+    [disabled]="disableExportButton$ | async"
     class="export-button"
     (click)="export()"
   >

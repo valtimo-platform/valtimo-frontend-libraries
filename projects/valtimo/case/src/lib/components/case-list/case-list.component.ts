@@ -136,6 +136,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
   public readonly showAssignModal$ = new BehaviorSubject<boolean>(false);
   public readonly showChangePageModal$ = new BehaviorSubject<boolean>(false);
   public readonly showChangeTabModal$ = new BehaviorSubject<boolean>(false);
+  public readonly disableExportButton$ = new BehaviorSubject<boolean>(false);
 
   public readonly searchFields$: Observable<Array<SearchField> | null> =
     this.searchService.documentSearchFields$.pipe(tap(() => (this.loadingSearchFields = false)));
@@ -477,6 +478,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
     ),
     map(res => {
       if (!Array.isArray(res.data)) return res.data;
+      this.disableExportButton$.next(res.data.length === 0 ? true : false);
       return res.data.map(item => {
         const mappedInternalStatusColumns = res.statusColumnKeys.reduce((acc, curr) => {
           const status = res.statuses.find(
