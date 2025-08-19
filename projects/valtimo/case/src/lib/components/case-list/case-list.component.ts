@@ -672,7 +672,6 @@ export class CaseListComponent implements OnInit, OnDestroy {
   }
 
   public export(): void {
-    // TODO http call to download the export
     this.caseExportService.downloadExport();
   }
 
