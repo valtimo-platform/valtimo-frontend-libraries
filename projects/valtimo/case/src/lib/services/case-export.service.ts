@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {combineLatest, Observable, switchMap} from 'rxjs';
+import {combineLatest, first, switchMap} from 'rxjs';
 import {CaseListService} from './case-list.service';
 import {CaseParameterService} from './case-parameter.service';
 import {CaseListSearchService} from './case-list-search.service';
@@ -15,13 +15,6 @@ export class CaseExportService {
   ) {}
 
   downloadExport(): void {
-    const body = {
-      documentDefinitionName: 'bezwaar',
-      searchOperator: 'AND',
-      assigneeFilter: 'ALL',
-      statusFilter: [null, 'aanvraag-ontvangen', 'in-behandeling', 'informatieverzoek-uitgezet'],
-      caseTagsFilter: [],
-    };
     combineLatest([
       this.listService.caseDefinitionKey$,
       this.parameterService.querySearchParams$,
@@ -30,13 +23,14 @@ export class CaseExportService {
       this.parameterService.queryCaseTagsParams$,
     ])
       .pipe(
+        first(),
         switchMap(data => {
           const body = {
             documentDefinitionName: data[0],
             searchOperator: 'AND',
             assigneeFilter: data[2],
-            statusFilter: data[3] ? data[3] : [],
-            caseTagsFilter: data[4] ? data[4] : [],
+            statusFilter: data[3],
+            caseTagsFilter: data[4],
             otherFilters: this.caseListSearchService.mapSearchValuesToFilters(data[1]),
           };
           return combineLatest([
