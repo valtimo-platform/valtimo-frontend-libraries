@@ -76,6 +76,7 @@ import {
 } from '../../constants';
 import {
   CAN_CREATE_CASE_PERMISSION,
+  CAN_EXPORT_CASE_PERMISSION,
   CAN_VIEW_CASE_PERMISSION,
   CASE_DETAIL_PERMISSION_RESOURCE,
 } from '../../permissions';
@@ -170,10 +171,9 @@ export class CaseListComponent implements OnInit, OnDestroy {
     )
   );
 
-  // TODO export permission nodig?
   public readonly canExportCase$: Observable<boolean> = this.caseDefinitionKey$.pipe(
     switchMap(caseDefinitionKey =>
-      this.permissionService.requestPermission(CAN_CREATE_CASE_PERMISSION, {
+      this.permissionService.requestPermission(CAN_EXPORT_CASE_PERMISSION, {
         resource: CASE_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocumentDefinition,
         identifier: caseDefinitionKey,
       })
