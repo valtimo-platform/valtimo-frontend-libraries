@@ -61,6 +61,7 @@ interface DocumentenApiMetadata {
   taal: DocumentLanguage;
   informatieobjecttype: string;
   trefwoorden?: string[];
+  relatedDocumentId: string;
 }
 
 type AdditionalDocumentDate = 'sent' | 'received' | 'neither';

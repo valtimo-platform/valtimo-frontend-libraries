@@ -39,6 +39,10 @@ export class FormIoStateService {
     return this._documentId$.asObservable();
   }
 
+  public get documentId(): string {
+    return this._documentId$.getValue();
+  }
+
   public setDocumentId(documentId: string) {
     this._documentId$.next(documentId);
   }
