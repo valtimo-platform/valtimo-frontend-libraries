@@ -25,7 +25,8 @@ import {
   CarbonListModule,
   ColumnConfig,
   ConfirmationModalModule,
-  Pagination, ViewType,
+  Pagination,
+  ViewType,
 } from '@valtimo/components';
 import {
   DraftVersionService,
