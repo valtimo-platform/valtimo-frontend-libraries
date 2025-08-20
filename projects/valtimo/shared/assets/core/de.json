@@ -904,9 +904,9 @@
         "ellipsisCharacterLimit": "Zeichenbeschränkung für Auslassungszeichen",
         "ellipsisCharacterLimitTooltip": "Geben Sie die Anzahl der Zeichen ein, die angezeigt werden sollen, bevor Auslassungspunkte angezeigt werden",
         "ellipsisCharacterLimitPlaceholder": "Wählen Sie eine Anzahl von Zeichen (optional)",
-        "linkText": "Link tekst",
-        "linkTextTooltip": "",
-        "linkTextPlaceholder": "Link tekst (Optional)"
+        "linkText": "Linktext",
+        "linkTextTooltip": "Der Text, der für den Link angezeigt wird. Wenn dieses Feld leer gelassen wird, wird die URL selbst als Linktext verwendet.",
+        "linkTextPlaceholder": "Linktext (optional)"
       },
       "displayType": {
         "text": "Text",
