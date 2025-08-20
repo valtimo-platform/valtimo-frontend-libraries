@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-export * from './layout.service';
-export * from './widget-layout.service';
-export * from './widget-fields.service';
-export * from './widget-wizard.service';
+import {EventEmitter} from '@angular/core';
+
+export interface IWidgetContentComponent {
+  changeValidEvent: EventEmitter<boolean>;
+}

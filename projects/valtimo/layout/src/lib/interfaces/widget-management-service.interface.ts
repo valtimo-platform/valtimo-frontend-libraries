@@ -13,8 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {BehaviorSubject, Observable} from 'rxjs';
+import {BasicWidget} from '../models';
 
-export * from './layout.service';
-export * from './widget-layout.service';
-export * from './widget-fields.service';
-export * from './widget-wizard.service';
+export interface IWidgetManagementService<T> {
+  params$: Observable<T | null>;
+  valueResolverApi$: BehaviorSubject<string | null>;
+  initParams(...params): void;
+  getWidgetConfiguration(): Observable<BasicWidget[]>;
+  updateWidgetConfiguration(widgets: BasicWidget[]): Observable<BasicWidget[]>;
+  deleteWidget(widget: BasicWidget): Observable<void>;
+  updateWidget(widget: BasicWidget): Observable<BasicWidget>;
+  createWidget(widget: BasicWidget): Observable<BasicWidget>;
+}

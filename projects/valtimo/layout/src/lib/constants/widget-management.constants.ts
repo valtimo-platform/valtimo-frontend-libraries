@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-export * from './layout.service';
-export * from './widget-layout.service';
-export * from './widget-fields.service';
-export * from './widget-wizard.service';
+import {InjectionToken} from '@angular/core';
+import {IWidgetManagementService} from '../interfaces';
+
+const WIDGET_MANAGEMENT_SERVICE = new InjectionToken<IWidgetManagementService<any>>(
+  'WIDGET_MANAGEMENT_SERVICE'
+);
+
+export {WIDGET_MANAGEMENT_SERVICE};

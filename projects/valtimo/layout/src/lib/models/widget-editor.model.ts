@@ -14,7 +14,20 @@
  * limitations under the License.
  */
 
-export * from './layout.service';
-export * from './widget-layout.service';
-export * from './widget-fields.service';
-export * from './widget-wizard.service';
+import {TagType} from 'carbon-components-angular';
+import { WidgetType } from './widget.model';
+
+enum WidgetManagementTab {
+  VISUAL = 'visual',
+  JSON = 'json',
+}
+
+const WidgetTypeTags: {[key: string]: TagType} = {
+  [WidgetType.COLLECTION]: 'teal',
+  [WidgetType.CUSTOM]: 'magenta',
+  [WidgetType.FIELDS]: 'blue',
+  [WidgetType.FORMIO]: 'green',
+  [WidgetType.TABLE]: 'purple',
+};
+
+export {WidgetManagementTab, WidgetTypeTags};

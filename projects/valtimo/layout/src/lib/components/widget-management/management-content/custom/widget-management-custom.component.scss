@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -14,7 +14,20 @@
  * limitations under the License.
  */
 
-export * from './layout.service';
-export * from './widget-layout.service';
-export * from './widget-fields.service';
-export * from './widget-wizard.service';
+.valtimo-widget-management-custom {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  ::ng-deep.dropdown-label {
+    label {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    cds-dropdown {
+      margin-top: 8px;
+    }
+  }
+}

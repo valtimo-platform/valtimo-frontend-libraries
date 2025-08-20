@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -13,8 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+.valtimo-widget-management-table {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 
-export * from './layout.service';
-export * from './widget-layout.service';
-export * from './widget-fields.service';
-export * from './widget-wizard.service';
+  &__form {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: flex-end;
+  }
+
+  &__subtitle {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 22px;
+  }
+
+  &__toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__path-selector {
+    display: flex;
+    flex-direction: column;
+  }
+}

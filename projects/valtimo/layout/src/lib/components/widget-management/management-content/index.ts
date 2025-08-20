@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export * from './layout.service';
-export * from './widget-layout.service';
-export * from './widget-fields.service';
-export * from './widget-wizard.service';
+export * from './fields/widget-management-fields.component';
+export * from './table/widget-management-table.component';
+export * from './collection/widget-management-collection.component';
+export * from './custom/widget-management-custom.component';
