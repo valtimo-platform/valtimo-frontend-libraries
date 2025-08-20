@@ -903,7 +903,10 @@
         "valuePlaceholder": "Weg zum Wert",
         "ellipsisCharacterLimit": "Zeichenbeschränkung für Auslassungszeichen",
         "ellipsisCharacterLimitTooltip": "Geben Sie die Anzahl der Zeichen ein, die angezeigt werden sollen, bevor Auslassungspunkte angezeigt werden",
-        "ellipsisCharacterLimitPlaceholder": "Wählen Sie eine Anzahl von Zeichen (optional)"
+        "ellipsisCharacterLimitPlaceholder": "Wählen Sie eine Anzahl von Zeichen (optional)",
+        "linkText": "Link tekst",
+        "linkTextTooltip": "",
+        "linkTextPlaceholder": "Link tekst (Optional)"
       },
       "displayType": {
         "text": "Text",
@@ -913,7 +916,8 @@
         "datetime": "Datum und zeit",
         "enum": "Aufzählung",
         "number": "Nummer",
-        "percent": "Prozentsatz"
+        "percent": "Prozentsatz",
+        "link": "Link"
       },
       "custom": {
         "selectComponent": "Angular-komponente",
