@@ -554,11 +554,7 @@ export class DocumentenApiMetadataModalComponent implements OnInit, OnDestroy {
       {}
     ) as DocumentenApiMetadata;
 
-    if (this.documentenApiMetadataForm.valid)
-      this.metadata.emit({
-        ...mappedRawValue,
-        relatedDocumentId: this.formioStateService.documentId,
-      });
+    if (this.documentenApiMetadataForm.valid) this.metadata.emit(mappedRawValue);
 
     this.closeModal();
   }
