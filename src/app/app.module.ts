@@ -232,6 +232,7 @@ export function tabsFactory() {
     FormViewModelModule,
     LoggingModule,
     FormManagementModule,
+    IkoModule,
     BpmnJsDiagramModule,
     MenuModule,
     WidgetModule,
