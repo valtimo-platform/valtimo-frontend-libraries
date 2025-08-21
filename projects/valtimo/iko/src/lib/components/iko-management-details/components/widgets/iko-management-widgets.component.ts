@@ -23,7 +23,7 @@ import {
   IWidgetManagementService,
   WIDGET_MANAGEMENT_SERVICE,
   WidgetManagementComponent,
-} from '@valtimo/widget';
+} from '@valtimo/layout';
 import {combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
 import {IkoManagementParams, IkoRepositoryConfigResponse, TabDto} from '../../../../models';
 import {IkoManagementApiService, IkoWidgetManagementApiService} from '../../../../services';

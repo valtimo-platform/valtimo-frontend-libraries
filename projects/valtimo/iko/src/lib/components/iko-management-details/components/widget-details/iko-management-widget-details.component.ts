@@ -16,7 +16,7 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {IkoWidgetManagementApiService} from '../../../../services';
-import {WIDGET_MANAGEMENT_SERVICE} from '@valtimo/widget';
+import {WIDGET_MANAGEMENT_SERVICE} from '@valtimo/layout';
 
 @Component({
   templateUrl: './iko-management-widget-details.component.html',
