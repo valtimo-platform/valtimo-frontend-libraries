@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Inject, Input, signal} from '@angular/core';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
@@ -35,6 +34,7 @@ import {
   BasicWidget,
   Widget,
   WidgetStyle,
+  WidgetType,
   WidgetTypeTags,
   WidgetWizardCloseEvent,
   WidgetWizardCloseEventType,
@@ -62,6 +62,11 @@ export class WidgetManagementEditorComponent {
   @Input() public set params(value: any) {
     if (!value) return;
     this.widgetManagementService.initParams(value);
+  }
+  @Input() public set availableWidgetTypes(value: WidgetType[]) {
+    if (!value) return;
+
+    this.widgetWizardService.$availableWidgetTypes.set(value);
   }
 
   public readonly FIELDS: ColumnConfig[] = [

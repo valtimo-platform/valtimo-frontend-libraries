@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {ListItem} from 'carbon-components-angular';
-import { WidgetDisplayTypeKey } from '../models';
+import {WidgetDisplayTypeKey} from '../models';
 
 @Injectable({
   providedIn: 'root',

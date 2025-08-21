@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, ViewEncapsulation} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
 import {TilesModule} from 'carbon-components-angular';
 import {AVAILABLE_WIDGETS, WidgetTypeSelection} from '../../../../../models';
@@ -30,7 +29,14 @@ import {WidgetWizardService} from '../../../../../services';
   imports: [CommonModule, TranslateModule, TilesModule],
 })
 export class WidgetWizardTypeStepComponent {
-  public readonly availableWidgets = AVAILABLE_WIDGETS;
+  public readonly $availableWidgetTypes = computed(() => {
+    const availableTypes = this.widgetWizardService.$availableWidgetTypes();
+    return !availableTypes
+      ? AVAILABLE_WIDGETS
+      : AVAILABLE_WIDGETS.filter((typeSelection: WidgetTypeSelection) =>
+          availableTypes.includes(typeSelection.type)
+        );
+  });
   public readonly $selectedWidget = this.widgetWizardService.$selectedWidget;
 
   constructor(private readonly widgetWizardService: WidgetWizardService) {}

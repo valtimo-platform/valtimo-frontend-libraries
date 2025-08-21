@@ -15,7 +15,7 @@
  */
 
 import {TagType} from 'carbon-components-angular';
-import { WidgetType } from './widget.model';
+import {WidgetType} from './widget.model';
 
 enum WidgetManagementTab {
   VISUAL = 'visual',

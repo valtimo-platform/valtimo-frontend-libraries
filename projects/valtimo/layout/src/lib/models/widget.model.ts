@@ -174,5 +174,5 @@ export {
   WidgetPackResultItemsByRow,
   FormioWidgetWidgetWithUuid,
   MaxRectsResult,
-  WidgetComponentMap
+  WidgetComponentMap,
 };

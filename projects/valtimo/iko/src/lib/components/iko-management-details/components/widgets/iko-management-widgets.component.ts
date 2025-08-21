@@ -23,6 +23,7 @@ import {
   IWidgetManagementService,
   WIDGET_MANAGEMENT_SERVICE,
   WidgetManagementComponent,
+  WidgetType,
 } from '@valtimo/layout';
 import {combineLatest, map, Observable, Subscription, switchMap, tap} from 'rxjs';
 import {IkoManagementParams, IkoRepositoryConfigResponse, TabDto} from '../../../../models';
@@ -55,6 +56,12 @@ export class IkoManagementWidgetsComponent implements OnInit, OnDestroy {
 
   public readonly widgets$: Observable<BasicWidget[]> =
     this.ikoWidgetManagementApiService.getWidgetConfiguration();
+
+  public readonly AVAILABLE_WIDGET_TYPES = [
+    WidgetType.FIELDS,
+    WidgetType.COLLECTION,
+    WidgetType.TABLE,
+  ];
 
   private readonly _ikoRepositoryConfig$: Observable<IkoRepositoryConfigResponse> =
     this.params$.pipe(

@@ -25,7 +25,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { WidgetWizardService } from '../../../../../services';
+import {WidgetWizardService} from '../../../../../services';
 
 @Component({
   selector: 'valtimo-widget-wizard-content-step',

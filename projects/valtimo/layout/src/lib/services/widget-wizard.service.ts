@@ -57,6 +57,8 @@ export class WidgetWizardService {
 
   public readonly $usedWidgetKeys: WritableSignal<string[]> = signal([]);
 
+  public readonly $availableWidgetTypes: WritableSignal<WidgetType[] | null> = signal(null);
+
   public resetWizard(): void {
     this.$selectedWidget.set(null);
     this.$widgetWidth.set(null);

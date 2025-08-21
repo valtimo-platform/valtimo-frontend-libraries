@@ -22,7 +22,7 @@ import {WIDGET_MANAGEMENT_SERVICE} from '../../../constants';
 import {IWidgetManagementService} from '../../../interfaces';
 import {WidgetManagementEditorComponent} from '../management-editor/widget-management-editor.component';
 import {Observable, map, take, tap} from 'rxjs';
-import {BasicWidget, WidgetManagementTab} from '../../../models';
+import {BasicWidget, WidgetManagementTab, WidgetType} from '../../../models';
 import {EditorModel, JsonEditorComponent} from '@valtimo/components';
 
 @Component({
@@ -44,6 +44,7 @@ export class WidgetManagementComponent {
     if (!value) return;
     this.widgetManagementService.initParams(value);
   }
+  @Input() availableWidgetTypes: WidgetType[];
 
   public readonly jsonModel$: Observable<EditorModel> = this.widgetManagementService
     .getWidgetConfiguration()

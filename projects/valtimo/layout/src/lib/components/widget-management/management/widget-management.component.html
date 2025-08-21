@@ -21,6 +21,7 @@
   >
     <valtimo-widget-management-editor
       *ngIf="$activeTab() === WidgetManagementTab.VISUAL"
+      [availableWidgetTypes]="availableWidgetTypes"
     ></valtimo-widget-management-editor>
   </cds-tab>
 
