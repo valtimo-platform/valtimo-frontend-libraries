@@ -290,18 +290,28 @@
       </cds-dropdown>
     </cds-label>
 
-    <cds-toggle
-      formControlName="exportable"
-      data-testid="export-selector-toggle"
-      [label]="'listColumn.exportField' | translate"
-      [disabled]="!modalObs.enableExport"
-      [onText]="'listColumn.sortableYes' | translate"
-      [offText]="'listColumn.sortableNo' | translate"
-      [keyColumnTitle]="modalObs.isYesNo && ('viewTypeConverter.Yes' | translate)"
-      [valueColumnTitle]="modalObs.isYesNo && ('viewTypeConverter.No' | translate)"
-      [required]="false"
-      [size]="'sm'"
-    ></cds-toggle>
+    <cds-label>
+      <span class="label-with-tooltip select-label">
+        {{ 'listColumn.exportField' | translate }}
+
+        <v-tooltip-icon
+          [tooltip]="'listColumn.exportTooltip' | translate"
+          [disabled]="modalObs.disableInput"
+        ></v-tooltip-icon>
+      </span>
+
+      <cds-toggle
+        formControlName="exportable"
+        data-testid="export-selector-toggle"
+        [disabled]="!modalObs.enableExport"
+        [onText]="'listColumn.sortableYes' | translate"
+        [offText]="'listColumn.sortableNo' | translate"
+        [keyColumnTitle]="modalObs.isYesNo && ('viewTypeConverter.Yes' | translate)"
+        [valueColumnTitle]="modalObs.isYesNo && ('viewTypeConverter.No' | translate)"
+        [required]="false"
+        [size]="'sm'"
+      ></cds-toggle>
+    </cds-label>
   </form>
 </ng-template>
 

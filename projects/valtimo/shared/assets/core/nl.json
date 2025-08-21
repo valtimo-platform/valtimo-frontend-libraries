@@ -1592,6 +1592,7 @@
     "sortableYes": "Ja",
     "sortableNo": "Nee",
     "exportField": "Exporteerbaar",
+    "exportTooltip": "Alleen velden van het document of het dossier kunnen geëxporteerd worden. Als er een ander type veld wordt gekozen, dan wordt de export knop op 'disabled' staat gezet.",
     "sortableAsc": "Oplopend",
     "sortableDesc": "Aflopend",
     "hasEnvConfigWarningTitle": "Dit dossiertype heeft al een kolom-configuratie",
