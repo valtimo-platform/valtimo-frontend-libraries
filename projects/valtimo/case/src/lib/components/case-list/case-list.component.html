@@ -188,7 +188,10 @@
 </ng-template>
 
 <ng-template #caseListActions>
-  <cds-tooltip [description]="'case.exportButtonTooltip' | translate">
+  <cds-tooltip
+    *ngIf="canExportCase$ | async"
+    [description]="'case.exportButtonTooltip' | translate"
+  >
     <button
       data-testid="case-list-export-button"
       cdsButton="ghost"
