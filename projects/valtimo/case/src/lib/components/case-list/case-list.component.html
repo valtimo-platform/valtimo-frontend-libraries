@@ -188,17 +188,18 @@
 </ng-template>
 
 <ng-template #caseListActions>
-  <button
-    *ngIf="canExportCase$ | async"
-    cdsButton="primary"
-    [disabled]="disableExportButton$ | async"
-    class="export-button"
-    (click)="export()"
-  >
-    {{ 'case.export' | translate }}
+  <cds-tooltip [description]="'case.exportButtonTooltip' | translate">
+    <button
+      data-testid="case-list-export-button"
+      cdsButton="ghost"
+      iconOnly="true"
+      (click)="export()"
+      [disabled]="disableExportButton$ | async"
+    >
+      <svg cdsIcon="download" size="16"></svg>
+    </button>
+  </cds-tooltip>
 
-    <svg cdsIcon="download" size="16" class="cds--btn__icon"></svg>
-  </button>
   <button
     *ngIf="canCreateCase$ | async"
     cdsButton="primary"

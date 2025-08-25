@@ -15,7 +15,7 @@
     "TaskDueDateSetEvent": "Taak einddatum ingesteld > {{taskName}}"
   },
   "case": {
-    "export": "Export",
+    "exportButtonTooltip": "Exporteer huidige dossier lijst",
     "summaryFormNotFound": "Formulier niet gevonden voor '{{caseDefinitionKey}}'. Er moet een formulier bestaan met de naam '{{caseDefinitionKey}}.summary'.",
     "bulkAssign": {
       "assign": "Toewijzen",
@@ -786,9 +786,7 @@
         "title": "Er zijn geen statussen geconfigureerd",
         "description": "Klik hier om een status voor dit dossiertype te configureren"
       },
-      "noResultsFinalVersion": {
-        "description": "Er zijn geen status aangemaakt voor dit zaaktype."
-      }
+      "noResultsFinalVersion": {"description": "Er zijn geen status aangemaakt voor dit zaaktype."}
     },
     "caseTags": {
       "searchFieldTitle": "Tags",
@@ -809,9 +807,7 @@
         "title": "Er zijn geen tags geconfigureerd",
         "description": "Klik hier om een tag voor dit dossiertype te configureren"
       },
-      "noResultsFinalVersion": {
-        "description": "Er zijn geen tags aangemaakt voor dit zaaktype."
-      }
+      "noResultsFinalVersion": {"description": "Er zijn geen tags aangemaakt voor dit zaaktype."}
     },
     "draftWarning": {
       "title": "Niet gekoppeld aan een versie van het dossiertype",

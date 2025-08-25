@@ -15,7 +15,7 @@
     "TaskDueDateSetEvent": "Aufgabefrist gesetzt > {{taskName}}"
   },
   "case": {
-    "export": "Export",
+    "exportButtonTooltip": "Aktuelle Aktenliste exportieren",
     "summaryFormNotFound": "Zusammenfassungsformular für '{{caseDefinitionKey}}' wurde nicht gefunden. Es muss ein Formular mit dem Namen '{{caseDefinitionKey}}.summary' existieren, das den Falldefinitionsschlüssel verwendet.",
     "bulkAssign": {
       "assign": "Zuweisen",
@@ -802,9 +802,7 @@
         "title": "Keine Tags konfiguriert",
         "description": "Klicken Sie hier, um einen Tag für diesen Casetyp zu konfigurieren"
       },
-      "noResultsFinalVersion": {
-        "description": "Für diesen Vorgangstyp wurden keine Tags erstellt."
-      }
+      "noResultsFinalVersion": {"description": "Für diesen Vorgangstyp wurden keine Tags erstellt."}
     },
     "draftWarning": {
       "title": "Nicht mit einer Version des Case verknüpft",
