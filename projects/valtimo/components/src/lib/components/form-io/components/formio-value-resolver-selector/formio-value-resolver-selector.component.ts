@@ -19,7 +19,9 @@ import {FormioCustomComponent} from '../../../../modules';
 import {CommonModule} from '@angular/common';
 import {ValuePathSelectorComponent} from '../../../value-path-selector/value-path-selector.component';
 import {ValuePathSelectorPrefix} from '../../../../models';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, map} from 'rxjs';
+import {formioParams} from '../form-io-builder/form-io-builder.utils';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-formio-value-resolver-selector',
@@ -32,7 +34,12 @@ export class FormioValueResolverSelectorComponent implements FormioCustomCompone
   @Output() public readonly valueChange = new EventEmitter<string>();
 
   public readonly defaultValue$ = new BehaviorSubject<string>('');
-
+  public readonly caseDefinitionKey$ = formioParams.pipe(
+    map(params => params?.caseDefinitionKey),
+  );
+  public readonly caseDefinitionVersionTag$ = formioParams.pipe(
+    map(params => params?.caseDefinitionVersionTag),
+  );
   private _value!: string;
   @Input() public set value(value: string) {
     if (!value) return;
