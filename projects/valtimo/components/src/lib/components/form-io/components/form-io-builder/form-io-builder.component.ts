@@ -57,14 +57,6 @@ export class FormioBuilderComponent implements OnInit {
     tap(language => this.languageEventEmitter.emit(language))
   );
 
-  private readonly _params$ = getCaseManagementRouteParams(this.route);
-
-  public readonly caseDefinitionKey$ = this._params$.pipe(map(params => params?.caseDefinitionKey));
-
-  public readonly caseDefinitionVersionTag$ = this._params$.pipe(
-    map(params => params?.caseDefinitionVersionTag)
-  );
-
   public readonly languageEventEmitter = new EventEmitter<string>();
 
   public readonly options$ = new BehaviorSubject<ValtimoFormioOptions>(undefined);

@@ -21,7 +21,6 @@ import {ValuePathSelectorComponent} from '../../../value-path-selector/value-pat
 import {ValuePathSelectorPrefix} from '../../../../models';
 import {BehaviorSubject, map} from 'rxjs';
 import {formioParams} from '../form-io-builder/form-io-builder.utils';
-import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'valtimo-formio-value-resolver-selector',
