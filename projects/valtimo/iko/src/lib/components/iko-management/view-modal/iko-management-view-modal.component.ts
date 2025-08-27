@@ -12,8 +12,15 @@ import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from
 import {TranslateModule} from '@ngx-translate/core';
 import {CARBON_CONSTANTS, ValtimoCdsModalDirective} from '@valtimo/components';
 import {ButtonModule, IconModule, InputModule, ModalModule} from 'carbon-components-angular';
-import {BehaviorSubject, Observable, combineLatest, filter, map, switchMap, tap} from 'rxjs';
-
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  Observable,
+  Subscription,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {
   DataAggregatePropertyField,
   IkoDataAggregateResponse,
@@ -82,6 +89,8 @@ export class IkoManagementViewModalComponent implements OnInit, OnDestroy {
     properties: this.fb.group({}, Validators.required),
   });
 
+  private readonly _subscriptions = new Subscription();
+
   public get propertiesFormGroup(): FormGroup {
     return this.formGroup.get('properties') as FormGroup;
   }
@@ -92,15 +101,17 @@ export class IkoManagementViewModalComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    combineLatest([this._prefillData$, this.propertyFields$]).subscribe(
-      ([prefillData, propertyFields]) => {
-        this.mapPrefillDataToForm(prefillData, propertyFields);
-      }
+    this._subscriptions.add(
+      combineLatest([this._prefillData$, this.propertyFields$]).subscribe(
+        ([prefillData, propertyFields]) => {
+          this.mapPrefillDataToForm(prefillData, propertyFields);
+        }
+      )
     );
   }
 
   public ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
+    this._subscriptions.unsubscribe();
   }
 
   public onCancel(): void {
