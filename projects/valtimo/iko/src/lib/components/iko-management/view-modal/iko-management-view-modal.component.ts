@@ -43,6 +43,7 @@ export class IkoManagementViewModalComponent {
       this.resetForm();
       return;
     }
+    console.log('prefill', {value});
 
     this.formGroup.get('key')?.disable();
   }
@@ -142,10 +143,10 @@ export class IkoManagementViewModalComponent {
   }
 
   private resetForm(): void {
-    this.formGroup = this.fb.group({
-      title: this.fb.control('', Validators.required),
-      key: this.fb.control('', Validators.required),
-      properties: this.fb.group({}, Validators.required),
+    this.formGroup.reset({
+      title: '',
+      key: '',
+      properties: {},
     });
   }
 }
