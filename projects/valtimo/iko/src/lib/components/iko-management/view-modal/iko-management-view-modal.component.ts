@@ -40,11 +40,10 @@ export class IkoManagementViewModalComponent {
   }
   @Input() public set prefillData(value: IkoDataAggregateResponse | null) {
     if (!value) {
-      this.formGroup.reset();
+      this.resetForm();
       return;
     }
 
-    console.log('prefill', {value});
     this.formGroup.get('key')?.disable();
   }
   @Output() public readonly modalClose = new EventEmitter<any | null>();
@@ -61,10 +60,9 @@ export class IkoManagementViewModalComponent {
     // ),
     tap((fields: any[]) => {
       this.addPropertiesForms(fields);
-      console.log({fields});
     })
   );
-  public readonly formGroup = this.fb.group({
+  public formGroup = this.fb.group({
     title: this.fb.control('', Validators.required),
     key: this.fb.control('', Validators.required),
     properties: this.fb.group({}, Validators.required),
@@ -141,14 +139,13 @@ export class IkoManagementViewModalComponent {
           );
       }
     });
-    console.log(this.formGroup);
   }
 
   private resetForm(): void {
-    this.formGroup.setValue({
-      key: '',
-      title: '',
-      properties: {},
+    this.formGroup = this.fb.group({
+      title: this.fb.control('', Validators.required),
+      key: this.fb.control('', Validators.required),
+      properties: this.fb.group({}, Validators.required),
     });
   }
 }

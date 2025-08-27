@@ -140,7 +140,7 @@ export class IkoManagementComponent implements OnInit, OnDestroy {
 
     this.ikoManagementApiService
       .createIkoDataAggregate(item.key, {...item, ikoRepositoryConfigKey: apiKey})
-      .subscribe(res => console.log({res}));
+      .subscribe();
   }
 
   private setPageTitle(): void {

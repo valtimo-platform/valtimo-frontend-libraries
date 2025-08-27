@@ -77,7 +77,6 @@ export class IkoManagementApiService extends BaseApiService {
     key: string,
     body: IkoDataAggregateCreateRequest
   ): Observable<IkoDataAggregateResponse> {
-    console.log({body});
     return this.httpClient.post<IkoDataAggregateResponse>(
       this.getApiUrl(`management/v1/iko-data-aggregate/${key}`),
       body
@@ -105,7 +104,6 @@ export class IkoManagementApiService extends BaseApiService {
   }
 
   public getIkoDataAggregateType(key: string): Observable<IkoRepositoryConfigResponse> {
-    console.log({key});
     return this.httpClient.get<IkoRepositoryConfigResponse>(
       this.getApiUrl(`/management/v1/iko/${key}`)
     );
