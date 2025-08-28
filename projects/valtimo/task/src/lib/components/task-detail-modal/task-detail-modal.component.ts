@@ -135,6 +135,7 @@ export class TaskDetailModalComponent implements OnInit, OnDestroy {
         if (task) {
           this.logger.debug('Checking if user allowed to assign a user to Task with id:', task.id);
           this.businessKey$.next(task.businessKey);
+
           this.permissionService
             .requestPermission(CAN_ASSIGN_TASK_PERMISSION, {
               resource: TASK_DETAIL_PERMISSION_RESOURCE.task,
