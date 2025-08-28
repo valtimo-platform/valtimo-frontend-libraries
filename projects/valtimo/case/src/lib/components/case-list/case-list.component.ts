@@ -125,6 +125,7 @@ export class CaseListComponent implements OnInit, OnDestroy {
   public pagination!: Pagination;
   public canHaveAssignee!: boolean;
   public visibleCaseTabs: Array<CaseListTab> | null = null;
+  public loadingExport = false;
 
   public readonly defaultTabs = DEFAULT_CASE_LIST_TABS;
   public readonly tableTranslations = CASE_LIST_TABLE_TRANSLATIONS;
@@ -674,7 +675,9 @@ export class CaseListComponent implements OnInit, OnDestroy {
   }
 
   public export(): void {
-    this.caseExportService.downloadExport();
+    this.caseExportService
+      .downloadExport()
+      .subscribe(data => (this.loadingExport = data.isLoading));
   }
 
   public forceRefresh(): void {
