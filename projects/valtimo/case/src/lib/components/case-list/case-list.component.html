@@ -110,7 +110,7 @@
     </div>
 
     <valtimo-no-results
-      [action]="obs.noResultsMessage.isSearchResult ? null : caseListActions"
+      [action]="obs.noResultsMessage.isSearchResult ? null : caseListActionsNoResult"
       [description]="obs.noResultsMessage.description | translate"
       [title]="obs.noResultsMessage.title | translate"
     ></valtimo-no-results>
@@ -205,6 +205,19 @@
     </button>
   </cds-tooltip>
 
+  <button
+    *ngIf="canCreateCase$ | async"
+    cdsButton="primary"
+    [disabled]="disableStartButton$ | async"
+    (click)="startCase()"
+  >
+    {{ 'Start Case' | translate }}
+
+    <svg cdsIcon="add" size="16" class="cds--btn__icon"></svg>
+  </button>
+</ng-template>
+
+<ng-template #caseListActionsNoResult>
   <button
     *ngIf="canCreateCase$ | async"
     cdsButton="primary"
