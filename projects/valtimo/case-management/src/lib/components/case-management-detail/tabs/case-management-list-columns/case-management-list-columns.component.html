@@ -117,7 +117,6 @@
       isYesNo: isYesNo$ | async,
       showTagAmount: showTagAmount$ | async,
       params: params$ | async,
-      enableExport: enableExport$ | async,
     } as modalObs"
     [open]="modalObs.show"
     size="sm"
@@ -303,7 +302,6 @@
       <cds-toggle
         formControlName="exportable"
         data-testid="export-selector-toggle"
-        [disabled]="!modalObs.enableExport"
         [onText]="'listColumn.sortableYes' | translate"
         [offText]="'listColumn.sortableNo' | translate"
         [keyColumnTitle]="modalObs.isYesNo && ('viewTypeConverter.Yes' | translate)"

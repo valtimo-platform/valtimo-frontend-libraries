@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {AfterViewInit, Component, computed, signal} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AfterViewInit, Component, computed, OnDestroy, signal} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
@@ -43,6 +43,7 @@ import {
   Observable,
   startWith,
   Subject,
+  Subscription,
   switchMap,
   tap,
 } from 'rxjs';
@@ -55,10 +56,10 @@ import {ListColumnModal} from '../../../../models';
   templateUrl: './case-management-list-columns.component.html',
   styleUrls: ['./case-management-list-columns.component.scss'],
 })
-export class CaseManagementListColumnsComponent implements AfterViewInit {
+export class CaseManagementListColumnsComponent implements AfterViewInit, OnDestroy {
   public readonly downloadName$ = new BehaviorSubject<string>('');
   public readonly downloadUrl$ = new BehaviorSubject<string | null>(null);
-  public readonly enableExport$ = new BehaviorSubject<boolean>(false);
+  private readonly _subscriptions = new Subscription();
 
   public readonly actionItems: ActionItem[] = [
     {label: 'interface.delete', callback: this.deleteRow.bind(this), type: 'danger'},
@@ -167,6 +168,10 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
     tagAmount: new FormControl(1),
     exportable: new FormControl(false),
   });
+
+  public get path(): AbstractControl<string> {
+    return this.formGroup.get('path') as AbstractControl<string>;
+  }
 
   public readonly disableDefaultSort$ = combineLatest([
     this.currentModalType$,
@@ -321,6 +326,10 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
   public ngAfterViewInit(): void {
     this.iconService.registerAll([ArrowDown16, ArrowUp16]);
     this.disableExportToggle();
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   public openModal(modalType: ListColumnModal): void {
@@ -630,13 +639,18 @@ export class CaseManagementListColumnsComponent implements AfterViewInit {
   }
 
   private disableExportToggle(): void {
-    this.formGroup.valueChanges.subscribe(value => {
-      const pathMustStartWithCaseOrDocRegex = /^(case:|doc:)/;
-      const correctPath = pathMustStartWithCaseOrDocRegex.test(String(value.path));
-      this.enableExport$.next(correctPath);
-      if (!correctPath) {
-        this.formGroup.patchValue({exportable: false}, {emitEvent: false});
-      }
-    });
+    this._subscriptions.add(
+      this.path.valueChanges.pipe(startWith(this.path.value)).subscribe(value => {
+        const pathMustStartWithCaseOrDocRegex = /^(case:|doc:)/;
+        const correctPath = pathMustStartWithCaseOrDocRegex.test(String(value));
+        if (correctPath) {
+          this.formGroup.get('exportable')?.enable();
+        } else {
+          this.formGroup.get('exportable')?.disable();
+        }
+
+        this.formGroup.patchValue({exportable: correctPath});
+      })
+    );
   }
 }
