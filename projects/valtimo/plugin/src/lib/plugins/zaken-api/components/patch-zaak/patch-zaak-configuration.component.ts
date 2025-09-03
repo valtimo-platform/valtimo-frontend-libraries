@@ -46,7 +46,6 @@ export class PatchZaakConfigurationComponent implements FunctionConfigurationCom
   protected readonly CASE_GEOMETRY_COORDINATES: string = 'caseGeometryCoordinates';
   protected readonly PAYMENT_INDICATION_TYPE: string = 'paymentIndication';
 
-  private readonly DATA_TEST_ID_PREFIX: string = 'patch-zaak-property_';
   private readonly _formValue$ = new BehaviorSubject<PatchZaakConfig>({});
   private readonly _properties = new Map<PatchZaakProperties, string>();
   private _saveSubscription!: Subscription;
@@ -125,19 +124,6 @@ export class PatchZaakConfigurationComponent implements FunctionConfigurationCom
 
   public hasPropertyBeenAdded(property: PatchZaakProperties): boolean {
     return this.propertyList.indexOf(property) !== -1;
-  }
-
-  public dataTestIdFor(property: PatchZaakProperties): string {
-    return this.DATA_TEST_ID_PREFIX + property
-  }
-
-  public presetPropertyWithValue(property: PatchZaakProperties, value: string): void {
-    const input =
-      document.querySelector<HTMLInputElement>(`[data-testid="${this.DATA_TEST_ID_PREFIX + property}"]`);
-    if (input) {
-      input.value = value;
-      input.dispatchEvent(new Event('input'));
-    }
   }
 
   private handleValid(formValue: PatchZaakConfig): void {
