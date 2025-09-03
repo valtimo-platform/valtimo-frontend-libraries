@@ -325,7 +325,7 @@ export class CaseManagementListColumnsComponent implements AfterViewInit, OnDest
 
   public ngAfterViewInit(): void {
     this.iconService.registerAll([ArrowDown16, ArrowUp16]);
-    this.disableExportToggle();
+    // this.disableExportToggle();
   }
 
   public ngOnDestroy(): void {
@@ -640,7 +640,6 @@ export class CaseManagementListColumnsComponent implements AfterViewInit, OnDest
 
   private disableExportToggle(): void {
     this.formGroup.valueChanges.subscribe(value => {
-      console.log(value);
       const pathMustStartWithCaseOrDocRegex = /^(case:|doc:)/;
       const correctPath = pathMustStartWithCaseOrDocRegex.test(String(value.path));
 
@@ -651,18 +650,5 @@ export class CaseManagementListColumnsComponent implements AfterViewInit, OnDest
         // this.formGroup.get('path')?.disable();
       }
     });
-    // this._subscriptions.add(
-    //   this.path.valueChanges.pipe(startWith(this.path.value)).subscribe(value => {
-    //     const pathMustStartWithCaseOrDocRegex = /^(case:|doc:)/;
-    //     const correctPath = pathMustStartWithCaseOrDocRegex.test(String(value));
-    //     if (correctPath) {
-    //       this.formGroup.get('exportable')?.enable();
-    //     } else {
-    //       this.formGroup.get('exportable')?.disable();
-    //     }
-
-    //     this.formGroup.patchValue({exportable: correctPath});
-    //   })
-    // );
   }
 }
