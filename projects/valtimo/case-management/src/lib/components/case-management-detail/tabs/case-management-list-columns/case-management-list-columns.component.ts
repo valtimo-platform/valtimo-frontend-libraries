@@ -639,18 +639,30 @@ export class CaseManagementListColumnsComponent implements AfterViewInit, OnDest
   }
 
   private disableExportToggle(): void {
-    this._subscriptions.add(
-      this.path.valueChanges.pipe(startWith(this.path.value)).subscribe(value => {
-        const pathMustStartWithCaseOrDocRegex = /^(case:|doc:)/;
-        const correctPath = pathMustStartWithCaseOrDocRegex.test(String(value));
-        if (correctPath) {
-          this.formGroup.get('exportable')?.enable();
-        } else {
-          this.formGroup.get('exportable')?.disable();
-        }
+    this.formGroup.valueChanges.subscribe(value => {
+      console.log(value);
+      const pathMustStartWithCaseOrDocRegex = /^(case:|doc:)/;
+      const correctPath = pathMustStartWithCaseOrDocRegex.test(String(value.path));
 
-        this.formGroup.patchValue({exportable: correctPath});
-      })
-    );
+      if (correctPath) {
+        // this.formGroup.get('path')?.enable();
+        // this.formGroup.patchValue({exportable: false}, {emitEvent: false});
+      } else {
+        // this.formGroup.get('path')?.disable();
+      }
+    });
+    // this._subscriptions.add(
+    //   this.path.valueChanges.pipe(startWith(this.path.value)).subscribe(value => {
+    //     const pathMustStartWithCaseOrDocRegex = /^(case:|doc:)/;
+    //     const correctPath = pathMustStartWithCaseOrDocRegex.test(String(value));
+    //     if (correctPath) {
+    //       this.formGroup.get('exportable')?.enable();
+    //     } else {
+    //       this.formGroup.get('exportable')?.disable();
+    //     }
+
+    //     this.formGroup.patchValue({exportable: correctPath});
+    //   })
+    // );
   }
 }
