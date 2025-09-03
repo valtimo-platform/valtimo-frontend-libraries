@@ -10,7 +10,6 @@
 
   <div class="row">
       <div class="col-12">
-
         <button
             cdsButton="primary"
             [size]="'md'"
@@ -27,7 +26,6 @@
 
   <v-form (valueChange)="onFormValueChanged($event)" style="background-color: orange">
     @for (property of propertyList; track property) {
-      @if (property !== CASE_GEOMETRY_COORDINATES) {
         <div class="row">
           <div class="col-11">
             @if (property === CASE_GEOMETRY_TYPE) {
@@ -46,6 +44,7 @@
                       <ng-template [ngIf]="!isFirst"> | </ng-template><a (click)="presetPropertyWithValue(CASE_GEOMETRY_TYPE, preset)" class="preset">{{ preset }}</a>
                   </ng-template>
               </div>
+            } @else if (property === CASE_GEOMETRY_COORDINATES) {
               <v-input
                 [name]="CASE_GEOMETRY_COORDINATES"
                 [title]="translationKeyFor(CASE_GEOMETRY_COORDINATES) | pluginTranslate: pluginId | async"
@@ -90,15 +89,16 @@
             }
           </div>
           <div class="col-1">
-            <button
-              class="btn btn-space delete-button"
-              (click)="removeProperty(property)">
-              <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
-            </button>
+            @if (property !== CASE_GEOMETRY_COORDINATES) {
+              <button
+                class="btn btn-space delete-button"
+                (click)="removeProperty(property)">
+                <svg class="cds--btn__icon" cdsIcon="trash-can" size="16"></svg>
+              </button>
+            }
           </div>
         </div>
       }
-    }
   </v-form>
 </ng-container>
 
