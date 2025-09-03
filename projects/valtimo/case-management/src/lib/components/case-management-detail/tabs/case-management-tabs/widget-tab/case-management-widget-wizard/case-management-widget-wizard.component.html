@@ -40,8 +40,8 @@
     </cds-progress-indicator>
 
     <div
-      class="valtimo-widget-wizard-step__hidden"
-      [class.valtimo-widget-wizard-step__shown]="currentStep() === WidgetWizardSteps.TYPE"
+      class="valtimo-widget-wizard-step--hidden"
+      [class.valtimo-widget-wizard-step--shown]="currentStep() === WidgetWizardSteps.TYPE"
     >
       <p>{{ 'widgetTabManagement.types.description' | translate }}</p>
 
@@ -51,8 +51,8 @@
     </div>
 
     <div
-      class="valtimo-widget-wizard-step__hidden"
-      [class.valtimo-widget-wizard-step__shown]="currentStep() === WidgetWizardSteps.WIDTH"
+      class="valtimo-widget-wizard-step--hidden"
+      [class.valtimo-widget-wizard-step--shown]="currentStep() === WidgetWizardSteps.WIDTH"
     >
       <p>{{ 'widgetTabManagement.width.description' | translate }}</p>
 
@@ -62,8 +62,8 @@
     </div>
 
     <div
-      class="valtimo-widget-wizard-step__hidden"
-      [class.valtimo-widget-wizard-step__shown]="currentStep() === WidgetWizardSteps.STYLE"
+      class="valtimo-widget-wizard-step--hidden"
+      [class.valtimo-widget-wizard-step--shown]="currentStep() === WidgetWizardSteps.STYLE"
     >
       <p>{{ 'widgetTabManagement.style.description' | translate }}</p>
 
@@ -82,8 +82,8 @@
     </div>
 
     <div
-      class="valtimo-widget-wizard-step__hidden"
-      [class.valtimo-widget-wizard-step__shown]="isDefaultStep()"
+      class="valtimo-widget-wizard-step--hidden"
+      [class.valtimo-widget-wizard-step--shown]="isDefaultStep()"
     >
       <p>{{ 'widgetTabManagement.types.description' | translate }}</p>
 
