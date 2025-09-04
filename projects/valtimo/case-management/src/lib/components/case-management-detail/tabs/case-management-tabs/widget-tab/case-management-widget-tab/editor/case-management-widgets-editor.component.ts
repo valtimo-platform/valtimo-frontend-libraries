@@ -34,12 +34,16 @@ import {
   ViewType,
 } from '@valtimo/components';
 import {CaseManagementParams} from '@valtimo/shared';
-import {ButtonModule, IconModule, TabsModule} from 'carbon-components-angular';
+import {ButtonModule, IconModule, IconService, TabsModule} from 'carbon-components-angular';
 import {cloneDeep} from 'lodash';
 import {BehaviorSubject, combineLatest, map, Observable, Subject, take} from 'rxjs';
 import {AVAILABLE_WIDGETS, WidgetStyle, WidgetTypeTags} from '../../../../../../../models';
 import {WidgetTabManagementService, WidgetWizardService} from '../../../../../../../services';
 import {CasManagementWidgetWizardComponent} from '../../case-management-widget-wizard/case-management-widget-wizard.component';
+import {DragVertical16} from '@carbon/icons';
+import {
+  CaseManagementAddDividerModalComponent
+} from '../../../../../../case-management-add-divider-modal/case-management-add-divider-modal.component';
 
 @Component({
   selector: 'valtimo-case-management-widgets-editor',
@@ -55,6 +59,7 @@ import {CasManagementWidgetWizardComponent} from '../../case-management-widget-w
     TabsModule,
     CasManagementWidgetWizardComponent,
     ConfirmationModalModule,
+    CaseManagementAddDividerModalComponent
   ],
 })
 export class CaseManagementWidgetsEditorComponent {
@@ -139,6 +144,7 @@ export class CaseManagementWidgetsEditorComponent {
   );
 
   public readonly isWizardOpen$ = new BehaviorSubject<boolean>(false);
+  public readonly isAddDividerModaldOpen$ = new BehaviorSubject<boolean>(false);
   public readonly isEditMode = this.widgetWizardService.editMode;
   public readonly deleteModalOpen$ = new BehaviorSubject<boolean>(false);
   public readonly deleteRowKey$ = new Subject<number>();
@@ -151,8 +157,11 @@ export class CaseManagementWidgetsEditorComponent {
     private readonly keyGeneratorService: KeyGeneratorService,
     private readonly translateService: TranslateService,
     private readonly widgetTabManagementService: WidgetTabManagementService,
-    private readonly widgetWizardService: WidgetWizardService
-  ) {}
+    private readonly widgetWizardService: WidgetWizardService,
+    private readonly iconService: IconService,
+  ) {
+    this.iconService.registerAll([DragVertical16]);
+  }
 
   public editWidget(tabWidget: CaseWidget): void {
     this.widgetWizardService.widgetTitle.set(tabWidget.title);
@@ -178,6 +187,14 @@ export class CaseManagementWidgetsEditorComponent {
 
   public openAddModal(): void {
     this.isWizardOpen$.next(true);
+  }
+
+  public openAddDividerModal(): void {
+    this.isAddDividerModaldOpen$.next(true);
+  }
+
+  public onCloseAddDividerModalEvent(): void {
+    this.isAddDividerModaldOpen$.next(false)
   }
 
   public onDeleteConfirm(widgetKey: string): void {

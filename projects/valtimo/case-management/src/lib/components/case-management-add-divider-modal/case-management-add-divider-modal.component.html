@@ -1,0 +1,73 @@
+<!--
+  ~ Copyright 2015-2025 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<cds-modal valtimoCdsModal showFooter="true" [open]="open" (close)="onCloseModal()">
+  <cds-modal-header [showCloseButton]="true" (closeSelect)="onCloseModal()">
+    <h3 cdsModalHeaderHeading>
+      {{ 'widgetTabManagement.list.dividerModal.title' | translate }}
+    </h3>
+  </cds-modal-header>
+
+  <section cdsModalContent>
+    <form [formGroup]="addDivider" cdsModalContent>
+      <cds-label>
+        {{ 'widgetTabManagement.list.dividerModal.dividerTitleLabel' | translate }}
+
+        <input
+          formControlName="title"
+          cdsText
+          placeholder="{{ 'widgetTabManagement.list.dividerModal.dividerTitlePlaceholder' | translate }}"
+          [attr.modal-primary-focus]="true"
+        />
+      </cds-label>
+
+      <cds-label [invalid]="!!(idError$ | async)" [invalidText]="(idError$ | async) | translate">
+        {{ 'widgetTabManagement.list.dividerModal.dividerKeyLabel' | translate }}
+
+        <div>
+          <input
+            cdsText
+            formControlName="key"
+            [invalid]="!!(idError$ | async)"
+            [attr.modal-primary-focus]="true"
+            placeholder="{{ 'widgetTabManagement.list.dividerModal.dividerKeyPlaceholder' | translate }}"
+          />
+
+          <button
+            *ngIf="!(editActive$ | async)"
+            cdsButton="secondary"
+            [disabled]="editDisabled$ | async"
+            [iconOnly]="true"
+            size="md"
+            (click)="enableEdit()"
+          >
+            <svg cdsIcon="edit" size="16"></svg>
+          </button>
+        </div>
+      </cds-label>
+    </form>
+  </section>
+
+  <cds-modal-footer>
+    <button cdsButton="ghost" (click)="onCloseModal()">
+      {{ 'caseManagement.allVersionsModal.closeButton' | translate }}
+    </button>
+
+    <button cdsButton="primary" (click)="onCloseModal()">
+      {{ 'widgetTabManagement.list.dividerModal.create' | translate }}
+    </button>
+  </cds-modal-footer>
+</cds-modal>
