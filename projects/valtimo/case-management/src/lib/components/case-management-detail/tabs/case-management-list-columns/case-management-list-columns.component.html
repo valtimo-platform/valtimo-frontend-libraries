@@ -289,7 +289,7 @@
       </cds-dropdown>
     </cds-label>
 
-    <cds-label>
+    <cds-label *ngIf="hideExportButton">
       <span class="label-with-tooltip select-label">
         {{ 'listColumn.exportField' | translate }}
 

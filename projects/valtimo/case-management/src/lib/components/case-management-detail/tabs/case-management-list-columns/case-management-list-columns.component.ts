@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {AfterViewInit, Component, computed, OnDestroy, signal} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {ArrowDown16, ArrowUp16} from '@carbon/icons';
 import {TranslateService} from '@ngx-translate/core';
@@ -26,7 +26,7 @@ import {
   ValuePathSelectorPrefix,
   ViewType,
 } from '@valtimo/components';
-import {ConfigService, EditPermissionsService, getCaseManagementRouteParams} from '@valtimo/shared';
+import {EditPermissionsService, getCaseManagementRouteParams} from '@valtimo/shared';
 import {
   CaseListColumn,
   CaseListColumnView,
@@ -169,10 +169,6 @@ export class CaseManagementListColumnsComponent implements AfterViewInit, OnDest
     exportable: new FormControl(false),
   });
 
-  public get path(): AbstractControl<string> {
-    return this.formGroup.get('path') as AbstractControl<string>;
-  }
-
   public readonly disableDefaultSort$ = combineLatest([
     this.currentModalType$,
     this.formGroup.valueChanges,
@@ -313,19 +309,19 @@ export class CaseManagementListColumnsComponent implements AfterViewInit, OnDest
 
   public readonly jsonEditorActive = signal<boolean>(false);
   public readonly buttonTheme = computed(() => (this.jsonEditorActive() ? 'primary' : 'ghost'));
+  public hideExportButton = true;
 
   constructor(
     private readonly documentService: DocumentService,
     private readonly route: ActivatedRoute,
     private readonly translateService: TranslateService,
-    private readonly configService: ConfigService,
     private readonly iconService: IconService,
     private readonly editPermissionsService: EditPermissionsService
   ) {}
 
   public ngAfterViewInit(): void {
     this.iconService.registerAll([ArrowDown16, ArrowUp16]);
-    // this.disableExportToggle();
+    this.disableExportToggle();
   }
 
   public ngOnDestroy(): void {
@@ -634,21 +630,22 @@ export class CaseManagementListColumnsComponent implements AfterViewInit, OnDest
             }),
         },
       },
-      exportable: formValue.exportable || false,
+      exportable: this.hideExportButton ? formValue.exportable : false,
     };
   }
 
   private disableExportToggle(): void {
-    this.formGroup.valueChanges.subscribe(value => {
-      const pathMustStartWithCaseOrDocRegex = /^(case:|doc:)/;
-      const correctPath = pathMustStartWithCaseOrDocRegex.test(String(value.path));
+    this.formGroup.controls.path.valueChanges
+      .pipe(startWith(this.formGroup.controls.path.value))
+      .subscribe(value => {
+        const pathMustStartWithCaseOrDocRegex = /^(case:|doc:)/;
+        const correctPath = pathMustStartWithCaseOrDocRegex.test(String(value));
 
-      if (correctPath) {
-        // this.formGroup.get('path')?.enable();
-        // this.formGroup.patchValue({exportable: false}, {emitEvent: false});
-      } else {
-        // this.formGroup.get('path')?.disable();
-      }
-    });
+        if (correctPath) {
+          this.hideExportButton = true;
+        } else {
+          this.hideExportButton = false;
+        }
+      });
   }
 }
