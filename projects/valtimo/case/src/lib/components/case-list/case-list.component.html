@@ -192,7 +192,7 @@
     *ngIf="canExportCase$ | async"
     [description]="'case.exportButtonTooltip' | translate"
   >
-    <span *ngIf="loadingExport" class="loading-spinner"><cds-loading size="sm"></cds-loading></span>
+    <cds-loading *ngIf="loadingExport" size="sm" class="loading-spinner"></cds-loading>
 
     <button
       *ngIf="!loadingExport"

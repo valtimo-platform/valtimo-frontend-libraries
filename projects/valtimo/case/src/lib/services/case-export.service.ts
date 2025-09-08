@@ -8,10 +8,8 @@ import {
   startWith,
   Observable,
   catchError,
-  throwError,
   fromEvent,
   map,
-  endWith,
 } from 'rxjs';
 import {CaseListService} from './case-list.service';
 import {CaseParameterService} from './case-parameter.service';
@@ -21,7 +19,7 @@ import {GlobalNotificationService, InterceptorSkip} from '@valtimo/shared';
 @Injectable()
 export class CaseExportService {
   constructor(
-    private http: HttpClient,
+    private readonly http: HttpClient,
     private readonly listService: CaseListService,
     private readonly parameterService: CaseParameterService,
     private readonly caseListSearchService: CaseListSearchService,

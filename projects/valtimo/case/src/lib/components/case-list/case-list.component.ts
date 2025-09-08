@@ -174,15 +174,15 @@ export class CaseListComponent implements OnInit, OnDestroy {
   );
 
   public readonly canExportCase$: Observable<boolean> = this.caseDefinitionKey$.pipe(
-    switchMap(caseDefinitionKey => {
-      return combineLatest([
+    switchMap(caseDefinitionKey =>
+      combineLatest([
         this.permissionService.requestPermission(CAN_EXPORT_CASE_PERMISSION, {
           resource: CASE_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocumentDefinition,
           identifier: caseDefinitionKey,
         }),
         this.documentService.getCaseList(caseDefinitionKey),
-      ]);
-    }),
+      ])
+    ),
     switchMap(([canExportPermission, caseList]) => {
       const isExportableColumns = caseList.filter(caseListitem => caseListitem.exportable === true);
       return of(canExportPermission && isExportableColumns.length > 0);
