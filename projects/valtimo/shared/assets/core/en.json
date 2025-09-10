@@ -438,6 +438,7 @@
     "duplicate": "Duplicate",
     "readOnly": "Read-only",
     "add": "Add form",
+    "navigateToRelatedCase": "Go to case (opens in new tab)",
     "tabs": {"formBuilder": "Form builder", "jsonEditor": "JSON editor", "output": "Output"},
     "intermediateSave": {
       "save": "Save progress",
@@ -885,7 +886,10 @@
         "valuePlaceholder": "Path to value",
         "ellipsisCharacterLimit": "Ellipsis character limit",
         "ellipsisCharacterLimitTooltip": "Enter the number of characters that will display before an ellipsis is shown",
-        "ellipsisCharacterLimitPlaceholder": "Choose a number of characters (optional)"
+        "ellipsisCharacterLimitPlaceholder": "Choose a number of characters (optional)",
+        "linkText": "Link text",
+        "linkTextTooltip": "The text that will be displayed for the link. If left empty, the URL will be used as link text.",
+        "linkTextPlaceholder": "Link text (optional)"
       },
       "displayType": {
         "text": "Text",
@@ -895,7 +899,8 @@
         "datetime": "Date and time",
         "enum": "Enumeration",
         "number": "Number",
-        "percent": "Percentage"
+        "percent": "Percentage",
+        "link": "Link"
       },
       "custom": {"selectComponent": "Angular component", "placeholder": "Select a component"},
       "formio": {"selectForm": "Form definition", "placeholder": "Select a form definition"},
@@ -1325,7 +1330,8 @@
     "title": "Title",
     "yes": "Yes",
     "no": "No",
-    "upload": "Upload"
+    "upload": "Upload",
+    "noTranslationFound": "No translation found"
   },
   "taskDetail": {"taskCreated": "Created", "taskCompleted": "has successfully been completed"},
   "assignTask": {

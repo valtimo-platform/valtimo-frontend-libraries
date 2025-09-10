@@ -441,6 +441,7 @@
     "duplicate": "Dupliceren",
     "readOnly": "Alleen-lezen",
     "add": "Formulier toevoegen",
+    "navigateToRelatedCase": "Ga naar dossier (opent in nieuw tabblad)",
     "tabs": {
       "formBuilder": "Formulier-bewerker",
       "jsonEditor": "JSON-bewerker",
@@ -907,7 +908,10 @@
         "valuePlaceholder": "Pad naar waarde",
         "ellipsisCharacterLimit": "Tekenlimiet met beletselteken",
         "ellipsisCharacterLimitTooltip": "Voer het aantal tekens in dat wordt weergegeven voordat er een beletselteken wordt weergegeven",
-        "ellipsisCharacterLimitPlaceholder": "Kies een aantal tekens (optioneel)"
+        "ellipsisCharacterLimitPlaceholder": "Kies een aantal tekens (optioneel)",
+        "linkText": "Link tekst",
+        "linkTextTooltip": "De tekst die wordt weergegeven als een link. Als dit leeg is, wordt de URL als tekst gebruikt.",
+        "linkTextPlaceholder": "Link tekst (optioneel)"
       },
       "displayType": {
         "text": "Tekst",
@@ -917,7 +921,8 @@
         "datetime": "Datum en tijd",
         "enum": "Opsomming",
         "number": "Nummer",
-        "percent": "Percentage"
+        "percent": "Percentage",
+        "link": "Link"
       },
       "custom": {"selectComponent": "Angular-component", "placeholder": "Selecteer een component"},
       "formio": {
@@ -1352,7 +1357,8 @@
     "title": "Titel",
     "yes": "Ja",
     "no": "Nee",
-    "upload": "Uploaden"
+    "upload": "Uploaden",
+    "noTranslationFound": "Geen vertaling gevonden"
   },
   "taskDetail": {"taskCreated": "Aangemaakt op", "taskCompleted": "is succesvol afgerond"},
   "assignTask": {
@@ -1542,7 +1548,7 @@
     "searchFieldPlaceholder": "Kies een type...",
     "noSearchFieldsConfiguredWarningTitle": "Geen zoekvelden geconfigureerd",
     "deleteSearchField": "Zoekveld verwijderen",
-    "deleteSearchFieldConfirmation": "Weet u zeker dat u deze zoekveld wilt verwijderen?",
+    "deleteSearchFieldConfirmation": "Weet je zeker dat je dit zoekveld wilt verwijderen?",
     "dropdownDataProvider": "Dropdown-databron",
     "dropdownDatabaseDataProvider": "Zet waarde",
     "dropdownJsonFileDataProvider": "Configuratiebestand",
