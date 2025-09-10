@@ -184,8 +184,8 @@ export class CaseListComponent implements OnInit, OnDestroy {
       ])
     ),
     switchMap(([canExportPermission, caseList]) => {
-      const isExportableColumns = caseList.filter(caseListitem => caseListitem.exportable === true);
-      return of(canExportPermission && isExportableColumns.length > 0);
+      const isExportableColumns = caseList.some(caseListitem => caseListitem.exportable);
+      return of(canExportPermission && isExportableColumns);
     })
   );
 

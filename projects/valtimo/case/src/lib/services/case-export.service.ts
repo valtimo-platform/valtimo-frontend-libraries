@@ -26,7 +26,7 @@ export class CaseExportService {
     private readonly globalNotificationService: GlobalNotificationService
   ) {}
 
-  downloadExport(): Observable<{isLoading: boolean}> {
+  public downloadExport(): Observable<{isLoading: boolean}> {
     return combineLatest([
       this.listService.caseDefinitionKey$,
       this.parameterService.querySearchParams$,

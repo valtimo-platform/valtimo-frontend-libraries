@@ -309,7 +309,7 @@ export class CaseManagementListColumnsComponent implements AfterViewInit, OnDest
 
   public readonly jsonEditorActive = signal<boolean>(false);
   public readonly buttonTheme = computed(() => (this.jsonEditorActive() ? 'primary' : 'ghost'));
-  public hideExportButton = true;
+  public displayExportButton = true;
 
   constructor(
     private readonly documentService: DocumentService,
@@ -611,6 +611,7 @@ export class CaseManagementListColumnsComponent implements AfterViewInit, OnDest
   }
 
   private mapFormValuesToColumn(formValue: any): CaseListColumn {
+    console.log('this.hideExportButton', this.displayExportButton);
     return {
       key: formValue.key,
       sortable: formValue.sortable,
@@ -630,7 +631,7 @@ export class CaseManagementListColumnsComponent implements AfterViewInit, OnDest
             }),
         },
       },
-      exportable: this.hideExportButton ? formValue.exportable : false,
+      exportable: this.displayExportButton ? formValue.exportable : false,
     };
   }
 
@@ -639,13 +640,7 @@ export class CaseManagementListColumnsComponent implements AfterViewInit, OnDest
       .pipe(startWith(this.formGroup.controls.path.value))
       .subscribe(value => {
         const pathMustStartWithCaseOrDocRegex = /^(case:|doc:)/;
-        const correctPath = pathMustStartWithCaseOrDocRegex.test(String(value));
-
-        if (correctPath) {
-          this.hideExportButton = true;
-        } else {
-          this.hideExportButton = false;
-        }
+        this.displayExportButton = pathMustStartWithCaseOrDocRegex.test(String(value));
       });
   }
 }
