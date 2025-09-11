@@ -76,6 +76,10 @@ export class IkoManagementSearchActionsComponent {
   public readonly prefillData$ = new BehaviorSubject<IkoDataRequestResponse | null>(null);
   public readonly actionModalOpen$ = new BehaviorSubject<boolean>(false);
   public readonly deleteModalOpen$ = new BehaviorSubject<boolean>(false);
+  public readonly repositoryKey$ = this.route.params.pipe(
+    map((params: Params) => params.apiKey),
+    filter(repositoryKey => !!repositoryKey)
+  );
   public readonly aggregateKey$ = this.route.params.pipe(
     map((params: Params) => params.key),
     filter(key => !!key)

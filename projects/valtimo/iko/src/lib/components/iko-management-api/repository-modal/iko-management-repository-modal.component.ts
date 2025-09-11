@@ -9,9 +9,21 @@ import {
   Output,
   signal,
 } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
-import {CARBON_CONSTANTS, ValtimoCdsModalDirective} from '@valtimo/components';
+import {
+  CARBON_CONSTANTS,
+  SelectItem,
+  SelectModule,
+  ValtimoCdsModalDirective,
+} from '@valtimo/components';
 import {ButtonModule, IconModule, InputModule, ModalModule} from 'carbon-components-angular';
 import {
   BehaviorSubject,
@@ -34,8 +46,8 @@ import {toObservable} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'valtimo-iko-management-view-modal',
-  templateUrl: './iko-management-view-modal.component.html',
-  styleUrl: './iko-management-view-modal.component.scss',
+  templateUrl: './iko-management-repository-modal.component.html',
+  styleUrl: './iko-management-repository-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -48,9 +60,10 @@ import {toObservable} from '@angular/core/rxjs-interop';
     ButtonModule,
     IconModule,
     PropertiesFormComponent,
+    SelectModule,
   ],
 })
-export class IkoManagementViewModalComponent {
+export class IkoManagementRepositoryModalComponent {
   private readonly _open$ = new BehaviorSubject<boolean>(false);
   @Input() public set open(value: boolean) {
     this._open$.next(value);
@@ -75,6 +88,16 @@ export class IkoManagementViewModalComponent {
   }
   @Output() public readonly modalClose = new EventEmitter<any | null>();
 
+  public readonly disabled$ = new BehaviorSubject(true);
+  private readonly _ikoRepositoryTypes$ = this.ikoManagementApiService.getIkoRepositoryTypes();
+  public readonly ikoRepositoryTypeSelectItems$: Observable<SelectItem[]> =
+    this._ikoRepositoryTypes$.pipe(
+      map(types => Object.keys(types).map(typeKey => ({id: typeKey, text: types[typeKey]}))),
+      tap(() => {
+        this.disabled$.next(false);
+      })
+    );
+
   public readonly propertyFields$: Observable<PropertyField[]> = this.open$.pipe(
     filter((open: boolean) => !!open),
     switchMap(() => this._apiKey$),
@@ -82,12 +105,13 @@ export class IkoManagementViewModalComponent {
       this.ikoManagementApiService.getIkoDataAggregateType(repositoryKey ?? '')
     ),
     switchMap((repository: IkoRepositoryConfigResponse) =>
-      this.ikoManagementApiService.getIkoDataAggregatePropertyFields(repository.type)
+      this.ikoManagementApiService.getIkoRepositoryPropertyFields(repository.type)
     )
   );
   public formGroup = this.fb.group({
     title: this.fb.control('', Validators.required),
     key: this.fb.control('', Validators.required),
+    type: this.fb.control('iko', [Validators.required]),
     properties: this.fb.group({}, Validators.required),
   });
 
@@ -107,6 +131,16 @@ export class IkoManagementViewModalComponent {
 
   public onSave(): void {
     this.modalClose.emit(this.formGroup.getRawValue());
+  }
+
+  public getControlInvalid(controlKey: string): boolean {
+    const control: AbstractControl | null = this.formGroup.get(controlKey);
+
+    if (!control) {
+      return true;
+    }
+
+    return !control.valid && !control.pristine;
   }
 
   private resetForm(): void {

@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, signal} from '@angular/core';
 import {
+  ActionItem,
   CARBON_CONSTANTS,
   CarbonListModule,
   ColumnConfig,
+  ConfirmationModalModule,
   PageTitleService,
   SelectItem,
   SelectModule,
@@ -28,6 +30,7 @@ import {IkoManagementApiService} from '../../services';
 import {
   BehaviorSubject,
   combineLatest,
+  filter,
   Observable,
   of,
   startWith,
@@ -46,7 +49,12 @@ import {
   TabsModule,
 } from 'carbon-components-angular';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {IkoRepositoryConfigListResponse, PropertyField} from '../../models';
+import {
+  IkoDataAggregateResponse,
+  IkoRepositoryConfigListResponse,
+  IkoRepositoryConfigResponse,
+  PropertyField,
+} from '../../models';
 import {
   AbstractControl,
   FormBuilder,
@@ -55,6 +63,8 @@ import {
   Validators,
 } from '@angular/forms';
 import {IkoManagementListModalComponent} from '../iko-management-details/components/list-modal/list-modal.component';
+import {PropertiesFormComponent} from '../iko-management-properties/iko-management-properties.component';
+import {IkoManagementViewModalComponent} from '../iko-management/view-modal/iko-management-view-modal.component';
 
 @Component({
   selector: 'valtimo-iko-management-api',
@@ -74,12 +84,15 @@ import {IkoManagementListModalComponent} from '../iko-management-details/compone
     ValtimoCdsModalDirective,
     LayerModule,
     SelectModule,
-    IkoManagementListModalComponent,
+    PropertiesFormComponent,
+    ConfirmationModalModule,
+    IkoManagementViewModalComponent,
   ],
   styleUrl: './iko-management-api.component.scss',
 })
 export class IkoManagementApiComponent implements OnInit, OnDestroy {
-  public readonly openModal$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public readonly $modalOpen = signal<boolean>(false);
+  public readonly $prefillData = signal<any | null>(null);
 
   public readonly disabled$ = new BehaviorSubject(true);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
@@ -97,13 +110,17 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
       label: 'ikoManagement.ikoServer',
     },
   ];
-
-  public readonly form = this.formBuilder.group({
-    title: this.formBuilder.control('', [Validators.required]),
-    key: this.formBuilder.control('', [Validators.required]),
-    type: this.formBuilder.control('iko', [Validators.required]),
-    pluginId: this.formBuilder.control('', [Validators.required]),
-  });
+  public readonly ACTION_ITEMS: ActionItem[] = [
+    {
+      label: 'interface.edit',
+      callback: this.onEditClick.bind(this),
+    },
+    {
+      label: 'interface.delete',
+      callback: this.onDeleteClick.bind(this),
+      type: 'danger',
+    },
+  ];
 
   private readonly _ikoRepositoryTypes$ = this.ikoManagementApiService.getIkoRepositoryTypes();
   public readonly ikoRepositoryTypeSelectItems$: Observable<SelectItem[]> =
@@ -114,42 +131,10 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
       })
     );
 
-  public readonly pluginSelectItems$: Observable<SelectItem[]> = this.form
-    .get('type')
-    .valueChanges.pipe(
-      startWith(this.form.get('type').value),
-      tap(() => this.form.patchValue({pluginId: ''})),
-      switchMap(type =>
-        combineLatest([
-          type ? this.ikoManagementApiService.getIkoRepositoryConfigPropertyFields(type) : of([]),
-          this.translateService.stream('key'),
-        ])
-      ),
-      map(
-        ([res]) =>
-          (res as PropertyField[])?.reduce((acc, curr) => {
-            return [
-              ...acc,
-              ...curr?.dropdownList.map(field => ({
-                id: field.first,
-                text: field.second,
-              })),
-            ];
-          }, []) || []
-      ),
-      tap(() => {
-        this.disabled$.next(false);
-      })
-    );
-
-  private readonly _subscriptions = new Subscription();
-
   constructor(
     private readonly ikoManagementApiService: IkoManagementApiService,
     private readonly pageTitleService: PageTitleService,
-    private readonly router: Router,
-    private readonly formBuilder: FormBuilder,
-    private readonly translateService: TranslateService
+    private readonly router: Router
   ) {}
 
   public ngOnInit(): void {
@@ -157,7 +142,6 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this._subscriptions.unsubscribe();
     this.pageTitleService.enableReset();
   }
 
@@ -166,28 +150,12 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
   }
 
   public openModal(): void {
-    this.openModal$.next(true);
+    this.$modalOpen.set(true);
   }
 
   public closeModal(): void {
-    this.openModal$.next(false);
+    this.$modalOpen.set(false);
 
-    setTimeout(() => {
-      this.form.reset();
-    }, CARBON_CONSTANTS.modalAnimationMs);
-  }
-
-  public getControlInvalid(controlKey: string): boolean {
-    const control: AbstractControl | null = this.form.get(controlKey);
-
-    if (!control) {
-      return true;
-    }
-
-    return !control.valid && !control.pristine;
-  }
-
-  public createApiConfig(): void {
     const formValue = this.form.getRawValue();
 
     this.disable();
@@ -209,6 +177,11 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
         },
         error: () => this.enable(),
       });
+  }
+
+  public onEditClick(item: IkoDataAggregateResponse): void {
+    this.$prefillData.set(item);
+    this.$modalOpen.set(true);
   }
 
   private disable(): void {
