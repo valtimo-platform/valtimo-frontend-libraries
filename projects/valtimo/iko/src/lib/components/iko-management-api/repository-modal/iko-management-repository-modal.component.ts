@@ -4,14 +4,11 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
-  OnInit,
   Output,
   signal,
 } from '@angular/core';
 import {
   AbstractControl,
-  FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
@@ -24,28 +21,21 @@ import {
   SelectModule,
   ValtimoCdsModalDirective,
 } from '@valtimo/components';
-import {ButtonModule, IconModule, InputModule, ModalModule} from 'carbon-components-angular';
 import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  map,
-  Observable,
-  Subscription,
-  switchMap,
-  tap,
-} from 'rxjs';
-import {
-  PropertyField,
-  IkoDataAggregateResponse,
-  IkoRepositoryConfigResponse,
-} from '../../../models';
+  ButtonModule,
+  IconModule,
+  InputModule,
+  LayerModule,
+  ModalModule,
+} from 'carbon-components-angular';
+import {BehaviorSubject, filter, map, Observable, startWith, switchMap, tap} from 'rxjs';
+import {PropertyField, IkoRepositoryConfigResponse} from '../../../models';
 import {IkoManagementApiService} from '../../../services';
 import {PropertiesFormComponent} from '../../iko-management-properties/iko-management-properties.component';
-import {toObservable} from '@angular/core/rxjs-interop';
+import {ConfigService} from '@valtimo/shared';
 
 @Component({
-  selector: 'valtimo-iko-management-view-modal',
+  selector: 'valtimo-iko-management-repository-modal',
   templateUrl: './iko-management-repository-modal.component.html',
   styleUrl: './iko-management-repository-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,6 +51,7 @@ import {toObservable} from '@angular/core/rxjs-interop';
     IconModule,
     PropertiesFormComponent,
     SelectModule,
+    LayerModule,
   ],
 })
 export class IkoManagementRepositoryModalComponent {
@@ -73,21 +64,17 @@ export class IkoManagementRepositoryModalComponent {
   public get open$(): Observable<boolean> {
     return this._open$.asObservable();
   }
-  private readonly _apiKey$ = new BehaviorSubject<string | null>(null);
-  @Input() public set apiKey(value: string | null) {
-    if (!value) return;
-
-    this._apiKey$.next(value);
-  }
-  public readonly $prefillData = signal<IkoDataAggregateResponse | null>(null);
-  @Input() public set prefillData(value: IkoDataAggregateResponse | null) {
+  public readonly $prefillData = signal<IkoRepositoryConfigResponse | null>(null);
+  @Input() public set prefillData(value: IkoRepositoryConfigResponse | null) {
     this.$prefillData.set(value);
     if (!value) return;
 
+    this.formGroup.patchValue(value);
     this.formGroup.get('key')?.disable();
   }
   @Output() public readonly modalClose = new EventEmitter<any | null>();
 
+  public enableIkoType = false;
   public readonly disabled$ = new BehaviorSubject(true);
   private readonly _ikoRepositoryTypes$ = this.ikoManagementApiService.getIkoRepositoryTypes();
   public readonly ikoRepositoryTypeSelectItems$: Observable<SelectItem[]> =
@@ -97,28 +84,29 @@ export class IkoManagementRepositoryModalComponent {
         this.disabled$.next(false);
       })
     );
-
-  public readonly propertyFields$: Observable<PropertyField[]> = this.open$.pipe(
-    filter((open: boolean) => !!open),
-    switchMap(() => this._apiKey$),
-    switchMap((repositoryKey: string | null) =>
-      this.ikoManagementApiService.getIkoDataAggregateType(repositoryKey ?? '')
-    ),
-    switchMap((repository: IkoRepositoryConfigResponse) =>
-      this.ikoManagementApiService.getIkoRepositoryPropertyFields(repository.type)
-    )
-  );
   public formGroup = this.fb.group({
     title: this.fb.control('', Validators.required),
     key: this.fb.control('', Validators.required),
-    type: this.fb.control('iko', [Validators.required]),
+    type: this.fb.control('', Validators.required),
     properties: this.fb.group({}, Validators.required),
   });
 
+  public readonly propertyFields$: Observable<PropertyField[]> = this.formGroup
+    .get('type')
+    .valueChanges.pipe(
+      startWith(this.formGroup.get('type').value),
+      tap(_ => this.formGroup.patchValue({properties: {}})),
+      filter(type => !!type && !Array.isArray(type)),
+      switchMap(type => this.ikoManagementApiService.getIkoRepositoryPropertyFields(type))
+    );
+
   constructor(
     private readonly fb: FormBuilder,
-    private readonly ikoManagementApiService: IkoManagementApiService
-  ) {}
+    private readonly ikoManagementApiService: IkoManagementApiService,
+    private readonly configService: ConfigService
+  ) {
+    this.enableIkoType = this.configService.getFeatureToggle('enableIkoType');
+  }
 
   public get properties(): FormGroup | null {
     const properties = this.formGroup.get('properties');
@@ -134,6 +122,10 @@ export class IkoManagementRepositoryModalComponent {
   }
 
   public getControlInvalid(controlKey: string): boolean {
+    if (controlKey === 'type' && !this.enableIkoType) {
+      return false;
+    }
+
     const control: AbstractControl | null = this.formGroup.get(controlKey);
 
     if (!control) {
@@ -148,8 +140,9 @@ export class IkoManagementRepositoryModalComponent {
       this.formGroup.reset({
         title: '',
         key: '',
+        type: 'iko',
+        properties: {},
       });
-      this.formGroup.setControl('properties', this.fb.group({}, Validators.required));
       this.formGroup.get('key')?.enable();
     }, CARBON_CONSTANTS.modalAnimationMs);
   }

@@ -4,25 +4,14 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
-  OnInit,
   Output,
   signal,
 } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {CARBON_CONSTANTS, ValtimoCdsModalDirective} from '@valtimo/components';
 import {ButtonModule, IconModule, InputModule, ModalModule} from 'carbon-components-angular';
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  map,
-  Observable,
-  Subscription,
-  switchMap,
-  tap,
-} from 'rxjs';
+import {BehaviorSubject, filter, Observable, switchMap, take} from 'rxjs';
 import {
   PropertyField,
   IkoDataAggregateResponse,
@@ -30,7 +19,6 @@ import {
 } from '../../../models';
 import {IkoManagementApiService} from '../../../services';
 import {PropertiesFormComponent} from '../../iko-management-properties/iko-management-properties.component';
-import {toObservable} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'valtimo-iko-management-view-modal',
@@ -52,27 +40,35 @@ import {toObservable} from '@angular/core/rxjs-interop';
 })
 export class IkoManagementViewModalComponent {
   private readonly _open$ = new BehaviorSubject<boolean>(false);
+
   @Input() public set open(value: boolean) {
     this._open$.next(value);
 
     if (!value) this.resetForm();
   }
+
   public get open$(): Observable<boolean> {
     return this._open$.asObservable();
   }
+
   private readonly _apiKey$ = new BehaviorSubject<string | null>(null);
+
   @Input() public set apiKey(value: string | null) {
     if (!value) return;
 
     this._apiKey$.next(value);
   }
+
   public readonly $prefillData = signal<IkoDataAggregateResponse | null>(null);
+
   @Input() public set prefillData(value: IkoDataAggregateResponse | null) {
     this.$prefillData.set(value);
     if (!value) return;
 
+    this.formGroup.patchValue(value);
     this.formGroup.get('key')?.disable();
   }
+
   @Output() public readonly modalClose = new EventEmitter<any | null>();
 
   public readonly propertyFields$: Observable<PropertyField[]> = this.open$.pipe(
@@ -106,7 +102,22 @@ export class IkoManagementViewModalComponent {
   }
 
   public onSave(): void {
-    this.modalClose.emit(this.formGroup.getRawValue());
+    this.propertyFields$.pipe(take(1)).subscribe(fields => {
+      const formData = this.formGroup.getRawValue();
+      fields.forEach(field => {
+        if (formData.properties[field.key] && field.type === 'keyValueList') {
+          formData.properties[field.key] = Array.isArray(formData.properties[field.key])
+            ? formData.properties[field.key].reduce((acc: Record<string, any>, cur: any) => {
+                if (cur.key) {
+                  acc[cur.key] = cur.value;
+                }
+                return acc;
+              }, {})
+            : {};
+        }
+      });
+      this.modalClose.emit(formData);
+    });
   }
 
   private resetForm(): void {
@@ -114,8 +125,8 @@ export class IkoManagementViewModalComponent {
       this.formGroup.reset({
         title: '',
         key: '',
+        properties: {},
       });
-      this.formGroup.setControl('properties', this.fb.group({}, Validators.required));
       this.formGroup.get('key')?.enable();
     }, CARBON_CONSTANTS.modalAnimationMs);
   }

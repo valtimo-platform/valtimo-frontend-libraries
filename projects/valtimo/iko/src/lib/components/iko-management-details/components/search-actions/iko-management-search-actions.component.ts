@@ -141,10 +141,7 @@ export class IkoManagementSearchActionsComponent {
       .pipe(
         switchMap((aggregateKey: string) =>
           prefillData === null
-            ? this.ikoManagementApiService.createIkoDataRequest(aggregateKey, action.key, {
-                ...action,
-                properties: {},
-              })
+            ? this.ikoManagementApiService.createIkoDataRequest(aggregateKey, action.key, action)
             : this.ikoManagementApiService.updateIkoDataRequest(aggregateKey, action.key, action)
         )
       )

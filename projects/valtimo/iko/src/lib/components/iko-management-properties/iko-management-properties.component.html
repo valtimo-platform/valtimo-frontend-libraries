@@ -32,40 +32,16 @@
         </cds-label>
       }
       @case (propertyField.type === 'dropdown') {
-        <div [formArrayName]="propertyField.key">
-          <cds-text-label>
-            {{ propertyField.title }}
-
-            @for (dropdownControl of getFa(propertyField.key).controls; track dropdownControl) {
-              <fieldset>
-                <input
-                  [formControlName]="$index"
-                  cdsText
-                  cdsLayer
-                  [placeholder]="'interface.value' | translate"
-                  [attr.modal-primary-focus]="true"
-                />
-
-                <button
-                  cdsButton="danger--ghost"
-                  [disabled]="$count === 1"
-                  [iconOnly]="true"
-                  (click)="onDeleteRowClick(propertyField.key, $index)"
-                >
-                  <svg cdsIcon="trash-can" size="16"></svg>
-                </button>
-              </fieldset>
-            }
-          </cds-text-label>
-
-          <button
-            cdsButton="primary"
-            (click)="onAddDropdownValue(propertyField.key, propertyField.required)"
-          >
-            Add Dropdown Value
-            <svg class="cds--btn__icon" cdsIcon="add" size="16"></svg>
-          </button>
-        </div>
+        @if (propertyField?.dropdownList) {
+          <v-select
+            [invalid]="getControlInvalid(propertyField.key)"
+            [formControlName]="propertyField.key"
+            [items]="$selectItems()[propertyField.key]"
+            [title]="propertyField.title"
+            [appendInline]="false"
+            [dropUp]="false"
+          ></v-select>
+        }
       }
       @case (propertyField.type === 'keyValueList') {
         <div [formArrayName]="propertyField.key">

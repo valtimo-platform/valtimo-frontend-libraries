@@ -215,11 +215,14 @@ export class IkoManagementApiService extends BaseApiService {
     key: string,
     body: IkoRepositoryConfigUpdateRequest
   ): Observable<IkoRepositoryConfigResponse> {
-    return this.httpClient.put<IkoRepositoryConfigResponse>(this.getApiUrl(`/v1/iko/${key}`), body);
+    return this.httpClient.put<IkoRepositoryConfigResponse>(
+      this.getApiUrl(`/management/v1/iko/${key}`),
+      body
+    );
   }
 
   public deleteIkoRepositoryConfig(key: string): Observable<void> {
-    return this.httpClient.delete<void>(this.getApiUrl(`/v1/iko/${key}`));
+    return this.httpClient.delete<void>(this.getApiUrl(`/management/v1/iko/${key}`));
   }
 
   public getIkoRepositoryConfigPropertyFields(type: string): Observable<PropertyField[]> {

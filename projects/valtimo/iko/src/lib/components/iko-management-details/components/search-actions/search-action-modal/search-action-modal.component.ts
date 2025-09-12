@@ -32,7 +32,7 @@ import {
   IkoRepositoryConfigResponse,
   IkoDataAggregateResponse,
 } from '../../../../../models';
-import {filter, map, Observable, switchMap} from 'rxjs';
+import {filter, map, Observable, switchMap, take} from 'rxjs';
 import {IkoManagementApiService} from '../../../../../services';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {PropertiesFormComponent} from '../../../../iko-management-properties/iko-management-properties.component';
@@ -116,11 +116,21 @@ export class IkoManagementSearchActionModalComponent {
   }
 
   public onSave(): void {
-    this.modalClose.emit({
-      key: this.formGroup.get('key')?.value ?? '',
-      title: this.formGroup.get('title')?.value ?? '',
-      ikoDataAggregateKey: this.formGroup.get('ikoDataAggregateKey')?.value ?? this.aggregateKey,
-      properties: this.formGroup.get('properties')?.value ?? {},
+    this.propertyFields$.pipe(take(1)).subscribe(fields => {
+      const formData = this.formGroup.getRawValue();
+      fields.forEach(field => {
+        if (formData.properties[field.key] && field.type === 'keyValueList') {
+          formData.properties[field.key] = Array.isArray(formData.properties[field.key])
+            ? formData.properties[field.key].reduce((acc: Record<string, any>, cur: any) => {
+                if (cur.key) {
+                  acc[cur.key] = cur.value;
+                }
+                return acc;
+              }, {})
+            : {};
+        }
+      });
+      this.modalClose.emit(formData);
     });
   }
 }

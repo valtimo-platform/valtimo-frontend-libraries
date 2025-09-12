@@ -39,10 +39,9 @@
 </ng-template>
 
 <valtimo-iko-management-repository-modal
-  *ngIf="apiKey$ | async as apiKey"
   [open]="$modalOpen()"
   [prefillData]="$prefillData()"
-  (modalClose)="onModalClose($event, apiKey)"
+  (modalClose)="closeModal($event)"
 ></valtimo-iko-management-repository-modal>
 
 <valtimo-confirmation-modal

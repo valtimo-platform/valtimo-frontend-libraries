@@ -3,7 +3,7 @@
     <h3 cdsModalHeaderHeading>Add view</h3>
   </cds-modal-header>
 
-  <form cdsModalContent [cdsLayer]="1" [formGroup]="form" class="iko-api-form">
+  <form cdsModalContent [cdsLayer]="1" [formGroup]="formGroup" class="iko-api-form">
     <cds-label [invalid]="getControlInvalid('title')">
       {{ 'ikoManagement.titleTitle' | translate }}
 
@@ -26,24 +26,18 @@
       />
     </cds-label>
 
-    @if (false) {
-      <!-- TODO: Discuss with Thomas-->
+    @if (enableIkoType) {
       <v-select
         [invalid]="getControlInvalid('type')"
         formControlName="type"
+        [disabled]="!enableIkoType"
         [items]="ikoRepositoryTypeSelectItems$ | async"
         [title]="'ikoManagement.typeTitle' | translate"
         [appendInline]="false"
+        [dropUp]="false"
       ></v-select>
     }
 
-    <v-select
-      [invalid]="getControlInvalid('pluginId')"
-      formControlName="pluginId"
-      [items]="pluginSelectItems$ | async"
-      [title]="'ikoManagement.pluginIdTitle' | translate"
-      [appendInline]="false"
-    ></v-select>
     <valtimo-iko-management-properties
       [propertiesFormGroup]="properties"
       [fields]="propertyFields$ | async"

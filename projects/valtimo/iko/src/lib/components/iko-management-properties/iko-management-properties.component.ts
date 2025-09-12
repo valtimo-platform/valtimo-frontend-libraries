@@ -13,14 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, Input, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, Input, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormArray, FormGroup, ReactiveFormsModule, FormBuilder, Validators} from '@angular/forms';
+import {
+  FormArray,
+  FormGroup,
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
+import {SelectItem, SelectModule} from '@valtimo/components';
 import {ButtonModule, IconModule, InputModule, LayerModule} from 'carbon-components-angular';
 import {TranslatePipe} from '@ngx-translate/core';
-import {IkoDataAggregateResponse, PropertyField} from '../../models';
-import {combineLatest, Subscription} from 'rxjs';
-import {toObservable} from '@angular/core/rxjs-interop';
+import {PropertyField} from '../../models';
 import {computed, effect} from '@angular/core';
 
 @Component({
@@ -36,6 +42,7 @@ import {computed, effect} from '@angular/core';
     InputModule,
     IconModule,
     LayerModule,
+    SelectModule,
   ],
 })
 export class PropertiesFormComponent {
@@ -45,7 +52,7 @@ export class PropertiesFormComponent {
   @Input() public set fields(fields: PropertyField[]) {
     if (fields) {
       this.applyPropertyControls(this.fb, this.propertiesFormGroup, fields);
-      this.$fields.set(fields ?? []);
+      this.$fields.set(fields);
     }
   }
 
@@ -53,6 +60,18 @@ export class PropertiesFormComponent {
   @Input() public set prefillData(value: Record<string, any | null> | null) {
     this.$prefillData.set(value ?? {});
   }
+
+  public readonly $selectItems = computed(() =>
+    this.$fields()
+      .filter(field => field?.dropdownList)
+      .reduce((acc: Record<string, SelectItem[]>, field) => {
+        acc[field.key] = field.dropdownList.map(item => ({
+          id: item.first,
+          text: item.second,
+        }));
+        return acc;
+      }, {})
+  );
 
   private readonly combined = computed(() => ({
     prefill: this.$prefillData(),
@@ -68,10 +87,6 @@ export class PropertiesFormComponent {
 
   public getFa(key: string): FormArray {
     return this.propertiesFormGroup.get(key) as FormArray;
-  }
-
-  public onAddDropdownValue(key: string, required?: boolean) {
-    this.addDropdownValue(this.getFa(key), this.fb, required);
   }
 
   public onAddKeyValue(key: string, required?: boolean) {
@@ -94,13 +109,11 @@ export class PropertiesFormComponent {
         case 'text':
         case 'url':
         case 'integer':
+        case 'dropdown':
           propertiesGroup.addControl(
             field.key,
             fb.control('', field.required ? [Validators.required] : [])
           );
-          break;
-        case 'dropdown':
-          propertiesGroup.addControl(field.key, fb.array([fb.control('', Validators.required)]));
           break;
         case 'keyValueList':
           propertiesGroup.addControl(
@@ -117,6 +130,16 @@ export class PropertiesFormComponent {
     });
   }
 
+  public getControlInvalid(controlKey: string): boolean {
+    const control: AbstractControl | null = this.propertiesFormGroup.get(controlKey);
+
+    if (!control) {
+      return true;
+    }
+
+    return !control.valid && !control.pristine;
+  }
+
   private mapPrefillDataToForm(
     prefillData: Record<string, any>,
     propertyFields: PropertyField[]
@@ -124,17 +147,9 @@ export class PropertiesFormComponent {
     if (!prefillData || !this.propertiesFormGroup) return;
 
     propertyFields.forEach((field: PropertyField) => {
-      if (field.type === 'dropdown') {
-        prefillData[field.key].forEach((_, index: number) => {
-          if (index !== prefillData[field.key].length - 1) {
-            this.onAddDropdownValue(field.key, field.required);
-          }
-        });
-      }
-
       if (field.type === 'keyValueList') {
         const keyValueList = !prefillData[field.key]
-          ? [{key: 'null', value: 'null'}]
+          ? [{key: '', value: ''}]
           : Array.isArray(prefillData[field.key])
             ? prefillData[field.key]
             : Object.entries(prefillData[field.key]).map(([key, value]) => ({
@@ -148,10 +163,6 @@ export class PropertiesFormComponent {
     });
 
     this.propertiesFormGroup.patchValue(prefillData);
-  }
-
-  private addDropdownValue(arr: FormArray, fb: FormBuilder, required?: boolean) {
-    arr.push(fb.control('', required ? Validators.required : []));
   }
 
   private addKeyValue(arr: FormArray, fb: FormBuilder, required?: boolean) {

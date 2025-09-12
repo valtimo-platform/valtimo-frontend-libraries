@@ -17,7 +17,6 @@ import {CommonModule} from '@angular/common';
 import {Component, OnDestroy, OnInit, signal} from '@angular/core';
 import {
   ActionItem,
-  CARBON_CONSTANTS,
   CarbonListModule,
   ColumnConfig,
   ConfirmationModalModule,
@@ -27,17 +26,7 @@ import {
   ValtimoCdsModalDirective,
 } from '@valtimo/components';
 import {IkoManagementApiService} from '../../services';
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  Observable,
-  of,
-  startWith,
-  Subscription,
-  switchMap,
-  tap,
-} from 'rxjs';
+import {BehaviorSubject, Observable, switchMap, take, tap} from 'rxjs';
 import {Router} from '@angular/router';
 import {map} from 'rxjs/operators';
 import {
@@ -48,23 +37,14 @@ import {
   ModalModule,
   TabsModule,
 } from 'carbon-components-angular';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateModule} from '@ngx-translate/core';
 import {
   IkoDataAggregateResponse,
   IkoRepositoryConfigListResponse,
   IkoRepositoryConfigResponse,
-  PropertyField,
 } from '../../models';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import {IkoManagementListModalComponent} from '../iko-management-details/components/list-modal/list-modal.component';
-import {PropertiesFormComponent} from '../iko-management-properties/iko-management-properties.component';
-import {IkoManagementViewModalComponent} from '../iko-management/view-modal/iko-management-view-modal.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {IkoManagementRepositoryModalComponent} from './repository-modal/iko-management-repository-modal.component';
 
 @Component({
   selector: 'valtimo-iko-management-api',
@@ -84,15 +64,16 @@ import {IkoManagementViewModalComponent} from '../iko-management/view-modal/iko-
     ValtimoCdsModalDirective,
     LayerModule,
     SelectModule,
-    PropertiesFormComponent,
     ConfirmationModalModule,
-    IkoManagementViewModalComponent,
+    IkoManagementRepositoryModalComponent,
   ],
   styleUrl: './iko-management-api.component.scss',
 })
 export class IkoManagementApiComponent implements OnInit, OnDestroy {
   public readonly $modalOpen = signal<boolean>(false);
   public readonly $prefillData = signal<any | null>(null);
+  public readonly $keyToDelete = signal<string | null>(null);
+  public readonly showDeleteModal$ = new BehaviorSubject<boolean>(false);
 
   public readonly disabled$ = new BehaviorSubject(true);
   public readonly loading$ = new BehaviorSubject<boolean>(true);
@@ -153,30 +134,28 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
     this.$modalOpen.set(true);
   }
 
-  public closeModal(): void {
+  public closeModal(item: IkoRepositoryConfigResponse | null): void {
     this.$modalOpen.set(false);
-
-    const formValue = this.form.getRawValue();
-
     this.disable();
 
-    this.ikoManagementApiService
-      .createIkoRepositoryConfig(formValue.key, {
-        title: formValue.title,
-        key: formValue.key,
-        type: formValue.type,
-        properties: {
-          pluginConfiguration: formValue.pluginId,
-        },
-      })
-      .subscribe({
-        next: () => {
-          this.enable();
-          this.closeModal();
-          this.reload();
-        },
-        error: () => this.enable(),
-      });
+    const prefillData: IkoDataAggregateResponse | null = this.$prefillData();
+    this.$prefillData.set(null);
+    if (!item) return;
+
+    let saveObservable;
+    if (prefillData !== null) {
+      saveObservable = this.ikoManagementApiService.updateIkoRepositoryConfig(item.key, item);
+    } else {
+      saveObservable = this.ikoManagementApiService.createIkoRepositoryConfig(item.key, item);
+    }
+
+    saveObservable.pipe(take(1)).subscribe({
+      next: () => {
+        this.enable();
+        this.reload();
+      },
+      error: () => this.enable(),
+    });
   }
 
   public onEditClick(item: IkoDataAggregateResponse): void {
@@ -184,14 +163,23 @@ export class IkoManagementApiComponent implements OnInit, OnDestroy {
     this.$modalOpen.set(true);
   }
 
+  public onDeleteClick(item: IkoDataAggregateResponse): void {
+    this.$keyToDelete.set(item.key);
+    this.showDeleteModal$.next(true);
+  }
+
+  public onDeleteConfirm(key: string): void {
+    this.ikoManagementApiService
+      .deleteIkoRepositoryConfig(key)
+      .subscribe(() => this._reload$.next(null));
+  }
+
   private disable(): void {
     this.disabled$.next(true);
-    this.form.disable();
   }
 
   private enable(): void {
     this.disabled$.next(false);
-    this.form.enable();
   }
 
   private reload(): void {
