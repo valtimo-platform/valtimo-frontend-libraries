@@ -50,6 +50,7 @@ describe('DossierListComponent', () => {
 
     httpClient = TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
+
   });
 
   it('should create the component', () => {

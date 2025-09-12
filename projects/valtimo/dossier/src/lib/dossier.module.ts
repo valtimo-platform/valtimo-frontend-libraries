@@ -104,6 +104,7 @@ import {DossierDetailWidgetsComponent} from './components/dossier-detail/tab/wid
 import {DossierDetailTaskListComponent} from './components/dossier-detail-task-list/dossier-detail-task-list.component';
 import {DossierDetailsTaskDetailComponent} from './components/dossier-detail-task-detail/dossier-detail-task-detail.component';
 import {AngularSplitModule} from 'angular-split';
+import {ToastrModule} from 'ngx-toastr';
 
 export type TabsFactory = () => Map<string, object>;
 
@@ -151,6 +152,10 @@ export type TabsFactory = () => Map<string, object>;
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       },
+    }),
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-full-width',
+      preventDuplicates: true,
     }),
     TaskModule,
     ModalModule,
