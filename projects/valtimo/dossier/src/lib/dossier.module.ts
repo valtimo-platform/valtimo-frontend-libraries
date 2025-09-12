@@ -77,6 +77,7 @@ import {
   TabsModule,
   TagModule,
   TilesModule,
+  TooltipModule,
 } from 'carbon-components-angular';
 import {NoteModalComponent} from './components/note-modal/note-modal.component';
 import {DossierAssignUserComponent} from './components/dossier-assign-user/dossier-assign-user.component';
@@ -199,6 +200,7 @@ export type TabsFactory = () => Map<string, object>;
     ValtimoCdsModalDirectiveModule,
     TilesModule,
     LayerModule,
+    TooltipModule,
   ],
   exports: [DossierListComponent, DossierDetailComponent, DossierProcessStartModalComponent],
 })
