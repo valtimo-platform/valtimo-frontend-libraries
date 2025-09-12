@@ -18,8 +18,8 @@ import {ActivatedRoute} from '@angular/router';
 import {
   FormioCustomComponent,
   FormIoDomService,
-  ValtimoModalService,
   FormIoStateService,
+  ValtimoModalService,
 } from '@valtimo/components';
 import {DocumentenApiFileReference, UploadProviderService} from '@valtimo/resource';
 import {UserProviderService} from '@valtimo/security';
@@ -37,7 +37,6 @@ import {catchError, filter, map, take, tap} from 'rxjs/operators';
 import {DocumentenApiMetadata, SupportedDocumentenApiFeatures} from '../../models';
 import {DocumentenApiVersionService} from '../../services';
 import {DocumentService} from '@valtimo/document';
-import {getCaseManagementRouteParams} from '@valtimo/shared';
 
 @Component({
   standalone: false,
@@ -110,6 +109,7 @@ export class DocumentenApiUploaderComponent
     this.defaultValues['informatieobjecttype'] = defaultValue;
     this.stateService.documentDefinitionName$
       .pipe(
+        filter(documentDefinitionName => !!documentDefinitionName),
         switchMap(documentDefinitionName =>
           this.documentService.getCaseSettings(documentDefinitionName)
         ),
@@ -185,20 +185,22 @@ export class DocumentenApiUploaderComponent
     this.hideField(hide, 'trefwoorden');
   }
 
+  @Input() documentUrlProcessVariable: string;
+
   @Output() valueChange = new EventEmitter<Array<DocumentenApiFileReference>>();
 
-  readonly uploading$ = new BehaviorSubject<boolean>(false);
-  readonly fileToBeUploaded$ = new BehaviorSubject<File | null>(null);
-  readonly modalDisabled$ = new BehaviorSubject<boolean>(false);
-  readonly showModal = signal<boolean>(false);
-  readonly uploadProcessLinked$: Observable<boolean | string> =
+  public readonly uploading$ = new BehaviorSubject<boolean>(false);
+  public readonly fileToBeUploaded$ = new BehaviorSubject<File | null>(null);
+  public readonly modalDisabled$ = new BehaviorSubject<boolean>(false);
+  public readonly showModal = signal<boolean>(false);
+  public readonly uploadProcessLinked$: Observable<boolean | string> =
     this.modalService.caseDefinitionKey$.pipe(
       switchMap(caseDefinitionKey =>
         this.uploadProviderService.checkUploadProcessLink(caseDefinitionKey)
       ),
       startWith('loading')
     );
-  readonly isAdmin$: Observable<boolean> = this.userProviderService
+  public readonly isAdmin$: Observable<boolean> = this.userProviderService
     .getUserSubject()
     .pipe(map(userIdentity => userIdentity?.roles.includes('ROLE_ADMIN')));
 
@@ -246,12 +248,12 @@ export class DocumentenApiUploaderComponent
     }
   }
 
-  fileSelected(file: File): void {
+  public fileSelected(file: File): void {
     this.fileToBeUploaded$.next(file);
     this.showModal.set(true);
   }
 
-  deleteFile(id: string): void {
+  public deleteFile(id: string): void {
     this.domService.toggleSubmitButton(true);
     this._value = this._value.filter((file: DocumentenApiFileReference) =>
       file?.id ? file?.id !== id : true
@@ -259,11 +261,11 @@ export class DocumentenApiUploaderComponent
     this.valueChange.emit(this._value);
   }
 
-  closeMetadataModal(): void {
+  public closeMetadataModal(): void {
     this.showModal.set(false);
   }
 
-  metadataSet(metadata: DocumentenApiMetadata): void {
+  public metadataSet(metadata: DocumentenApiMetadata): void {
     this.uploading$.next(true);
     this.showModal.set(false);
     this.domService.toggleSubmitButton(true);
@@ -271,11 +273,17 @@ export class DocumentenApiUploaderComponent
     this.fileToBeUploaded$
       .pipe(
         take(1),
-        switchMap(file => this.uploadProviderService.uploadTempFileWithMetadata(file, metadata)),
+        switchMap(file =>
+          this.uploadProviderService.uploadTempFileWithMetadata(file, {
+            ...metadata,
+            processInstanceId: this.stateService.processInstanceId,
+            documentUrlProcessVariable: this.documentUrlProcessVariable || null,
+          })
+        ),
         tap(result => {
           this.domService.toggleSubmitButton(false);
           this.uploading$.next(false);
-          this._value.push(result);
+          this._value = [...this._value, result];
           this.valueChange.emit(this._value);
         })
       )

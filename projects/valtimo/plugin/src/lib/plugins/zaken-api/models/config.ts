@@ -53,6 +53,37 @@ interface CreateNietNatuurlijkePersoonZaakRolConfig {
   rolToelichting: string;
   innNnpId: string;
   annIdentificatie: string;
+  kvkNummer?: string;
+  vestigingsNummer?: string;
+}
+
+interface CreateMedewerkerZaakRolConfig {
+  roltypeUrl: string;
+  rolToelichting: string;
+  identificatie: string;
+  achternaam: string;
+  voorletters: string;
+  voorvoegselAchternaam?: string;
+  afwijkendeNaamBetrokkene?: string;
+  indicatieMachtiging?: string;
+}
+
+interface CreateOrganisatorischeEenheidZaakRolConfig {
+  roltypeUrl: string;
+  rolToelichting: string;
+  identificatie: string;
+  naam: string;
+  isGehuisvestIn: string;
+  afwijkendeNaamBetrokkene?: string;
+  indicatieMachtiging?: string;
+}
+
+interface CreateVestigingZaakRolConfig {
+  roltypeUrl: string;
+  rolToelichting: string;
+  handelsnaam?: string;
+  kvkNummer: string;
+  vestigingsNummer: string;
 }
 
 interface CreateZaakConfig {
@@ -92,6 +123,23 @@ interface DeleteZaakeigenschapConfig {
   inputTypeEigenschapToggle?: InputOption;
 }
 
+interface PatchZaakConfig {
+  description?: string;
+  explanation?: string;
+  plannedEndDate?: string;
+  finalDeliveryDate?: string;
+  publicationDate?: string;
+  communicationChannel?: string;
+  communicationChannelName?: string;
+  paymentIndication?: string;
+  lastPaymentDate?: string;
+  caseGeometryType?: string;
+  caseGeometryCoordinates?: string,
+  mainCase?: string;
+  archiveActionDate?: string;
+  startDateRetentionPeriod?: string;
+}
+
 interface RelateerZakenConfig {
   teRelaterenZaakUri: string;
   aardRelatie: string;
@@ -105,10 +153,14 @@ export {
   CreateZaakConfig,
   CreateNatuurlijkePersoonZaakRolConfig,
   CreateNietNatuurlijkePersoonZaakRolConfig,
+  CreateMedewerkerZaakRolConfig,
+  CreateOrganisatorischeEenheidZaakRolConfig,
+  CreateVestigingZaakRolConfig,
   SetZaakopschortingConfig,
   StartHersteltermijnConfig,
   CreateZaakeigenschapConfig,
   UpdateZaakeigenschapConfig,
   DeleteZaakeigenschapConfig,
+  PatchZaakConfig,
   RelateerZakenConfig,
 };
