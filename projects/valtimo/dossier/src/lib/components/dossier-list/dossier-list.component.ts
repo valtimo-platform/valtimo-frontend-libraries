@@ -107,7 +107,7 @@ import {DossierListActionsComponent} from '../dossier-list-actions/dossier-list-
     DossierListSearchService,
     DossierListStatusService,
     DossierListCaseTagService,
-    CaseExportService
+    CaseExportService,
   ],
 })
 export class DossierListComponent implements OnInit, OnDestroy {
@@ -179,7 +179,7 @@ export class DossierListComponent implements OnInit, OnDestroy {
     switchMap(caseDefinitionKey =>
       combineLatest([
         this.permissionService.requestPermission(CAN_EXPORT_CASE_PERMISSION, {
-          resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocumentDefinition,
+          resource: DOSSIER_DETAIL_PERMISSION_RESOURCE.jsonSchemaDocument,
           identifier: caseDefinitionKey,
         }),
         this.documentService.getCaseList(caseDefinitionKey),
