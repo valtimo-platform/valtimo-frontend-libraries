@@ -16,6 +16,7 @@ import {DossierParameterService} from './dossier-parameter.service';
 import {DossierListSearchService} from './dossier-list-search.service';
 import {InterceptorSkip} from '@valtimo/security';
 import {ToastrService} from 'ngx-toastr';
+import {CASES_WITHOUT_STATUS_KEY} from '@valtimo/components';
 
 @Injectable()
 export class CaseExportService {
@@ -41,7 +42,9 @@ export class CaseExportService {
           documentDefinitionName: data[0],
           searchOperator: 'AND',
           assigneeFilter: data[2],
-          statusFilter: data[3],
+          statusFilter: data[3].map((statusKey: string) =>
+            statusKey === CASES_WITHOUT_STATUS_KEY ? null : statusKey
+          ),
           caseTagsFilter: data[4],
           otherFilters: this.caseListSearchService.mapSearchValuesToFilters(data[1]),
         };
