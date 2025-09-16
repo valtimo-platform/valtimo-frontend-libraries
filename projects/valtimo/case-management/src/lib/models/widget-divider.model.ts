@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2015-2025 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
@@ -13,3 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+type ModalMode = 'edit' | 'create' | 'duplicate';
+
+export {ModalMode};

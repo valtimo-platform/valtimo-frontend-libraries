@@ -97,9 +97,6 @@ import {CaseManagementUploadComponent} from './components/case-management-upload
 import {CaseManagementUploadStepComponent} from './components/case-management-upload/step/case-management-upload-step.component';
 import {TabManagementService} from './services';
 import {CaseManagementDraftWarningComponent} from './components/case-management-draft-warning/case-management-draft-warning.component';
-import {
-  CaseManagementAddDividerModalComponent
-} from './components/case-management-add-divider-modal/case-management-add-divider-modal.component';
 
 @NgModule({
   declarations: [

@@ -59,10 +59,12 @@
     </button>
   </ng-template>
 
-  <valtimo-case-management-add-divider-modal
-    [open]="isAddDividerModaldOpen$ | async"
-    (close)="onCloseAddDividerModalEvent()"
-  ></valtimo-case-management-add-divider-modal>
+  <valtimo-case-management-divider-modal
+    [open]="isDividerModalOpen$ | async"
+    [mode]="dividerModalMode$ | async"
+    [prefillData]="dividerDefinition$ | async"
+    (closeEvent)="onCloseAddDividerModalEvent($event, obs.items)"
+  ></valtimo-case-management-divider-modal>
 
   <valtimo-case-management-widget-wizard
     [editMode]="isEditMode()"

@@ -45,7 +45,9 @@ export class WidgetsContainerComponent implements AfterViewInit, OnDestroy {
   public readonly widgetsWithUuids$ = new BehaviorSubject<CaseWidgetWithUuid[]>([]);
 
   @Input() public set widgets(value: CaseWidget[]) {
-    const widgetsWithUuids = value.map(widget => ({...widget, uuid: uuid()}));
+    const widgetsWithUuids = value
+      .filter((widget, index, widgets) => !(index === widgets.length - 1 && widget.type === 'divider'))
+      .map(widget => ({ ...widget, uuid: uuid() }));
     this.caseWidgetsLayoutService.setWidgets(widgetsWithUuids);
     this.widgetsWithUuids$.next(widgetsWithUuids);
   }

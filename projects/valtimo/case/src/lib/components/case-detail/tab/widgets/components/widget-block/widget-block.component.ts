@@ -144,7 +144,7 @@ export class WidgetBlockComponent implements AfterViewInit, OnDestroy {
   ]).pipe(
     switchMap(([widget, tabkey, documentId]) =>
       // custom component and formio widgets do not fetch additional data
-      widget.type === CaseWidgetType.CUSTOM || widget.type === CaseWidgetType.FORMIO
+      widget.type === CaseWidgetType.CUSTOM || widget.type === CaseWidgetType.FORMIO || widget.type === CaseWidgetType.DIVIDER
         ? of({})
         : this.widgetsApiService.getWidgetData(
             documentId,
