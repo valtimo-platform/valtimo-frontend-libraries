@@ -201,7 +201,7 @@
 <ng-template #dossierListActions>
   <cds-tooltip
     *ngIf="canExportCase$ | async"
-    [description]="'case.exportButtonTooltip' | translate"
+    [description]="'dossier.exportButtonTooltip' | translate"
   >
     <cds-loading *ngIf="loadingExport" size="sm" class="loading-spinner"></cds-loading>
 
