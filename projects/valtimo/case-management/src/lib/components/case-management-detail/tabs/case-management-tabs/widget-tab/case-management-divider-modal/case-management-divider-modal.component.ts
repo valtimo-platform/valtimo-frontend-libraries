@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, EventEmitter, OnInit, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
 import {
   ButtonModule,
-  IconModule, IconService,
+  IconModule,
+  IconService,
   InputModule,
   ModalModule,
   TooltipModule,
 } from 'carbon-components-angular';
-import {FormGroup, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {BehaviorSubject} from 'rxjs';
 import {Edit16} from '@carbon/icons';
 import {BasicCaseWidget, CaseWidget, CaseWidgetType} from '@valtimo/case';
 import {tap} from 'rxjs/operators';
-import {AbstractControl} from '@angular/forms';
 import {ModalMode} from '../../../../../../models/widget-divider.model';
-import {CARBON_CONSTANTS} from '@valtimo/components';
+import {CARBON_CONSTANTS, CarbonListItem} from '@valtimo/components';
 
 @Component({
   selector: 'valtimo-case-management-divider-modal',
@@ -48,10 +48,25 @@ import {CARBON_CONSTANTS} from '@valtimo/components';
     ReactiveFormsModule
   ],
 })
-export class CaseManagementDividerModalComponent implements OnInit{
-  @Input() public open = false;
-
+export class CaseManagementDividerModalComponent implements OnInit {
   @Input() public mode: ModalMode;
+
+  private _open = false;
+  @Input() public set open(value: boolean) {
+    this._open = value;
+
+    if (this.mode === ModalMode.CREATE) {
+      this.getDefaultKey();
+      this.editDisabled$.next(false);
+    }
+  }
+
+  public get open(): boolean {
+    return this._open;
+  }
+
+  @Input() public widgets: CarbonListItem;
+  @Input() public usedKeys: string[] = [];
 
   private _prefillData: CaseWidget | null;
   @Input() public set prefillData(value: CaseWidget | null) {
@@ -67,11 +82,11 @@ export class CaseManagementDividerModalComponent implements OnInit{
 
   public get buttonLabel(): string {
     switch (this.mode) {
-      case 'create':
+      case ModalMode.CREATE:
         return 'widgetTabManagement.list.dividerModal.create';
-      case 'edit':
+      case ModalMode.EDIT:
         return 'widgetTabManagement.list.dividerModal.edit';
-      case 'duplicate':
+      case ModalMode.DUPLICATE:
         return 'widgetTabManagement.list.dividerModal.duplicate';
       default:
         return 'widgetTabManagement.list.dividerModal.create';
@@ -79,6 +94,8 @@ export class CaseManagementDividerModalComponent implements OnInit{
   }
 
   public dividerForm: FormGroup;
+
+  public readonly submitDisabled$ = new BehaviorSubject<boolean>(true);
 
   public readonly editDisabled$ = new BehaviorSubject<boolean>(true);
 
@@ -118,33 +135,36 @@ export class CaseManagementDividerModalComponent implements OnInit{
   public ngOnInit(): void {
     this.dividerForm = this.fb.group({
       title: this.fb.control<string>(''),
-      key: this.fb.control<string>('', [
+      key: this.fb.control<string>({value: '', disabled: true}, [
         Validators.required,
         Validators.pattern('[A-Za-z0-9-]*'),
       ]),
     });
 
-    this.getDefaultKey();
+    if(this.mode === ModalMode.EDIT) {
+      console.log("edit: ", ModalMode.EDIT)
+    }
   }
 
   public onCloseModal(dividerCreated?: boolean): void {
     if(!dividerCreated) {
       this.closeEvent.emit(null);
-      this.editDisabled$.next(false);
       this.resetForm();
       return;
     }
 
     const {title, key} = this.dividerForm.controls;
-    if (!title || !key) {
+
+    if (this.mode !== ModalMode.EDIT && this.usedKeys.includes(key.value)) {
+      this.idError$.next('widgetTabManagement.list.dividerModal.idError');
       return;
     }
 
-    this.divider.title = title.value;
+    this.divider.title = title.value ?? '';;
     this.divider.key = key.value;
 
     this.closeEvent.emit(this.divider);
-    this.dividerForm.reset();
+    this.resetForm();
   }
 
   public enableEdit(): void {
@@ -153,24 +173,41 @@ export class CaseManagementDividerModalComponent implements OnInit{
 
   public onFocusOut(): void {
     const {title, key} = this.dividerForm.controls;
+
     if (!title || !key) {
       return;
     }
 
-    if (this.mode !== 'edit') {
-      this.editDisabled$.next(false);
-      key.patchValue(title?.value.replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase());
+    if (this.mode === ModalMode.CREATE && title.value && title.value.trim() !== '') {
+      const normalizedKey = title.value.replace(/\W+/g, '-').replace(/\-$/, '').toLowerCase();
+
+      key.patchValue(normalizedKey);
     }
   }
 
-  public getDefaultKey(): void {
-    console.log('getDefaultKey');
-    this.dividerForm.patchValue({ key: 'widget-divider' });
+  private getDefaultKeyValue(): string {
+    const baseKey = 'widget-divider';
+    if (!this.usedKeys.includes(baseKey)) {
+      return baseKey;
+    }
+    for (let i = 1; ; i++) {
+      const candidate = `${baseKey}-${i}`;
+      if (!this.usedKeys.includes(candidate)) {
+        return candidate;
+      }
+    }
+  }
+
+  private getDefaultKey(): void {
+    this.dividerForm.patchValue({ key: this.getDefaultKeyValue() });
   }
 
   private resetForm(): void {
     setTimeout(() => {
-      this.dividerForm.reset();
+      this.dividerForm.reset({
+        title: '',
+        key: this.mode === ModalMode.CREATE ? this.getDefaultKeyValue() : ''
+      });
       this.idError$.next(null);
       this._editActive$.next(false);
       this.editDisabled$.next(true);
@@ -183,10 +220,9 @@ export class CaseManagementDividerModalComponent implements OnInit{
     let title = prefillData.title;
     let key = prefillData.key;
 
-    if (this.mode === 'duplicate') {
+    if (this.mode === ModalMode.DUPLICATE) {
       title = `${prefillData.title}-duplicate`;
       key = `${prefillData.key}-duplicate`;
-      this.editDisabled$.next(false);
     }
 
     this.dividerForm.patchValue({
@@ -194,7 +230,5 @@ export class CaseManagementDividerModalComponent implements OnInit{
       title,
       key
     });
-
-    this.enableEdit();
   }
 }

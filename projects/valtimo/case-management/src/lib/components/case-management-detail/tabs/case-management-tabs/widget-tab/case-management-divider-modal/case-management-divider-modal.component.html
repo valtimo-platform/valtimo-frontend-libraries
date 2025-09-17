@@ -18,6 +18,7 @@
     editDisabled: editDisabled$ | async,
     idError: idError$ | async,
     editActive: editActive$ | async,
+    submitDisabled: submitDisabled$ | async,
   } as obs"
    valtimoCdsModal showFooter="true" [open]="open" (close)="onCloseModal()">
   <cds-modal-header [showCloseButton]="true" (closeSelect)="onCloseModal()">
@@ -32,6 +33,7 @@
         {{ 'widgetTabManagement.list.dividerModal.dividerTitleLabel' | translate }}
 
         <input
+          class="title-input"
           formControlName="title"
           cdsText
           placeholder="{{ 'widgetTabManagement.list.dividerModal.dividerTitlePlaceholder' | translate }}"
@@ -48,16 +50,15 @@
             cdsText
             formControlName="key"
             [invalid]="!!obs.idError"
-            [attr.modal-primary-focus]="true"
             placeholder="{{ 'widgetTabManagement.list.dividerModal.dividerKeyPlaceholder' | translate }}"
           />
 
           <button
             *ngIf="!obs.editActive"
             cdsButton="secondary"
-            [disabled]="obs.editDisabled"
-            [iconOnly]="true"
             size="md"
+            [disabled]="mode === 'edit' || obs.editDisabled"
+            [iconOnly]="true"
             (click)="enableEdit()"
           >
             <svg cdsIcon="edit" size="16"></svg>
@@ -72,7 +73,7 @@
       {{ 'caseManagement.allVersionsModal.closeButton' | translate }}
     </button>
 
-    <button [disabled]="!dividerForm.valid" cdsButton="primary" (click)="onCloseModal()">
+    <button [disabled]="!dividerForm.valid" cdsButton="primary" (click)="onCloseModal(true)">
       {{ buttonLabel | translate }}
     </button>
   </cds-modal-footer>

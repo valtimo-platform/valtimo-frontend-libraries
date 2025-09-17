@@ -832,8 +832,9 @@
         "dividerKeyPlaceholder": "Schlüssel wird automatisch generiert",
         "create": "Erstellen",
         "duplicate": "Duplizieren",
-        "edit": "Bearbeiten"
-
+        "edit": "Bearbeiten",
+        "idError": "Dieser Trenner-Schlüssel wird bereits verwendet. Bitte wählen Sie einen eindeutigen Schlüssel.",
+        "keyRequiredError": "Divider-sleutel is verplicht"
       },
       "add": "Widget hinzufügen",
       "noResults": {

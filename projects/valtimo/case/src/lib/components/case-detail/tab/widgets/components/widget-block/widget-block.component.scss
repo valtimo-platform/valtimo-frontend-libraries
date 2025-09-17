@@ -33,43 +33,14 @@
   &__not-available {
     padding: 16px;
   }
-
-  &__divider-title {
-    width: 100%;
-    padding: 16px;
-    overflow-wrap: break-word;
-    font-size: 20px;
-    background: none !important;
-
-    p {
-      line-height: 24px;
-      font-weight: 600;
-      font-size: 20px;
-    }
-  }
 }
-
-//.divider-title {
-//  width: 100%;
-//  padding: 8px;
-//  overflow-wrap: break-word;
-//  font-size: 20px;
-//
-//  p {
-//    line-height: 24px;
-//    font-weight: 700;
-//    font-size: 20px;
-//  }
-//}
 
 .widget-block__divider-title {
   width: 100%;
-  padding: 8px;
-  overflow-wrap: break-word;
   font-size: 20px;
+  padding: 32px 0 16px 8px;
 
   p {
-    line-height: 24px;
     font-weight: 700;
     font-size: 20px;
   }
