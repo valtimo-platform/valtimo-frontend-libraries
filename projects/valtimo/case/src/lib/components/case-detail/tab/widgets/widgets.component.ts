@@ -58,7 +58,6 @@ export class CaseDetailWidgetsComponent implements OnInit, OnDestroy {
     switchMap(([documentId, tabKey]) =>
       this.widgetsApiService.getWidgetTabConfiguration(documentId, tabKey)
     ),
-    tap((result)=> console.log("result?.widgets ", result?.widgets)),
     tap(() => this.loadingWidgetConfiguration$.next(false))
   );
 

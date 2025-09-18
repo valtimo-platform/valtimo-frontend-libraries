@@ -63,6 +63,7 @@
     [open]="isDividerModalOpen$ | async"
     [mode]="dividerModalMode$ | async"
     [prefillData]="dividerDefinition$ | async"
+    [usedKeys]="_usedKeys"
     (closeEvent)="onCloseAddDividerModalEvent($event, obs.items)"
   ></valtimo-case-management-divider-modal>
 

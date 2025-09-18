@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
-type ModalMode = 'edit' | 'create' | 'duplicate';
+enum ModalMode {
+  EDIT = 'edit',
+  CREATE = 'create',
+  DUPLICATE = 'duplicate'
+}
 
 export {ModalMode};

@@ -75,7 +75,6 @@ import {
   TabsModule,
   TagModule,
   TilesModule,
-  TooltipModule,
 } from 'carbon-components-angular';
 import {NoteModalComponent} from './components/note-modal/note-modal.component';
 import {CaseAssignUserComponent} from './components/case-assign-user/case-assign-user.component';
@@ -143,7 +142,11 @@ export type TabsFactory = () => Map<string, object>;
     ModalModule,
     SpinnerModule,
     TranslateModule.forRoot({
-      loader: {provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient]},
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
     }),
     TaskModule,
     ModalModule,
@@ -192,7 +195,6 @@ export type TabsFactory = () => Map<string, object>;
     LayerModule,
     NotificationModule,
     CarbonInputModule,
-    TooltipModule,
   ],
   exports: [CaseListComponent, CaseDetailComponent, CaseProcessStartModalComponent],
 })
@@ -200,7 +202,14 @@ export class CaseModule {
   static forRoot(tabsFactory: TabsFactory): ModuleWithProviders<CaseModule> {
     return {
       ngModule: CaseModule,
-      providers: [CaseService, CaseBulkAssignService, {provide: TAB_MAP, useFactory: tabsFactory}],
+      providers: [
+        CaseService,
+        CaseBulkAssignService,
+        {
+          provide: TAB_MAP,
+          useFactory: tabsFactory,
+        },
+      ],
     };
   }
 }

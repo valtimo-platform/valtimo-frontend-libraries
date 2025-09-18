@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 import {CommonModule} from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  signal,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, signal} from '@angular/core';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {BasicCaseWidget, CaseWidget, CaseWidgetsRes} from '@valtimo/case';
+import {BasicCaseWidget, CaseWidget, CaseWidgetsRes, CaseWidgetType} from '@valtimo/case';
 import {
   ActionItem,
   CarbonListItem,
@@ -39,12 +32,13 @@ import {cloneDeep} from 'lodash';
 import {BehaviorSubject, combineLatest, map, Observable, Subject, take} from 'rxjs';
 import {AVAILABLE_WIDGETS, WidgetStyle, WidgetTypeTags} from '../../../../../../../models';
 import {WidgetTabManagementService, WidgetWizardService} from '../../../../../../../services';
-import {CasManagementWidgetWizardComponent} from '../../case-management-widget-wizard/case-management-widget-wizard.component';
+import {
+  CasManagementWidgetWizardComponent,
+} from '../../case-management-widget-wizard/case-management-widget-wizard.component';
 import {DragVertical16} from '@carbon/icons';
 import {
-  CaseManagementDividerModalComponent
+  CaseManagementDividerModalComponent,
 } from '../../case-management-divider-modal/case-management-divider-modal.component';
-import {CaseWidgetType} from '@valtimo/case';
 import {ModalMode} from '../../../../../../../models/widget-divider.model';
 
 @Component({
@@ -150,7 +144,7 @@ export class CaseManagementWidgetsEditorComponent {
   public readonly isDividerModalOpen$ = new BehaviorSubject<boolean>(false);
   public readonly isEditMode = this.widgetWizardService.editMode;
   public readonly deleteModalOpen$ = new BehaviorSubject<boolean>(false);
-  public readonly dividerModalMode$ = new BehaviorSubject<ModalMode>('create');
+  public readonly dividerModalMode$ = new BehaviorSubject<ModalMode>(ModalMode.CREATE);
   public readonly deleteRowKey$ = new Subject<number>();
 
   public readonly dragAndDropDisabled = signal(false);
@@ -169,7 +163,7 @@ export class CaseManagementWidgetsEditorComponent {
 
   public editWidget(tabWidget: CaseWidget): void {
     if(tabWidget.type === CaseWidgetType.DIVIDER) {
-      this.dividerModalMode$.next('edit');
+      this.dividerModalMode$.next(ModalMode.EDIT);
       this.dividerDefinition$.next(tabWidget);
       this.openAddDividerModal();
     } else {
@@ -194,7 +188,7 @@ export class CaseManagementWidgetsEditorComponent {
     tabWidgetClone.key = '';
 
     if(tabWidget.type === CaseWidgetType.DIVIDER) {
-      this.dividerModalMode$.next('duplicate');
+      this.dividerModalMode$.next(ModalMode.DUPLICATE);
       this.dividerDefinition$.next(tabWidget);
       this.openAddDividerModal();
     } else {
@@ -213,7 +207,7 @@ export class CaseManagementWidgetsEditorComponent {
   public onCloseAddDividerModalEvent(dividerDefinition: BasicCaseWidget, existingWidgets: CaseWidget[]): void {
     this.isDividerModalOpen$.next(false);
     this.widgetWizardService.resetWizard();
-    this.dividerModalMode$.next('create');
+    this.dividerModalMode$.next(ModalMode.CREATE);
     this.dividerDefinition$.next(null);
 
     if (!dividerDefinition) return;
@@ -250,7 +244,6 @@ export class CaseManagementWidgetsEditorComponent {
   }
 
   public onCloseEvent(widgetResult: BasicCaseWidget, existingWidgets: CaseWidget[]): void {
-    console.log("widgetResult (onCloseEvent): ", widgetResult);
     this.isWizardOpen$.next(false);
     this.widgetWizardService.resetWizard();
 
