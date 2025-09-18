@@ -117,7 +117,7 @@
     </div>
 
     <valtimo-no-results
-      [action]="obs.noResultsMessage.isSearchResult ? null : emptyResultdossierListActions"
+      [action]="obs.noResultsMessage.isSearchResult ? null : emptyResultDossierListActions"
       [description]="obs.noResultsMessage.description | translate"
       [title]="obs.noResultsMessage.title | translate"
     ></valtimo-no-results>
@@ -229,7 +229,7 @@
   </button>
 </ng-template>
 
-<ng-template #emptyResultdossierListActions>
+<ng-template #emptyResultDossierListActions>
   <button
     *ngIf="canCreateDocument$ | async"
     cdsButton="primary"
